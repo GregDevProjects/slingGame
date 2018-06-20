@@ -1,0 +1,9 @@
+Todo 
+
+Endless Sections 
+Treadmill 
+    - created when the player approaches 
+    - deleted when the player leaves 
+
+Chain 
+    - can be linked to different sections 
