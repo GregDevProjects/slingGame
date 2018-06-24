@@ -1,9 +1,6 @@
 Todo 
 
-Endless Sections 
-Treadmill 
-    - created when the player approaches 
-    - deleted when the player leaves 
-
-Chain 
-    - can be linked to different sections 
+Section design 
+- start adding new sections 
+- tie difficulty to gameplay progression
+- transition sections gracefully (player doesn't notice game object removal)
