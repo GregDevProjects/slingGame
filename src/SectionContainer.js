@@ -1,5 +1,6 @@
 import { SpaceRockTube } from './sections/SpaceRockTube'
-
+import { Traffic } from './sections/Traffic'
+import { getRandomInt } from './Helper'
 //chunck of gameplay that has variable difficulty options 
 //is deleted when safely offscreen 
 //can be chained on top (or possibly below) another SectionContainer 
@@ -25,6 +26,11 @@ export class SectionContainer {
                 ));
                 return this.activeSections;
                 break;
+            case SECTION_TYPES[2]:
+                this.activeSectionsArray.push(new Traffic(
+                    config
+                ));
+                return this.activeSections;              
         }
     }
 
@@ -33,7 +39,7 @@ export class SectionContainer {
         //TODO use top/bottom of section container rather than middle
         this.addSectionContainer({
             scene: this.scene, 
-            type: SECTION_TYPES[1],
+            type: SECTION_TYPES[getRandomInt(1,2)], //TODO: make this the lengh of all the sections
             x: this.leftXOfNewestSectionContainer(), 
             y: this.getTopOfNewestSectionContainer(),
             width: this.getWidthOfNewestSectionContainer(), //
@@ -60,7 +66,8 @@ export class SectionContainer {
     //need to figure out the best time to call this 
     deleteOldestSection(){
         this.activeSectionsArray[0].bodies.forEach((aBody)=>{
-            aBody.destroy();     
+            //TODO: delete graphics too 
+            this.scene.matter.world.remove(aBody);   
         })
         this.activeSectionsArray.splice(0,1);
     }
@@ -76,5 +83,6 @@ export class SectionContainer {
 }
 
 export const SECTION_TYPES = {
-    1: "SpaceRockTube" 
+    1: "SpaceRockTube",
+    2: "Traffic" 
 };

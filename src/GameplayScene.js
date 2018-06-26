@@ -21,16 +21,17 @@ export class GameplayScene extends Phaser.Scene {
         this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
 
-        new GameBackground(this);
+      //  new GameBackground(this);
         this.player = new Player({ scene: this, x: 0, y: 100 });
         this.activeSections = new SectionContainer({
             scene: this, 
-            type: SECTION_TYPES[1],
+            type: SECTION_TYPES[2],
             x: 0, 
             y: 0, 
             difficulty: 4,
             width: 1000
         });
+ 
 
         this.matterPhysics();
     }
@@ -44,6 +45,7 @@ export class GameplayScene extends Phaser.Scene {
         }
         this.player.update();
         this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height);
+
     }
 
 

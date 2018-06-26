@@ -29,3 +29,7 @@ export function getFarRightOfMatterObject(matterObj){
 export function getFarLeftOfMatterObject(matterObj){
     return matterObj.x - matterObj.width/2;
 }
+
+export function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
