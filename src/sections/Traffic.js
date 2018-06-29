@@ -1,23 +1,50 @@
 //walls on each side with a configurable amount of sapce rocks evenly spread out 
 import { Wall } from '../Wall'
-import { SpaceRock } from '../SpaceRock'
+import { VectorWall } from '../VectorWall'
+import {CargoShip} from '../CargoShip'
+import { Section } from './Section'
+import { getRandomInt } from '../Helper'
 
-export class Traffic{
+export class Traffic extends Section {
 
     constructor(config){
+        super();
         this.bodies = [];
         this.topY= config.y - Wall.getHeight() *2;
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;
-        this.height= Wall.getHeight() *2;
+        //this.height= Wall.getHeight() *2;
         this.scene = config.scene;
+
+        this.cargoShips = [];
+
         this.makeSpaceRockTube(config); 
     }
 
+    getX(){
+        return this.x;
+    }
+
+    getY(){
+        return this.x;
+    }
+
+    getWidth(){
+        return this.width;
+    }
+
+    getTopY(){
+        return this.topY;
+    }
+
     makeSpaceRockTube(config){
+        //height of the opening/closing bits 
         let height = 1000;
-        let open =  500; //amount to angle out from tube 
+        //amount to angle out from tube 
+        let open =  500; 
+        //height of the straightways 
+        let distanceToClosing = 500;
 
         let wallWidth = 200;
 
@@ -35,8 +62,6 @@ export class Traffic{
             {x:config.x + config.width - wallWidth + open, y:config.y - height}, //top left
         ];
 
-        let distanceToClosing = 500;
-
         let leftWallStraight = [
             {x:config.x - open, y:config.y - height}, //bottomleft
             {x:config.x + wallWidth - open , y:config.y - height}, //bottomright
@@ -49,7 +74,7 @@ export class Traffic{
             {x:config.x + config.width - wallWidth + open, y:config.y - height}, //top left        
             {x:config.x + config.width  + open , y:config.y - height - distanceToClosing }, //top right
             {x:config.x + config.width - wallWidth + open, y:config.y - height - distanceToClosing} //top left         
-        ]
+        ];
 
         let closingWallLeft = [
             {x:config.x - open, y:config.y - height - distanceToClosing}, //topleft
@@ -57,7 +82,7 @@ export class Traffic{
             {x:config.x , y:config.y - height*2 - distanceToClosing}, //topleft
             {x:config.x + wallWidth  , y:config.y - height*2 - distanceToClosing}, //topright   
 
-        ]
+        ];
 
         let closingWallRight = [
             {x:config.x + config.width  + open , y:config.y - height - distanceToClosing }, //top right
@@ -65,64 +90,109 @@ export class Traffic{
             {x:config.x + config.width, y:config.y - height*2 - distanceToClosing}, //topleft
             {x:config.x + config.width - wallWidth, y:config.y - height*2 - distanceToClosing}, //topright   
 
-        ]
+        ];
 
-        this.makeVectorWall(leftWall);
-        this.makeVectorWall(rightWall);
-        this.makeVectorWall(leftWallStraight);
-        this.makeVectorWall(rightWallStraight);
-        this.makeVectorWall(closingWallLeft);
-        this.makeVectorWall(closingWallRight);
+        this.bodies.push(
+            new VectorWall({scene: this.scene, vertices: leftWall}),
+            new VectorWall({scene: this.scene, vertices: rightWall}),
+            new VectorWall({scene: this.scene, vertices: leftWallStraight}),
+            new VectorWall({scene: this.scene, vertices: rightWallStraight}),
+            new VectorWall({scene: this.scene, vertices: closingWallLeft}),
+            new VectorWall({scene: this.scene, vertices: closingWallRight})
+        );
 
         this.topY = config.y - (height*2 //opening/closing cones 
                     +distanceToClosing); //straighaways 
-    }
-
-    //TODO: break this into a class 
-    //pass this.bodies as a param
-    makeVectorWall(vertices){
         
-        vertices = Phaser.Physics.Matter.Matter.Vertices.clockwiseSort(vertices);
-        var center = Phaser.Physics.Matter.Matter.Vertices.centre(vertices);
+        this.trafficLimitX = {leftX:config.x - open, rightX: config.x + config.width  + open};
 
-        let yo = this.scene.matter.add.fromVertices(
-            center.x, 
-            center.y, 
-            vertices,
-            {isStatic: true}
-        );
-
-        yo.update = function(){};
-
-        this.bodies.push(yo);
-
-        this.phaserPoly(vertices);
+        this.addCargoShips();
     }
 
-    phaserPoly(points){
-        var polygon = new Phaser.Geom.Polygon(points);
+    update(){
+        this.cargoShips.forEach((item, index, object)=>{
+            if(item.y >=this.topY ){        
+                item.update();
+            } else {
+                item.y = this.y;
+               // object.splice(index, 1);
+            }
+        })
+        
+    }
 
-        var graphics = this.scene.add.graphics();
+    delete(){
+        this.cargoShips.forEach((aCargoShip)=>{
+            aCargoShip.destroy();
+        });
 
-        graphics.lineStyle(2, 0x00aa00);
+        this.bodies.forEach((aWall)=>{
+            aWall.destroy();
+        });
+    }
 
-        graphics.beginPath();
+    //traffic grid spans full width of grid with gaps for the player to fly through 
+    addCargoShips(){
+        //creates:
+        //- - -
+        //-----
 
-        graphics.moveTo(
-            polygon.points[0].x,
-            polygon.points[0].y
-        );
+        this.createBigShipsToTheRight(this.y);
+        this.createBigShipsToTheRight(this.y + 500);
+        return;
 
-        for (var i = 1; i < polygon.points.length; i++)
-        {
-            graphics.lineTo(
-                polygon.points[i].x,
-                polygon.points[i].y
-            );
+        let cargoShipY = this.y;
+        let baseShip = false;
+        for(let i = 0; i< 4; i++){
+            let wallWidth = 200
+            let open = 500;
+            if(baseShip){
+                var newShip= this.createNewShipToTheRightOfShip(baseShip, 100);
+            } else {
+                var newShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: 1});
+                //first ship generated 
+                newShip.x = this.x + wallWidth - open + newShip.width/2;
+            }
+            
+            
+            newShip.y = this.y; 
+            let topShip = this.createNewShipAboveShip(newShip, 100);
+
+            let rightShip = this.createNewShipToTheRightOfShip(newShip, 100);
+
+            baseShip = rightShip;
+            this.cargoShips.push(rightShip,topShip,newShip);
+            console.log('looped');
         }
 
-        graphics.closePath();
-        graphics.strokePath();
 
+    }
+
+    //keep spawning ships to the right until there is no more room 
+    createBigShipsToTheRight(y){
+
+        let startPositionX = this.trafficLimitX.leftX + 200;
+        let gap = 200;
+        while(startPositionX < this.trafficLimitX.rightX){
+            let newShip = new CargoShip({scene:this.scene, x: startPositionX, y: y, cargoKeyNumber: getRandomInt(1,8)});
+            startPositionX += newShip.width;
+            this.cargoShips.push(newShip);
+            startPositionX+= gap; 
+        }
+    }
+
+    createNewShipAboveShip(newShip, offsetY) {
+        let topShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: 1});
+        topShip.y = newShip.getTop() - topShip.height/2 - offsetY;
+        topShip.x = newShip.x;
+        return topShip;
+    }
+
+    createNewShipToTheRightOfShip(newShip, offsetX){
+       
+        let rightShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: 1});
+        rightShip.y = newShip.y;
+        rightShip.x = newShip.getRight() + rightShip.width/2 + offsetX;
+        return rightShip;      
     }
 }

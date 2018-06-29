@@ -1,10 +1,12 @@
 //walls on each side with a configurable amount of sapce rocks evenly spread out 
 import { Wall } from '../Wall'
 import { SpaceRock } from '../SpaceRock'
+import { Section } from './Section'
 
-export class SpaceRockTube{
+export class SpaceRockTube extends Section{
 
     constructor(config){
+        super();
         this.bodies = [];
         this.topY= config.y - Wall.getHeight() *2;
         this.x = config.x;
@@ -12,6 +14,22 @@ export class SpaceRockTube{
         this.width = config.width;
         this.height= Wall.getHeight() *2;
         this.makeSpaceRockTube(config); 
+    }
+
+    getX(){
+        return this.x;
+    }
+
+    getY(){
+        return this.x;
+    }
+
+    getWidth(){
+        return this.width;
+    }
+
+    getTopY(){
+        return this.topY;
     }
 
     makeSpaceRockTube(config){
@@ -44,7 +62,15 @@ export class SpaceRockTube{
 
     }
 
-    getBodies(){
-        return this.bodies;
+    update(){
+        this.bodies.forEach((aBody)=>{
+            aBody.update();
+        });
+    }
+
+    delete(){
+        this.bodies.forEach((aBody)=>{
+            aBody.destroy();
+        })
     }
 }

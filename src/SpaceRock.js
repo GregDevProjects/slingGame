@@ -1,3 +1,4 @@
+import { getRandomInt } from './Helper';
 export class SpaceRock extends Phaser.Physics.Matter.Image{
     constructor(config){
         super(config.scene.matter.world, config.x, config.y, 'space_rock');
@@ -5,7 +6,7 @@ export class SpaceRock extends Phaser.Physics.Matter.Image{
         this.body.changeDirection = this.changeDirection.bind(this);
         this.scene.add.existing(this);
         this.velocity = 1;
-
+        this.floatsLeft = getRandomInt(0,1);
     }
     //TODO
     //setType()
@@ -14,9 +15,15 @@ export class SpaceRock extends Phaser.Physics.Matter.Image{
         this.velocity = -this.velocity;
     }
 
-    update(){
-        this.x+=this.velocity;
-        this.y-=1;
-        this.angle+=0.2;
+    update(){   
+        if(this.floatsLeft){   
+            this.x+=this.velocity;
+            this.angle+=0.2;
+        } else {
+            this.x-=this.velocity;
+            this.angle-=0.2;
+        }
+
+        this.y -= 1;    
     }
 }

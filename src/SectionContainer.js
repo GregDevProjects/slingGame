@@ -48,35 +48,34 @@ export class SectionContainer {
     }
 
     getTopOfNewestSectionContainer(){
-        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].topY;
+        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].getTopY();
+    }
+
+    getTopOfSectionContainerThePlayerIsIn(){
+        return  this.activeSectionsArray[this.activeSectionsArray.length - 2].getTopY();
     }
 
     getHeightOfNewestSectionContainer(){
-        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].height;
+        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].getHeight();
     }
 
     getWidthOfNewestSectionContainer(){
-        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].width;
+        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].getWidth();
     }
 
     leftXOfNewestSectionContainer(){
-        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].x;
+        return  this.activeSectionsArray[this.activeSectionsArray.length - 1].getX();
     }
 
     //need to figure out the best time to call this 
     deleteOldestSection(){
-        this.activeSectionsArray[0].bodies.forEach((aBody)=>{
-            //TODO: delete graphics too 
-            this.scene.matter.world.remove(aBody);   
-        })
+        this.activeSectionsArray[0].delete();
         this.activeSectionsArray.splice(0,1);
     }
 
     updateActiveSection(){
         this.activeSectionsArray.forEach((aSection)=>{
-            aSection.bodies.forEach((aBody)=>{
-                aBody.update();
-            })
+            aSection.update();
         })
     }
 

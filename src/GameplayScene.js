@@ -15,6 +15,15 @@ export class GameplayScene extends Phaser.Scene {
         this.load.image('bg', 'assets/img/bg.png');
         this.load.image('space_rock', 'assets/img/asteroid.png');
         this.load.image('wall', 'assets/img/wall.png')
+
+        this.load.image('cargo_1','assets/img/ship_1.png');
+        this.load.image('cargo_2','assets/img/ship_2.png');
+        this.load.image('cargo_3','assets/img/ship_3.png');
+        this.load.image('cargo_4','assets/img/ship_4.png');
+        this.load.image('cargo_5','assets/img/ship_5.png');
+        this.load.image('cargo_6','assets/img/ship_6.png');
+        this.load.image('cargo_7','assets/img/ship_7.png');
+        this.load.image('cargo_8','assets/img/ship_8.png');
     }
 
     create() {
@@ -32,16 +41,22 @@ export class GameplayScene extends Phaser.Scene {
             width: 1000
         });
  
-
+        this.activeSections.addAnotherSectionContainerAbove();  
         this.matterPhysics();
     }
 
     update() {
         this.activeSections.updateActiveSection();
         //when player reaches the top of the current container 
-        if(this.player.y <= this.activeSections.getTopOfNewestSectionContainer()){
+        if(this.player.y <= this.activeSections.getTopOfSectionContainerThePlayerIsIn()){ 
+            
             this.activeSections.addAnotherSectionContainerAbove();
-            this.activeSections.deleteOldestSection();
+            if(this.activeSections.activeSectionsArray.length >=4){
+                this.activeSections.deleteOldestSection();
+            }
+            
+
+            
         }
         this.player.update();
         this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height);
