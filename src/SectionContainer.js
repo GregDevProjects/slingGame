@@ -13,25 +13,23 @@ export class SectionContainer {
 
         this.activeSectionsArray = [];
         this.scene = config.scene;
+
+        this.allSections = [SpaceRockTube, Traffic];     
+
         this.addSectionContainer(config);
 
     }
 
     //first section generated calls this
     addSectionContainer(config){
-        switch(config.type){
-            case SECTION_TYPES[1]: 
-                this.activeSectionsArray.push(new SpaceRockTube(
-                    config
-                ));
-                return this.activeSections;
-                break;
-            case SECTION_TYPES[2]:
-                this.activeSectionsArray.push(new Traffic(
-                    config
-                ));
-                return this.activeSections;              
-        }
+        this.activeSectionsArray.push(new this.allSections[1](
+            config
+        ));
+
+        //always add random sections 
+        // this.activeSectionsArray.push(new this.allSections[getRandomInt(0,1)](
+        //     config
+        // ));
     }
 
     //all sections generated here except the fist
@@ -39,7 +37,6 @@ export class SectionContainer {
         //TODO use top/bottom of section container rather than middle
         this.addSectionContainer({
             scene: this.scene, 
-            type: SECTION_TYPES[getRandomInt(1,2)], //TODO: make this the lengh of all the sections
             x: this.leftXOfNewestSectionContainer(), 
             y: this.getTopOfNewestSectionContainer(),
             width: this.getWidthOfNewestSectionContainer(), //
@@ -80,8 +77,3 @@ export class SectionContainer {
     }
 
 }
-
-export const SECTION_TYPES = {
-    1: "SpaceRockTube",
-    2: "Traffic" 
-};

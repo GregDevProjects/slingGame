@@ -111,7 +111,7 @@ export class Traffic extends Section {
 
     update(){
         this.cargoShips.forEach((item, index, object)=>{
-            if(item.y >=this.topY ){        
+            if(item.y >=this.topY + 1000 ){        
                 item.update();
             } else {
                 item.y = this.y;
@@ -138,33 +138,8 @@ export class Traffic extends Section {
         //-----
 
         this.createBigShipsToTheRight(this.y);
-        this.createBigShipsToTheRight(this.y + 500);
+        this.createBigShipsToTheRight(this.y + 800);
         return;
-
-        let cargoShipY = this.y;
-        let baseShip = false;
-        for(let i = 0; i< 4; i++){
-            let wallWidth = 200
-            let open = 500;
-            if(baseShip){
-                var newShip= this.createNewShipToTheRightOfShip(baseShip, 100);
-            } else {
-                var newShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: 1});
-                //first ship generated 
-                newShip.x = this.x + wallWidth - open + newShip.width/2;
-            }
-            
-            
-            newShip.y = this.y; 
-            let topShip = this.createNewShipAboveShip(newShip, 100);
-
-            let rightShip = this.createNewShipToTheRightOfShip(newShip, 100);
-
-            baseShip = rightShip;
-            this.cargoShips.push(rightShip,topShip,newShip);
-            console.log('looped');
-        }
-
 
     }
 
@@ -173,11 +148,18 @@ export class Traffic extends Section {
 
         let startPositionX = this.trafficLimitX.leftX + 200;
         let gap = 200;
+        let lastShip = false;
         while(startPositionX < this.trafficLimitX.rightX){
-            let newShip = new CargoShip({scene:this.scene, x: startPositionX, y: y, cargoKeyNumber: getRandomInt(1,8)});
+            if(lastShip){
+                var newShip = this.createNewShipToTheRightOfShip(lastShip,gap);
+            } else {
+                var newShip = new CargoShip({scene:this.scene, x: startPositionX, y: y, cargoKeyNumber: getRandomInt(1,8)});
+                
+            }
             startPositionX += newShip.width;
             this.cargoShips.push(newShip);
             startPositionX+= gap; 
+            lastShip = newShip;
         }
     }
 
@@ -190,7 +172,7 @@ export class Traffic extends Section {
 
     createNewShipToTheRightOfShip(newShip, offsetX){
        
-        let rightShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: 1});
+        let rightShip = new CargoShip({scene:this.scene, x: 0, y: 0, boundry: this.topY, cargoKeyNumber: getRandomInt(1,8)});
         rightShip.y = newShip.y;
         rightShip.x = newShip.getRight() + rightShip.width/2 + offsetX;
         return rightShip;      

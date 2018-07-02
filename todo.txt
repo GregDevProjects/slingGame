@@ -1,6 +1,4 @@
 Todo 
-
-Section design 
-- start adding new sections 
-- tie difficulty to gameplay progression
-- transition sections gracefully (player doesn't notice game object removal)
+- use vectors for wall building on the space tube 
+- traffic ends when level start to get smaller 
+- add end section 

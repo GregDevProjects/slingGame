@@ -14,8 +14,8 @@ export class GameplayScene extends Phaser.Scene {
         this.load.image('player', 'assets/img/player.png');
         this.load.image('bg', 'assets/img/bg.png');
         this.load.image('space_rock', 'assets/img/asteroid.png');
-        this.load.image('wall', 'assets/img/wall.png')
-
+        this.load.image('wall', 'assets/img/wall.png');
+        this.load.image('red', 'assets/img/red.png');
         this.load.image('cargo_1','assets/img/ship_1.png');
         this.load.image('cargo_2','assets/img/ship_2.png');
         this.load.image('cargo_3','assets/img/ship_3.png');
@@ -31,10 +31,9 @@ export class GameplayScene extends Phaser.Scene {
         this.matter.world.setBounds(0, 0, 0, 0);
 
       //  new GameBackground(this);
-        this.player = new Player({ scene: this, x: 0, y: 100 });
+        this.player = new Player({ scene: this, x: 100, y: 0 });
         this.activeSections = new SectionContainer({
             scene: this, 
-            type: SECTION_TYPES[2],
             x: 0, 
             y: 0, 
             difficulty: 4,

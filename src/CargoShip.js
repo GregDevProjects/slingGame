@@ -9,8 +9,6 @@ export class CargoShip extends Phaser.Physics.Matter.Image{
         this.velocity = 1;
         this.setStatic(true);
     }
-    //TODO
-    //wap out ship when they meet the end of the section
 
     changeDirection(){
         this.velocity = -this.velocity;
