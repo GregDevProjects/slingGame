@@ -5,6 +5,7 @@ export class VectorWall {
         this.matterBodies = [];
         this.graphicsObjects = [];
         this.makeVectorWall(config.vertices);
+       // this.body.key=this.constructor.name; 
     }
 
     //TODO: break this into a class 
@@ -14,12 +15,15 @@ export class VectorWall {
         vertices = Phaser.Physics.Matter.Matter.Vertices.clockwiseSort(vertices);
         var center = Phaser.Physics.Matter.Matter.Vertices.centre(vertices);
 
-        this.matterBodies.push(this.scene.matter.add.fromVertices(
+        let matterObj = this.scene.matter.add.fromVertices(
             center.x, 
             center.y, 
             vertices,
             {isStatic: true}
-        ));
+        )
+        matterObj.key = this.constructor.name;
+
+        this.matterBodies.push(matterObj);
 
 
         this.phaserPoly(vertices);

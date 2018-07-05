@@ -1,5 +1,4 @@
 //walls on each side with a configurable amount of sapce rocks evenly spread out 
-import { Wall } from '../Wall'
 import { VectorWall } from '../VectorWall'
 import {CargoShip} from '../CargoShip'
 import { Section } from './Section'
@@ -10,16 +9,17 @@ export class Traffic extends Section {
     constructor(config){
         super();
         this.bodies = [];
-        this.topY= config.y - Wall.getHeight() *2;
+        this.height= 6000;
+        this.topY= config.y - this.height;
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;
-        //this.height= Wall.getHeight() *2;
+        
         this.scene = config.scene;
 
         this.cargoShips = [];
 
-        this.makeSpaceRockTube(config); 
+        this.makeWallsAndShips(config); 
     }
 
     getX(){
@@ -38,7 +38,7 @@ export class Traffic extends Section {
         return this.topY;
     }
 
-    makeSpaceRockTube(config){
+    makeWallsAndShips(config){
         //height of the opening/closing bits 
         let height = 1000;
         //amount to angle out from tube 
@@ -133,10 +133,6 @@ export class Traffic extends Section {
 
     //traffic grid spans full width of grid with gaps for the player to fly through 
     addCargoShips(){
-        //creates:
-        //- - -
-        //-----
-
         this.createBigShipsToTheRight(this.y);
         this.createBigShipsToTheRight(this.y + 800);
         return;
@@ -145,7 +141,6 @@ export class Traffic extends Section {
 
     //keep spawning ships to the right until there is no more room 
     createBigShipsToTheRight(y){
-
         let startPositionX = this.trafficLimitX.leftX + 200;
         let gap = 200;
         let lastShip = false;

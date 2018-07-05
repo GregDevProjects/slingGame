@@ -37,3 +37,30 @@ export function getRandomInt(min, max) {
 export function isUndefined(value){
     return value === undefined;
 }
+
+//move an object towards a vector 
+//there's probably a built in way to do this but I couldn't find it 
+export function moveObjectToPoint(objectToMove, whereToMove, speed){
+    let xDistance = objectToMove.x - whereToMove.x;
+    let yDistance = objectToMove.y - whereToMove.y;
+
+    if(Math.abs(xDistance) > 5){
+        if(objectToMove.x > whereToMove.x ){
+            objectToMove.x-=speed;
+        } else {
+            objectToMove.x+=speed;
+        }
+    } else {
+        objectToMove.setVelocityX(0);
+    }
+
+    if(Math.abs(yDistance) > 5){
+        if(objectToMove.y < whereToMove.y){
+         objectToMove.y+=speed;
+        } else {
+            objectToMove.y-=speed;
+        }
+    } else {
+        objectToMove.setVelocityY(0);
+    }
+}

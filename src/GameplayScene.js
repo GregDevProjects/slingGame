@@ -1,6 +1,8 @@
 import { GameBackground } from './GameBackground'
 import { Player } from './Player'
 import { SectionContainer, SECTION_TYPES } from './SectionContainer'
+import { PointOfNoReturn } from './PointOfNoReturn' 
+import { moveObjectToPoint } from './Helper'
 
 export class GameplayScene extends Phaser.Scene {
     constructor() {
@@ -16,6 +18,8 @@ export class GameplayScene extends Phaser.Scene {
         this.load.image('space_rock', 'assets/img/asteroid.png');
         this.load.image('wall', 'assets/img/wall.png');
         this.load.image('red', 'assets/img/red.png');
+        this.load.image('end', 'assets/img/endOfLine.png');
+        this.load.image('blackhole', 'assets/img/p5.png');
         this.load.image('cargo_1','assets/img/ship_1.png');
         this.load.image('cargo_2','assets/img/ship_2.png');
         this.load.image('cargo_3','assets/img/ship_3.png');
@@ -31,7 +35,7 @@ export class GameplayScene extends Phaser.Scene {
         this.matter.world.setBounds(0, 0, 0, 0);
 
       //  new GameBackground(this);
-        this.player = new Player({ scene: this, x: 100, y: 0 });
+        this.player = new Player({ scene: this, x: 200, y: 0 });
         this.activeSections = new SectionContainer({
             scene: this, 
             x: 0, 
@@ -41,27 +45,57 @@ export class GameplayScene extends Phaser.Scene {
         });
  
         this.activeSections.addAnotherSectionContainerAbove();  
+        this.createNewPointOfNoReturn();
         this.matterPhysics();
+        
+
+    }
+
+    createNewPointOfNoReturn(){
+        if(this.pointOfNoReturn){
+            this.pointOfNoReturn.delete();
+        }
+        this.pointOfNoReturn = new PointOfNoReturn({     
+            scene: this, x:this.activeSections.getOldestSection().x, 
+            y:this.activeSections.getOldestSection().y, 
+            width:this.activeSections.getOldestSection().width 
+        });
     }
 
     update() {
         this.activeSections.updateActiveSection();
-        //when player reaches the top of the current container 
-        if(this.player.y <= this.activeSections.getTopOfSectionContainerThePlayerIsIn()){ 
-            
-            this.activeSections.addAnotherSectionContainerAbove();
-            if(this.activeSections.activeSectionsArray.length >=4){
-                this.activeSections.deleteOldestSection();
-            }
-            
-
-            
+        if(this.isPlayerPastActiveSection()){ 
+            this.deleteAndAddSections();
         }
         this.player.update();
-        this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height);
+        this.moveCamera();
 
+        if(this.isPlayerPastPointOfNoReturn()){
+            moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
+            this.player.disableEngine(); 
+            this.player.addToCurrentAngle(10);
+        } 
     }
 
+    deleteAndAddSections(){
+        this.activeSections.addAnotherSectionContainerAbove();
+        if(this.activeSections.activeSectionsArray.length >=4){
+            this.activeSections.deleteOldestSection();
+            this.createNewPointOfNoReturn();
+        }
+    }
+
+    isPlayerPastActiveSection(){
+        return this.player.y <= this.activeSections.getTopOfSectionContainerThePlayerIsIn();
+    }
+
+    isPlayerPastPointOfNoReturn(){
+        return this.player.y > this.pointOfNoReturn.getPointOfNoReturn();
+    }
+
+    moveCamera() {
+        this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height);
+    }
 
     matterPhysics() {
         this.matter.world.on('collisionactive', this.onCollisionActive.bind(this));
@@ -84,9 +118,9 @@ export class GameplayScene extends Phaser.Scene {
             }
             if (aPair.bodyA.key === "SpaceRock" || aPair.bodyB.key === "SpaceRock") {
                 //gotta find a better way to do this
-                if(aPair.bodyA.key === "SpaceRock" && aPair.bodyB.key === "Wall"){
+                if(aPair.bodyA.key === "SpaceRock" && aPair.bodyB.key === "VectorWall"){
                     aPair.bodyA.changeDirection();
-                } else if(aPair.bodyB.key === "SpaceRock" && aPair.bodyA.key === "Wall") {
+                } else if(aPair.bodyB.key === "SpaceRock" && aPair.bodyA.key === "VectorWall") {
                     aPair.bodyB.changeDirection();
                 }
             }

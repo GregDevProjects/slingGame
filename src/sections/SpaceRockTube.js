@@ -1,19 +1,24 @@
 //walls on each side with a configurable amount of sapce rocks evenly spread out 
-import { Wall } from '../Wall'
 import { SpaceRock } from '../SpaceRock'
 import { Section } from './Section'
+import { VectorWall } from '../VectorWall'
 
 export class SpaceRockTube extends Section{
 
     constructor(config){
         super();
         this.bodies = [];
-        this.topY= config.y - Wall.getHeight() *2;
+
+        this.height= 4000;
+
+        this.topY= config.y - this.height;
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;
-        this.height= Wall.getHeight() *2;
+        
+        this.wallWidth = 200;
         this.makeSpaceRockTube(config); 
+        
     }
 
     getX(){
@@ -34,11 +39,7 @@ export class SpaceRockTube extends Section{
 
     makeSpaceRockTube(config){
         //makes it easier to target middle of image
-        config.x += Wall.getWidth()/2;
-        config.y -=Wall.getHeight()/2;
 
-        //TODO: standardize these width calculations for other sections 
-        let rightWallStartX = config.x + config.width - Wall.getWidth();
 
         //TODO: break this into a difficulty modifier that can be added to any section
         var SpaceRockDistance = this.height/(config.difficulty +1);
@@ -52,13 +53,25 @@ export class SpaceRockTube extends Section{
                     })
             );
         }
-    
-        let bottomLeftWall = new Wall({ scene: config.scene, x: config.x, y: config.y });
-        let bottomRightWall = new Wall({ scene: config.scene, x: rightWallStartX, y: config.y });    
-        let topLeftWall = new Wall({ scene: config.scene, x: config.x, y: bottomLeftWall.y - bottomLeftWall.height});
-        let topRightWall = new Wall({ scene: config.scene, x: rightWallStartX,  y: bottomLeftWall.y - bottomLeftWall.height});
+        
+        let leftWall = [
+            {x:this.x, y:this.y},
+            {x:this.x + this.wallWidth, y: this.y},
+            {x:this.x + this.wallWidth, y: this.y - this.height},
+            {x:this.x, y: this.y - this.height}
+        ]
 
-        this.bodies.push(topLeftWall,topRightWall, bottomLeftWall, bottomRightWall);
+        let rightWall = [
+            {x:this.x + this.width - this.wallWidth, y:this.y},
+            {x:this.x + this.width - this.wallWidth, y:this.y - this.height},
+            {x:this.x + this.width, y:this.y - this.height},
+            {x:this.x + this.width, y:this.y}
+        ]
+
+        this.bodies.push(
+            new VectorWall({scene:config.scene, vertices: leftWall}),
+            new VectorWall({scene:config.scene, vertices: rightWall})
+        );
 
     }
 

@@ -1,4 +1,6 @@
 Todo 
-- use vectors for wall building on the space tube 
-- traffic ends when level start to get smaller 
-- add end section 
+- implement death 
+- fix traffic 
+-implement difficulty 
+
+-make 1 variable for wallwaidth

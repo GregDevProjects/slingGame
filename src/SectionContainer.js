@@ -22,14 +22,14 @@ export class SectionContainer {
 
     //first section generated calls this
     addSectionContainer(config){
-        this.activeSectionsArray.push(new this.allSections[1](
-            config
-        ));
-
-        //always add random sections 
-        // this.activeSectionsArray.push(new this.allSections[getRandomInt(0,1)](
+        // this.activeSectionsArray.push(new this.allSections[1](
         //     config
         // ));
+
+       // always add random sections 
+        this.activeSectionsArray.push(new this.allSections[getRandomInt(0,1)](
+            config
+        ));
     }
 
     //all sections generated here except the fist
@@ -62,6 +62,10 @@ export class SectionContainer {
 
     leftXOfNewestSectionContainer(){
         return  this.activeSectionsArray[this.activeSectionsArray.length - 1].getX();
+    }
+
+    getOldestSection(){
+        return this.activeSectionsArray[0];
     }
 
     //need to figure out the best time to call this 

@@ -10,6 +10,7 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.setFixedRotation();
         this.scene.add.existing(this);
         this.boostSpeed = 0.03;
+        this.regularSpeed = 0.005;
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.body.key=this.constructor.name;
         this.boostThrust = 0;
@@ -46,7 +47,7 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.assignPointerToPlayerAction();
         this.applyBoostThrust();
         this.positionThrustSensorBehindPlayer();
-        this.applyThrust(0.005);
+        this.applyThrust(this.regularSpeed);
         this.emitter.setAngle(this.angle + 180);
        
     }
@@ -118,5 +119,9 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.thrust(thrustForce);
     }
 
+    disableEngine(){
+        this.boostSpeed = 0;
+        this.regularSpeed = 0; 
+    }
 
 }
