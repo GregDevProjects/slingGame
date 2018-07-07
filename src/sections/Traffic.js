@@ -19,6 +19,9 @@ export class Traffic extends Section {
 
         this.cargoShips = [];
 
+        this.angleInOutHeight = 500;
+        this.straightHeight = 1500;
+
         this.makeWallsAndShips(config); 
     }
 
@@ -40,11 +43,13 @@ export class Traffic extends Section {
 
     makeWallsAndShips(config){
         //height of the opening/closing bits 
-        let height = 1000;
+        let height = this.angleInOutHeight;
         //amount to angle out from tube 
         let open =  500; 
         //height of the straightways 
-        let distanceToClosing = 500;
+        let distanceToClosing =  this.straightHeight;
+
+
 
         let wallWidth = 200;
 
@@ -106,16 +111,17 @@ export class Traffic extends Section {
         
         this.trafficLimitX = {leftX:config.x - open, rightX: config.x + config.width  + open};
 
-        this.addCargoShips();
+        this.spaceCargoShipsBetween(2);
     }
 
     update(){
         this.cargoShips.forEach((item, index, object)=>{
-            if(item.y >=this.topY + 1000 ){        
+            if(item.y >=this.topY + this.angleInOutHeight ){        
                 item.update();
             } else {
-                item.y = this.y;
-               // object.splice(index, 1);
+               // return;
+                item.y = this.y - this.angleInOutHeight;
+                console.log('warp')
             }
         })
         
@@ -132,16 +138,24 @@ export class Traffic extends Section {
     }
 
     //traffic grid spans full width of grid with gaps for the player to fly through 
-    addCargoShips(){
-        this.createBigShipsToTheRight(this.y);
-        this.createBigShipsToTheRight(this.y + 800);
-        return;
+    spaceCargoShipsBetween(columns){
 
+        for(let i=1; i<columns+1; i++){
+            this.createBigShipsToTheRight(
+                this.getColumnStartPositionY(i)
+            );
+        }
+    }
+
+    getColumnStartPositionY(columnIndex){
+        console.log( this.y - this.angleInOutHeight - this.straightHeight /columnIndex, this.straightHeight/columnIndex)
+        
+        return this.y - this.angleInOutHeight - this.straightHeight /columnIndex;
     }
 
     //keep spawning ships to the right until there is no more room 
     createBigShipsToTheRight(y){
-        let startPositionX = this.trafficLimitX.leftX + 200;
+        let startPositionX = this.trafficLimitX.leftX + 200; 
         let gap = 200;
         let lastShip = false;
         while(startPositionX < this.trafficLimitX.rightX){

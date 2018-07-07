@@ -1,5 +1,7 @@
 import 'phaser';
 import { GameplayScene } from './GameplayScene'
+import { UIScene } from './UIScene'
+
 let config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
@@ -9,7 +11,7 @@ let config = {
         
         default: 'matter',
         matter: {
-            debug: false,
+            debug: true,
             gravity: {
                 x: 0,
                 y: 0
@@ -17,7 +19,8 @@ let config = {
         }
     },
     scene: [
-        GameplayScene
+        GameplayScene,
+        UIScene
     ]
 
 };

@@ -1,6 +1,22 @@
 Todo 
-- implement death 
-- fix traffic 
--implement difficulty 
+- fix traffic
+    -traffic warps in 
+        -use fade from white tint if possible
+- implement difficulty 
+    -traffic
+        -traffic congestion 
+        -traffic war??? 
+    -space tube
+        - 
+-fix explosion 
+    -should always be on top 
+
+prototypes 
+    -zoom out more
+    -traffic has different directions
+    -drift to get boost 
+        -boost to kill stuff
+        -kill stuff to get points : maybe kill stuff by slicing it in 2
+            -https://labs.phaser.io/edit.html?src=src/textures/crop%20texture%20image.js
 
 -make 1 variable for wallwaidth

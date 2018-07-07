@@ -68,16 +68,25 @@ export class SectionContainer {
         return this.activeSectionsArray[0];
     }
 
-    //need to figure out the best time to call this 
     deleteOldestSection(){
         this.activeSectionsArray[0].delete();
         this.activeSectionsArray.splice(0,1);
     }
 
-    updateActiveSection(){
+    updateSections(){
         this.activeSectionsArray.forEach((aSection)=>{
             aSection.update();
         })
     }
+
+    deleteAllSections(){
+        this.activeSectionsArray.forEach((aSection)=> {
+            aSection.delete();
+        })
+
+        this.activeSectionsArray = [];
+    }
+
+    
 
 }

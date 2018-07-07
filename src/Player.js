@@ -16,10 +16,15 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.boostThrust = 0;
         this.createThruster();
         this.createEmitter();
+        this.dead = false;
+        
+        
     }
 
+    //also creates particles
     createEmitter(){
-        this.emitter = this.scene.add.particles('red').createEmitter({
+        this.particles =  this.scene.add.particles('red');
+        this.emitter = this.particles.createEmitter({
 			speed: 80,
 			scale: { start: 3, end: 0 },
 			blendMode: 'ADD',
@@ -43,6 +48,11 @@ export class Player extends Phaser.Physics.Matter.Sprite{
     }
 
     update(){
+        if(this.dead){
+            this.setVelocityX(0);
+            this.setVelocityY(0);
+            return;
+        }
         this.assignKeyboardControlToPlayerAction();
         this.assignPointerToPlayerAction();
         this.applyBoostThrust();
@@ -50,6 +60,16 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.applyThrust(this.regularSpeed);
         this.emitter.setAngle(this.angle + 180);
        
+    }
+
+    onDeath(){
+        this.anims.play('kaboom',true);
+        this.particles.destroy();
+       // Phaser.Physics.Matter.Matter.Composite.remove(this.scene.matter.world, this.thrustSensor3);
+        this.scene.matter.world.remove(this.thrustSensor3);
+        this.scene.matter.world.remove(this);
+        this.dead= true;
+        return this;
     }
 
     positionThrustSensorBehindPlayer(){
@@ -124,4 +144,7 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.regularSpeed = 0; 
     }
 
+    isDead(){
+        return this.dead;
+    }
 }
