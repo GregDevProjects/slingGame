@@ -1,6 +1,4 @@
-import { SpaceRockTube } from './sections/SpaceRockTube'
-import { Traffic } from './sections/Traffic'
-import { getRandomInt } from './Helper'
+import { Section } from './sections/Section'
 //chunck of gameplay that has variable difficulty options 
 //is deleted when safely offscreen 
 //can be chained on top (or possibly below) another SectionContainer 
@@ -13,23 +11,22 @@ export class SectionContainer {
 
         this.activeSectionsArray = [];
         this.scene = config.scene;
-
-        this.allSections = [SpaceRockTube, Traffic];     
+  
 
         this.addSectionContainer(config);
-
+        this.difficulty = config.difficulty;
     }
 
     //first section generated calls this
     addSectionContainer(config){
-        // this.activeSectionsArray.push(new this.allSections[1](
-        //     config
-        // ));
-
-       // always add random sections 
-        this.activeSectionsArray.push(new this.allSections[getRandomInt(0,1)](
+        this.activeSectionsArray.push(new Section(
             config
         ));
+
+       // always add random sections 
+        // this.activeSectionsArray.push(new this.allSections[getRandomInt(0,1)](
+        //     config
+        // ));
     }
 
     //all sections generated here except the fist
@@ -40,7 +37,7 @@ export class SectionContainer {
             x: this.leftXOfNewestSectionContainer(), 
             y: this.getTopOfNewestSectionContainer(),
             width: this.getWidthOfNewestSectionContainer(), //
-            difficulty: 4   //tie this to gameplay progression 
+            difficulty: this.difficulty   //tie this to gameplay progression 
         });
     }
 

@@ -1,9 +1,10 @@
 import { GameBackground } from './GameBackground'
+import { Matter } from './matter/MatterHelper'
 import { Player } from './Player'
 import { SectionContainer, SECTION_TYPES } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn' 
 import { moveObjectToPoint } from './Helper'
-
+import { CollisionHandler } from './matter/CollisionHandler'
 
 export class GameplayScene extends Phaser.Scene {
     constructor() {
@@ -33,6 +34,8 @@ export class GameplayScene extends Phaser.Scene {
 
     create() {
 
+        this.matterHelper = new Matter({scene: this});
+
         this.anims.create({
             key: 'kaboom',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
@@ -41,18 +44,17 @@ export class GameplayScene extends Phaser.Scene {
             hideOnComplete: true
         }); 
 
-        this.cameras.main.setZoom(0.2);
+        this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
 
       //  new GameBackground(this);
-
-        this.matterPhysics();
+       
+       // this.matterPhysics();
         this.createGameObjects();
-
+        
         this.playerInvinsible = false;
-        //use another scene https://labs.phaser.io/edit.html?src=src\scenes\ui%20scene%20es6.js
-      //  this.scoreText = this.add.text(0,0, 'score: 0', { fontSize: '62px', fill: '#ffffff' });
 
+        CollisionHandler.startCollisionDetection({scene: this});
     }
 
     deleteGameObjects(){
@@ -67,13 +69,14 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     createGameObjects(){
-        this.player = new Player({ scene: this, x: 280, y: 0 });
+        this.player = new Player({ scene: this, x: 280, y: 0, matterHelper : this.matterHelper });
         this.activeSections = new SectionContainer({
             scene: this, 
             x: 0, 
             y: 0, 
-            difficulty: 4,
-            width: 1000
+            difficulty: 1,
+            width: 1000,
+            matterHelper : this.matterHelper
         });
 
         this.activeSections.addAnotherSectionContainerAbove();  
@@ -99,6 +102,7 @@ export class GameplayScene extends Phaser.Scene {
         this.activeSections.updateSections();
         if(this.isPlayerPastActiveSection()){ 
             this.deleteAndAddSections();
+            this.activeSections.difficulty++;
         }
         this.player.update();
         this.moveCamera();
@@ -127,46 +131,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     moveCamera() {
-        this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height);
+        this.cameras.main.setScroll(this.player.x - this.cameras.main.width / 2, this.player.y - this.cameras.main.height - 200);
     }
 
-    matterPhysics() {
-        this.matter.world.on('collisionactive', this.onCollisionActive.bind(this));
-    }
-
-    onCollisionActive(event, bodyA, bodyB) {
-        //reaaaaly sucks that I have to do this
-        //TODO: setup base class for matter objects that have a key 
-        for (let aPair of event.pairs) {
-            if (aPair.bodyA.key === "Wall" || aPair.bodyB.key === "Wall") {
-                //call wall collision
-               // console.log('wall');
-            }
-            if ((aPair.bodyA.key === "Player" || aPair.bodyB.key === "Player") && (aPair.bodyA.key !== "Thruster" && aPair.bodyB.key !== "Thruster")) {
-                if(!this.playerInvinsible){
-                    this.onPlayerCollisionWithNonTruster();
-                }
-                
-            }
-
-            if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
-                this.player.queueBoostThrust();
-            }
-            if (aPair.bodyA.key === "SpaceRock" || aPair.bodyB.key === "SpaceRock") {
-                //gotta find a better way to do this
-                if(aPair.bodyA.key === "SpaceRock" && aPair.bodyB.key === "VectorWall"){
-                    aPair.bodyA.changeDirection();
-                } else if(aPair.bodyB.key === "SpaceRock" && aPair.bodyA.key === "VectorWall") {
-                    aPair.bodyB.changeDirection();
-                }
-            }
-        }
-    }
-
-    onPlayerCollisionWithNonTruster(){
-        this.player.onDeath().on('animationcomplete', function() { 
-            this.deleteGameObjects();
-            this.createGameObjects();
-        }.bind(this), this.scene);
-    }
 }

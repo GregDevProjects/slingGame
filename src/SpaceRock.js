@@ -7,6 +7,7 @@ export class SpaceRock extends Phaser.Physics.Matter.Image{
         this.scene.add.existing(this);
         this.velocity = 1;
         this.floatsLeft = getRandomInt(0,1);
+        this.setCollisionCategory(this.scene.matterHelper.getMainCollisionGroup());
     }
     //TODO
     //setType()
@@ -25,5 +26,9 @@ export class SpaceRock extends Phaser.Physics.Matter.Image{
         }
 
         this.y -= 1;    
+    }
+
+    delete(){
+        this.destroy();    
     }
 }

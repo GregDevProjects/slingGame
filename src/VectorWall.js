@@ -5,6 +5,7 @@ export class VectorWall {
         this.matterBodies = [];
         this.graphicsObjects = [];
         this.makeVectorWall(config.vertices);
+        
        // this.body.key=this.constructor.name; 
     }
 
@@ -22,7 +23,7 @@ export class VectorWall {
             {isStatic: true}
         )
         matterObj.key = this.constructor.name;
-
+        matterObj.collisionFilter.category = this.scene.matterHelper.getMainCollisionGroup();
         this.matterBodies.push(matterObj);
 
 

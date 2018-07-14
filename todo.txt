@@ -1,22 +1,35 @@
 Todo 
-- fix traffic
-    -traffic warps in 
-        -use fade from white tint if possible
+- seperate wall shape and traffic/asteriod logic 
+    - remove spaceRockTube and traffic
+        -sections should be created on the fly with random track + obstacles 
 - implement difficulty 
     -traffic
         -traffic congestion 
-        -traffic war??? 
     -space tube
-        - 
--fix explosion 
+        - more rocks 
+-fix overlapping 
     -should always be on top 
 
 prototypes 
     -zoom out more
-    -traffic has different directions
-    -drift to get boost 
+    -music and color change 
+    -drift to get boost <- looks good!
         -boost to kill stuff
         -kill stuff to get points : maybe kill stuff by slicing it in 2
             -https://labs.phaser.io/edit.html?src=src/textures/crop%20texture%20image.js
 
 -make 1 variable for wallwaidth
+
+Bugs 
+- emmitter causes expection when deleting player
+Uncaught TypeError: Cannot read property 'position' of undefined
+    at Player.get [as x] (project.bundle.js:150497)
+    at Particle.fire (project.bundle.js:74743)
+    at ParticleEmitter.emitParticle (project.bundle.js:77027)
+    at ParticleEmitter.preUpdate (project.bundle.js:77127)
+    at ParticleEmitterManager.preUpdate (project.bundle.js:40578)
+    at UpdateList.update (project.bundle.js:122002)
+    at EventEmitter.emit (project.bundle.js:2011)
+    at Systems.step (project.bundle.js:34443)
+    at SceneManager.update (project.bundle.js:67326)
+    at Game.step (project.bundle.js:116335)

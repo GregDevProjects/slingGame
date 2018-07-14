@@ -17,7 +17,7 @@ export class Player extends Phaser.Physics.Matter.Sprite{
         this.createThruster();
         this.createEmitter();
         this.dead = false;
-        
+        this.setCollidesWith(config.matterHelper.getMainCollisionGroup());
         
     }
 
