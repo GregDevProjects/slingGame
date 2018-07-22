@@ -32,9 +32,6 @@ export class VectorWall {
         return bodies;
     }
 
-    update(){
-        //notin doin
-    }
 
     destroy(){
         this.matterBodies.forEach((aBody)=>{
@@ -54,7 +51,7 @@ export class VectorWall {
     
         graphics.lineStyle(1, 0x00aa00);
         graphics.fillStyle(0x00aa00, 1.0);
-
+        
         graphics.beginPath();
         this.graphicsObjects.push(graphics.moveTo(
             polygon.points[0].x,
@@ -74,7 +71,7 @@ export class VectorWall {
         graphics.fillPath();
         //TODO: research this for preformance boost 
        // graphics.generateTexture('starGraphics');
-
+     
       
     }
     

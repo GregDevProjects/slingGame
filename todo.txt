@@ -1,35 +1,80 @@
-Todo 
-- seperate wall shape and traffic/asteriod logic 
-    - remove spaceRockTube and traffic
-        -sections should be created on the fly with random track + obstacles 
-- implement difficulty 
-    -traffic
-        -traffic congestion 
-    -space tube
-        - more rocks 
--fix overlapping 
-    -should always be on top 
+-----------------Todo -----------------------------------------
 
-prototypes 
-    -zoom out more
-    -music and color change 
-    -drift to get boost <- looks good!
-        -boost to kill stuff
-        -kill stuff to get points : maybe kill stuff by slicing it in 2
-            -https://labs.phaser.io/edit.html?src=src/textures/crop%20texture%20image.js
+As a player, I want cargo ships that warp in and out seamlessly 
+    -cargo ships start with horizontal padding and fly in to regular spacing on an angle 
 
--make 1 variable for wallwaidth
+-----------------Todo -----------------------------------------
 
-Bugs 
-- emmitter causes expection when deleting player
-Uncaught TypeError: Cannot read property 'position' of undefined
-    at Player.get [as x] (project.bundle.js:150497)
-    at Particle.fire (project.bundle.js:74743)
-    at ParticleEmitter.emitParticle (project.bundle.js:77027)
-    at ParticleEmitter.preUpdate (project.bundle.js:77127)
-    at ParticleEmitterManager.preUpdate (project.bundle.js:40578)
-    at UpdateList.update (project.bundle.js:122002)
-    at EventEmitter.emit (project.bundle.js:2011)
-    at Systems.step (project.bundle.js:34443)
-    at SceneManager.update (project.bundle.js:67326)
-    at Game.step (project.bundle.js:116335)
+
+
+-----------------Backlog -----------------------------------------
+
+
+
+As a player, I want to destroy asteroids with thrusters 
+    -player gets thrust boost when asteroid is destroyed by thruster
+
+As a player, I want to know when I'm grinding 
+    -show emitter sparks on grind contact points 
+
+As a player, I want a non-boost thruster that looks good 
+    -animate existing thruster or find new one
+
+As a player, I want a powertrust progress bar that looks good 
+    - see if there is an open source progress bar that look good 
+    - maybe the thruster could change color to show boost progress instead 
+    - it should be obvious when at full power
+
+As a player, I want backgrounds with multiple layers 
+    - the phaser 3 minimap delerium example shows this
+
+As a player, I want a cap to the amount of asteroids/cargo ships that can be spawned at once
+so that the game is fair (TUNING 1) 
+    -implement cap per section size 
+
+As a player, I want multiple types of obstacles in the same section (TUNING 2)
+    -research how to implement based on difficulty 
+    -implement in section 
+    -deal with obstacles colliding
+
+As a player, I want a score system
+
+-----------------Bugs -----------------------------------------
+- not sure of the cause
+project.bundle.js:163259 Uncaught (in promise) TypeError: Cannot read property 'position' of undefined
+    at CargoShip.get [as y] (project.bundle.js:163259)
+    at CargoShip.set [as x] (project.bundle.js:163241)
+    at warpOut.then (project.bundle.js:171872)
+
+- SCENE WAS UNDEFINED
+            this.warpOut().then(() => {
+            this.x = x;
+            this.y = y;
+            this.warpIn().then(() => {
+                this.moveSpeed = 3;
+                this.setCollisionCategory(this.scene.matterHelper.getMainCollisionGroup());
+                this.isWarping = false;
+            });
+        })
+-----------------Bugs -----------------------------------------
+
+-----------------Backlog -----------------------------------------
+
+
+-----------------Ideas -----------------------------------------
+
+-as a newgrounds player I need a challenege besides space rocks and taffic 
+    -squad flyers 
+        -fly in random patteren from bottom to top starting in a random X plane 
+
+-make 1 variable for wallwidth
+
+-As Greg McLean, I want my game to to have a retro asthetic 
+    - music 
+    - barriers 
+    - space road  
+-As a newgrounds user, I want to play an endless runner type game with a top down space ship 
+    - highscores 
+    - increasing difficulty 
+
+-----------------Ideas -----------------------------------------

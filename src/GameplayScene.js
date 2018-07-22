@@ -2,7 +2,7 @@ import { GameBackground } from './GameBackground'
 import { Matter } from './matter/MatterHelper'
 import { Player } from './Player'
 import { SectionContainer, SECTION_TYPES } from './SectionContainer'
-import { PointOfNoReturn } from './PointOfNoReturn' 
+import { PointOfNoReturn } from './PointOfNoReturn'
 import { moveObjectToPoint } from './Helper'
 import { CollisionHandler } from './matter/CollisionHandler'
 
@@ -17,24 +17,26 @@ export class GameplayScene extends Phaser.Scene {
     preload() {
         this.load.image('player', 'assets/img/player.png');
         this.load.image('bg', 'assets/img/bg.png');
+        this.load.image('gridBg', 'assets/img/Grid.png');
         this.load.image('space_rock', 'assets/img/asteroid.png');
         this.load.image('red', 'assets/img/red.png');
         this.load.image('end', 'assets/img/endOfLine.png');
         this.load.image('blackhole', 'assets/img/p5.png');
-        this.load.image('cargo_1','assets/img/ship_1.png');
-        this.load.image('cargo_2','assets/img/ship_2.png');
-        this.load.image('cargo_3','assets/img/ship_3.png');
-        this.load.image('cargo_4','assets/img/ship_4.png');
-        this.load.image('cargo_5','assets/img/ship_5.png');
-        this.load.image('cargo_6','assets/img/ship_6.png');
-        this.load.image('cargo_7','assets/img/ship_7.png');
-        this.load.image('cargo_8','assets/img/ship_8.png');
+        this.load.image('cargo_1', 'assets/img/ship_1.png');
+        this.load.image('cargo_2', 'assets/img/ship_2.png');
+        this.load.image('cargo_3', 'assets/img/ship_3.png');
+        this.load.image('cargo_4', 'assets/img/ship_4.png');
+        this.load.image('cargo_5', 'assets/img/ship_5.png');
+        this.load.image('cargo_6', 'assets/img/ship_6.png');
+        this.load.image('cargo_7', 'assets/img/ship_7.png');
+        this.load.image('cargo_8', 'assets/img/ship_8.png');
+        this.load.image('thrustFlame', 'assets/img/thrustFlame.png');
         this.load.spritesheet('explosion', 'assets/img/explosion.png', { 'frameWidth': 96, 'frameHeight': 96 });
     }
 
     create() {
 
-        this.matterHelper = new Matter({scene: this});
+        this.matterHelper = new Matter({ scene: this });
 
         this.anims.create({
             key: 'kaboom',
@@ -42,91 +44,102 @@ export class GameplayScene extends Phaser.Scene {
             frameRate: 20,
             repeat: 0,
             hideOnComplete: true
-        }); 
+        });
 
         this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
 
-      //  new GameBackground(this);
-       
-       // this.matterPhysics();
+        this.background = new GameBackground(this);
+        // this.matterPhysics();
         this.createGameObjects();
-        
+
         this.playerInvinsible = false;
 
-        CollisionHandler.startCollisionDetection({scene: this});
+        CollisionHandler.startCollisionDetection({ scene: this });
     }
 
-    deleteGameObjects(){
+    deleteGameObjects() {
         this.player.destroy();
         this.activeSections.deleteAllSections();
     }
 
-    getPlayerDistance(){
-        if(this.player){
-            return Math.floor(-this.player.y/100);
+    getPlayerStats() {
+        if (this.player) {
+            return { 
+                'distance' : Math.floor(-this.player.y / 100),
+                'power' : this.player.power
+            };
         }
     }
 
-    createGameObjects(){
-        this.player = new Player({ scene: this, x: 280, y: 0, matterHelper : this.matterHelper });
+    onPlayerPowerThrustStart(){
+        this.activeSections.setAllSectionObstaclesSensors(true);
+    }
+
+    onPlayerPowerThrustEnd(){
+        this.activeSections.setAllSectionObstaclesSensors(false);
+    }
+
+    createGameObjects() {
+        this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
         this.activeSections = new SectionContainer({
-            scene: this, 
-            x: 0, 
-            y: 0, 
+            scene: this,
+            x: 0,
+            y: 0,
             difficulty: 1,
             width: 1000,
-            matterHelper : this.matterHelper
+            matterHelper: this.matterHelper
         });
 
-        this.activeSections.addAnotherSectionContainerAbove();  
+        this.activeSections.addAnotherSectionContainerAbove();
         this.createNewPointOfNoReturn();
     }
 
-    createNewPointOfNoReturn(){
-        if(this.pointOfNoReturn){
+    createNewPointOfNoReturn() {
+        if (this.pointOfNoReturn) {
             this.pointOfNoReturn.delete();
         }
-        this.pointOfNoReturn = new PointOfNoReturn({     
-            scene: this, x:this.activeSections.getOldestSection().x, 
-            y:this.activeSections.getOldestSection().y, 
-            width:this.activeSections.getOldestSection().width 
+        this.pointOfNoReturn = new PointOfNoReturn({
+            scene: this, x: this.activeSections.getOldestSection().x,
+            y: this.activeSections.getOldestSection().y,
+            width: this.activeSections.getOldestSection().width
         });
     }
 
     update() {
-        if(this.player.isDead()){
+        if (this.player.isDead()) {
             this.activeSections.updateSections();
             return;
         }
         this.activeSections.updateSections();
-        if(this.isPlayerPastActiveSection()){ 
+        if (this.isPlayerPastActiveSection()) {
             this.deleteAndAddSections();
             this.activeSections.difficulty++;
         }
         this.player.update();
+        this.background.update();
         this.moveCamera();
 
-        if(this.isPlayerPastPointOfNoReturn()){
+        if (this.isPlayerPastPointOfNoReturn()) {
             moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
-            this.player.disableEngine(); 
+            this.player.disableEngine();
             this.player.addToCurrentAngle(10);
-        } 
+        }
     }
 
-    deleteAndAddSections(){
+    deleteAndAddSections() {
         this.activeSections.addAnotherSectionContainerAbove();
-        if(this.activeSections.activeSectionsArray.length >=4){
+        if (this.activeSections.activeSectionsArray.length >= 4) {
             this.activeSections.deleteOldestSection();
             this.createNewPointOfNoReturn();
         }
     }
 
-    isPlayerPastActiveSection(){
+    isPlayerPastActiveSection() {
         return this.player.y <= this.activeSections.getTopOfSectionContainerThePlayerIsIn();
     }
 
-    isPlayerPastPointOfNoReturn(){
+    isPlayerPastPointOfNoReturn() {
         return this.player.y > this.pointOfNoReturn.getPointOfNoReturn();
     }
 
