@@ -15,6 +15,7 @@ export class SectionContainer {
 
         this.addSectionContainer(config);
         this.difficulty = config.difficulty;
+        this.isSpawnedWhite = false;
     }
 
     //first section generated calls this
@@ -33,7 +34,8 @@ export class SectionContainer {
             y: this.getTopOfNewestSectionContainer(),
             width: this.getWidthOfNewestSectionContainer(), //
             difficulty: this.difficulty,   //tie this to gameplay progression 
-            isObstaclesSensors: this.isSectionObstaclesSensors
+            isObstaclesSensors: this.isSectionObstaclesSensors,
+            isSpawnedWhite: this.isSpawnedWhite
         });
     }
 
@@ -92,22 +94,18 @@ export class SectionContainer {
     setAllSectionObstaclesTintWhite(isWhite){
 
         this.activeSectionsArray.forEach((aSection) => {
-            // // if(isWhite) {
-            //     aSection.setObstaclesTintWhite();
-            // //     continue;
-            // // }
-            // //
             if (isWhite){
-               // debugger;
+                this.isSpawnedWhite = true;
                 aSection.setObstaclesTintWhite();
             } else {
+                this.isSpawnedWhite = false;
                 aSection.setObstaclesTintOff();
             }
         });
     }
 
+    //TODO: find better way to keep player from slight collisions 
     setAllSectionObstaclesSensors(isSensor){
-
         this.isSectionObstaclesSensors = isSensor;
 
         this.activeSectionsArray.forEach((aSection) => {

@@ -15,7 +15,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.body.key = this.constructor.name;
         this.boostThrust = 0;
-        this.power = 1;
+        this.power = 0;
         this.createThruster();
         this.createEmitter();
         this.dead = false;
@@ -32,7 +32,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     //also creates particles
     createEmitter() {
-
         this.particles = this.scene.add.particles('red');
         this.emitter = this.particles.createEmitter({
             speed: 0,
@@ -44,13 +43,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             quantity:1
         });
       
-       this.emitter.startFollow(this);//.followOffset = {x: 0, y: 30};
+       this.emitter.startFollow(this);
        this.emitter.setVisible(false);
-       //debugger;
-
-        //call this on update 
-        //this.emitter.setAngle(this.angle);
-
     }
 
     incrementPower() {
@@ -176,6 +170,10 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.setFrictionAir(0.15);
             this.power = 0;
             this.scene.onPlayerPowerThrustStart();
+            this.setTintFill(0xffffff);
+            this.emitter.setVisible(true);
+            this.thrusterImage.setVisible(false);
+
             this.thrustTimer = this.scene.time.addEvent({ 
                 delay: this.powerThrustTime, 
                 callback: function () { 
@@ -184,11 +182,9 @@ export class Player extends Phaser.Physics.Matter.Sprite {
                 callbackScope: this, 
                 startAt: 0 
             });
-            this.setTintFill(0xffffff);
-            this.emitter.setVisible(true);
-            this.thrusterImage.setVisible(false);
-            this.scene.background.changeBackground();
-            this.scene.activeSections.setAllSectionObstaclesTintWhite(true);
+
+            // this.scene.background.changeBackground();
+            // this.scene.activeSections.setAllSectionObstaclesTintWhite(true);
         };
 
         this.stop = function () {
@@ -199,21 +195,19 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.clearTint();
             this.emitter.setVisible(false);
             this.thrusterImage.setVisible(true);
-            this.scene.background.changeBackground();
-            this.scene.activeSections.setAllSectionObstaclesTintWhite(false);
+            // this.scene.background.changeBackground();
+            // this.scene.activeSections.setAllSectionObstaclesTintWhite(false);
             this.comboCounter = 0;
         };
         return this;
     }
 
     incrementCombo() {
-
         this.comboCounter++;
         if (this.comboCounter < 2) {
             return;
         }
 
-      
         this.scene.tweens.add({
             targets:  this.scene.add.text(this.x, this.y - 100, 'COMBO ' + this.comboCounter, { font: '60px Arial', fill: '#ffffff' }),
             alpha: 0,

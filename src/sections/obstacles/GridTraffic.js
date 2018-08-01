@@ -4,20 +4,18 @@ import { CargoShip } from '../../CargoShip'
 export class GridTraffic {
 
     static makeAndGetBodies(config) {
-        let trafficLimitX = { leftX: config.x, rightX: config.x + config.width };
-        return this.spaceCargoShipsBetween(trafficLimitX, config);
+        return this.spaceCargoShipsBetween(config);
     }
 
     //TODO: make traffic even
     //traffic grid spans full width of grid with gaps for the player to fly through 
-    static spaceCargoShipsBetween(trafficLimitX, config) {
+    static spaceCargoShipsBetween(config) {
         let bodies = [];
         let distanceY = config.height / (config.difficulty + 1);
-        for (let i = 1; i < config.difficulty + 1; i++) {
-            bodies = bodies.concat(this.createBigShipsToTheRight(
-                (config.y - config.height) + distanceY * i,
-                config,
-                trafficLimitX
+        for (let i = 0; i < config.difficulty; i++) {
+            bodies = bodies.concat(this.createCargoShipPair(
+                config.y -  distanceY * i,
+                config
             ));
             //debugger;
         }
@@ -25,32 +23,35 @@ export class GridTraffic {
         return bodies;
     }
 
-    //keep spawning ships to the right until there is no more room 
-    static createBigShipsToTheRight(y, config, trafficLimitX) {
-        let startPositionX = trafficLimitX.leftX;
-        let gap = 200 + getRandomInt(100, 300);
-        let lastShip = false;
-        let cargoShips = [];
-        while (startPositionX < trafficLimitX.rightX) {
-            if (lastShip) {
-                var newShip = this.createNewShipToTheRightOfShip(lastShip, gap, config);
-            } else {
-                var newShip = new CargoShip({ scene: config.scene, x: startPositionX, y: y, cargoKeyNumber: getRandomInt(1, 8), warpToPostionY: config.y, warpOutPositionY: config.y - config.height });
+    //spawn 2 ships on the same y plane that fly together 
+    static createCargoShipPair(y, config) {
+    
+        let leftShip = new CargoShip({ 
+            scene: config.scene, 
+            straighPathPostion: {x: config.x, y: y},
+            startPostion: {x: config.x - config.wallWidth, y},
+            cargoKeyNumber: getRandomInt(1, 8), 
+            veerOff: {postionY:config.y - config.height + 500, xDirection: -1},
+            warpOutPositionY: config.y - config.height,
+            warpToPostionY: config.y
+         });
 
-            }
-            startPositionX += newShip.width;
-            cargoShips.push(newShip);
-            startPositionX += gap;
-            lastShip = newShip;
+         let rightShip = new CargoShip({ 
+            scene: config.scene, 
+            straighPathPostion: {x: config.x + config.width - config.wallWidth , y: y}, 
+            startPostion: {x: config.x + config.width , y},
+            cargoKeyNumber: getRandomInt(1, 8), 
+            veerOff: {postionY:config.y - config.height + 500, xDirection: 1},
+            warpOutPositionY: config.y - config.height,
+            warpToPostionY: config.y
+         });
+
+        if (config.isSpawnedWhite) {
+            leftShip.setTintFill(0xffffff);
+            rightShip.setTintFill(0xffffff);
         }
-        return cargoShips;
+
+        return [leftShip, rightShip];       
     }
 
-    static createNewShipToTheRightOfShip(newShip, offsetX, config) {
-
-        let rightShip = new CargoShip({ scene: config.scene, x: 0, y: 0, boundry: config.y + config.height, cargoKeyNumber: getRandomInt(1, 8), warpToPostionY: config.y, warpOutPositionY: config.y - config.height });
-        rightShip.y = newShip.y;
-        rightShip.x = newShip.getRight() + rightShip.width / 2 + offsetX;
-        return rightShip;
-    }
 }

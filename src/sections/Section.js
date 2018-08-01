@@ -16,8 +16,9 @@ export class Section{
         this.y = config.y;
         this.width = config.width;
         this.scene = config.scene;
+        this.tintWhiteOnSpawn = false;
         
-        this.walls = this.allTracks[getRandomInt(0,1)].makeAndGetBodies({
+        this.walls = this.allTracks[getRandomInt(0,this.allTracks.length - 1)].makeAndGetBodies({
             x: this.x,
             y: this.y,
             width: this.width,
@@ -26,13 +27,15 @@ export class Section{
             scene: config.scene
         });
         
-        this.obstacles = this.allObstacles[getRandomInt(0,1)].makeAndGetBodies({
+        this.obstacles = this.allObstacles[getRandomInt(0,this.allObstacles.length - 1)].makeAndGetBodies({
             scene: this.scene,
             x: this.x + this.wallWidth, 
             y: this.y, 
             width: this.width - this.wallWidth,
             height: this.height,
-            difficulty: config.difficulty
+            difficulty: config.difficulty,
+            wallWidth: this.wallWidth,
+            isSpawnedWhite: config.isSpawnedWhite
         });      
 
 

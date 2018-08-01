@@ -1,7 +1,8 @@
 -----------------Todo -----------------------------------------
 
-As a player, I want cargo ships that warp in and out seamlessly 
-    -cargo ships start with horizontal padding and fly in to regular spacing on an angle 
+As a player, I want to destroy asteroids with thrusters 
+    -player gets thrust boost when asteroid is destroyed by thruster
+    -asteroid tints as it takes damage (maybe)
 
 -----------------Todo -----------------------------------------
 
@@ -9,13 +10,17 @@ As a player, I want cargo ships that warp in and out seamlessly
 
 -----------------Backlog -----------------------------------------
 
+As a player, I want to be able to conserve momentum in wide areas when there isn't traffic 
+    -give asteroids random sizes 
+    -windmill thingy 
+        - make it move slowly and take out obstacles in its path
 
-
-As a player, I want to destroy asteroids with thrusters 
-    -player gets thrust boost when asteroid is destroyed by thruster
 
 As a player, I want to know when I'm grinding 
     -show emitter sparks on grind contact points 
+
+As a player, I want differnt types of tracks 
+    -see phone notes 
 
 As a player, I want a non-boost thruster that looks good 
     -animate existing thruster or find new one
@@ -23,39 +28,49 @@ As a player, I want a non-boost thruster that looks good
 As a player, I want a powertrust progress bar that looks good 
     - see if there is an open source progress bar that look good 
     - maybe the thruster could change color to show boost progress instead 
-    - it should be obvious when at full power
+    - it should be obvious when at full power (pulse purple?)
 
 As a player, I want backgrounds with multiple layers 
     - the phaser 3 minimap delerium example shows this
+    - add a few random planets 
 
 As a player, I want a cap to the amount of asteroids/cargo ships that can be spawned at once
 so that the game is fair (TUNING 1) 
     -implement cap per section size 
 
-As a player, I want multiple types of obstacles in the same section (TUNING 2)
+As a player, I want cargo ships that shoot each other (TUNING 2) 
+    -starts at certain difficulty 
+
+As a player, I want multiple types of obstacles in the same section (TUNING 3)
     -research how to implement based on difficulty 
     -implement in section 
     -deal with obstacles colliding
 
+As a player, I want walls that aren't green
+    -walls should change colors and/or texture on burst
+
 As a player, I want a score system
 
------------------Bugs -----------------------------------------
-- not sure of the cause
-project.bundle.js:163259 Uncaught (in promise) TypeError: Cannot read property 'position' of undefined
-    at CargoShip.get [as y] (project.bundle.js:163259)
-    at CargoShip.set [as x] (project.bundle.js:163241)
-    at warpOut.then (project.bundle.js:171872)
+As a player, I want the hitbox to match the image
 
-- SCENE WAS UNDEFINED
-            this.warpOut().then(() => {
-            this.x = x;
-            this.y = y;
-            this.warpIn().then(() => {
-                this.moveSpeed = 3;
-                this.setCollisionCategory(this.scene.matterHelper.getMainCollisionGroup());
-                this.isWarping = false;
-            });
-        })
+-----------------Bugs -----------------------------------------
+
+-asteroids spawn inside and beyond walls 
+-collisions don't always register as expected 
+    - use onstart and onactive for same collision detection
+
+- sometimes when player is deleted 
+Uncaught TypeError: Cannot read property 'position' of undefined
+    at Player.get [as x] (project.bundle.js:163278)
+    at Particle.fire (project.bundle.js:75480)
+    at ParticleEmitter.emitParticle (project.bundle.js:77779)
+    at ParticleEmitter.preUpdate (project.bundle.js:77879)
+    at ParticleEmitterManager.preUpdate (project.bundle.js:41735)
+    at UpdateList.update (project.bundle.js:134261)
+    at EventEmitter.emit (project.bundle.js:2696)
+    at Systems.step (project.bundle.js:35703)
+    at SceneManager.update (project.bundle.js:67853)
+    at Game.step (project.bundle.js:127935)
 -----------------Bugs -----------------------------------------
 
 -----------------Backlog -----------------------------------------

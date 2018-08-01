@@ -74,9 +74,13 @@ export class GameplayScene extends Phaser.Scene {
 
     onPlayerPowerThrustStart(){
         this.activeSections.setAllSectionObstaclesSensors(true);
+        this.background.changeBackground();
+        this.activeSections.setAllSectionObstaclesTintWhite(true);
     }
 
     onPlayerPowerThrustEnd(){
+        this.background.changeBackground();
+        this.activeSections.setAllSectionObstaclesTintWhite(false);
         this.activeSections.setAllSectionObstaclesSensors(false);
     }
 

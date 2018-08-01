@@ -24,10 +24,10 @@ export function destroyObject(matterObj, isExploding) {
         return;
     }
 
-    matterObj.setSensor(true);
+    //matterObj.setSensor(true);
+    matterObj.body.destroy()
     let kaboomAnimationHeight = 65;
     matterObj.setScale(matterObj.height / kaboomAnimationHeight);
     matterObj.anims.play('kaboom', true);
-    
     matterObj.on('animationcomplete', () => {matterObj.setScale(1); matterObj.destroy(); }, matterObj);
 }
