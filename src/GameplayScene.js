@@ -32,6 +32,7 @@ export class GameplayScene extends Phaser.Scene {
         this.load.image('cargo_8', 'assets/img/ship_8.png');
         this.load.image('thrustFlame', 'assets/img/thrustFlame.png');
         this.load.spritesheet('explosion', 'assets/img/explosion.png', { 'frameWidth': 96, 'frameHeight': 96 });
+        this.load.image('spinner', 'assets/img/spinner.png');
     }
 
     create() {

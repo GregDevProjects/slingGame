@@ -31,13 +31,13 @@ export class CollisionHandler {
                 // console.log('wall');
             }
 
-
             if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
                 if(!this.scene.player.getIsPowerThrusting()){
                     this.scene.player.queueBoostThrust();
                     this.scene.player.incrementPower();
                 }
             }
+
             if (aPair.bodyA.key === "SpaceRock" || aPair.bodyB.key === "SpaceRock") {
                 //gotta find a better way to do this
                 if (aPair.bodyA.key === "SpaceRock" && aPair.bodyB.key === "VectorWall") {
@@ -45,9 +45,20 @@ export class CollisionHandler {
                 } else if (aPair.bodyB.key === "SpaceRock" && aPair.bodyA.key === "VectorWall") {
                     aPair.bodyB.changeDirection();
                 }
-            }         
+            }  
 
+            if ((aPair.bodyA.key === "Spinner" || aPair.bodyB.key === "Spinner" )) {
+                if (bodyA.key === "SpaceRock" ||  bodyA.key === "CargoShip") {
+                    bodyA.delete(true);
+                }
+
+                if (bodyB.key === "SpaceRock" ||  bodyB.key === "CargoShip") {
+                    bodyB.delete(true);
+                }
+            } 
         }
+
+
     }
 
 
@@ -57,13 +68,13 @@ export class CollisionHandler {
             return;
         }
 
-        if (this.scene.player.isPowerThrusting){
+        if (this.scene.player.isPowerThrusting && bodyA.key !== 'Spinner' && bodyB.key !== 'Spinner'){
             if (bodyA.key !== 'Player' && bodyA.key !== 'VectorWall'){
                 bodyA.delete(true);
                 this.scene.player.incrementCombo();
             }
 
-            if (bodyB.key !== 'Player' && bodyB.key !== 'VectorWall'){
+            if (bodyB.key !== 'Player' && bodyB.key !== 'VectorWall'){  
                 bodyB.delete(true);
                 this.scene.player.incrementCombo();
             }

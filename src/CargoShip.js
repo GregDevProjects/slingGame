@@ -78,6 +78,9 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
         this.y = y;
     }
 
+    tintWhite() {
+        this.setTintFill(0xffffff);
+    }
 
     getDimensions() {
         //get demensions before creating 

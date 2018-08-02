@@ -71,6 +71,20 @@ Uncaught TypeError: Cannot read property 'position' of undefined
     at Systems.step (project.bundle.js:35703)
     at SceneManager.update (project.bundle.js:67853)
     at Game.step (project.bundle.js:127935)
+
+-when boosting
+Uncaught TypeError: Cannot set property 'frictionAir' of undefined
+    at Player.setFrictionAir (project.bundle.js:162461)
+    at Player.stop (project.bundle.js:172563)
+    at Player.callback (project.bundle.js:172551)
+    at Clock.update (project.bundle.js:169869)
+    at EventEmitter.emit (project.bundle.js:2696)
+    at Systems.step (project.bundle.js:35745)
+    at SceneManager.update (project.bundle.js:67854)
+    at Game.step (project.bundle.js:127936)
+    at TimeStep.step (project.bundle.js:132069)
+    at step (project.bundle.js:59382)
+
 -----------------Bugs -----------------------------------------
 
 -----------------Backlog -----------------------------------------

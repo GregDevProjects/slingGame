@@ -3,6 +3,7 @@ import { GridTraffic } from './obstacles/GridTraffic'
 import { Tube } from './tracks/Tube'
 import { Diamond } from './tracks/Diamond'
 import { getRandomInt } from '../Helper'
+import { Spinners } from './obstacles/Spinners'
 
 export class Section{
     constructor(config){
@@ -17,8 +18,8 @@ export class Section{
         this.width = config.width;
         this.scene = config.scene;
         this.tintWhiteOnSpawn = false;
-        
-        this.walls = this.allTracks[getRandomInt(0,this.allTracks.length - 1)].makeAndGetBodies({
+        let wallType = getRandomInt(0,this.allTracks.length - 1);
+        this.walls = this.allTracks[wallType].makeAndGetBodies({
             x: this.x,
             y: this.y,
             width: this.width,
@@ -38,6 +39,20 @@ export class Section{
             isSpawnedWhite: config.isSpawnedWhite
         });      
 
+        if (wallType == 0) {
+         //   debugger;
+            this.obstacles = [...this.obstacles, ...Spinners.makeAndGetBodies({
+                scene: this.scene,
+                x: this.x + this.wallWidth, 
+                y: this.y, 
+                width: this.width - this.wallWidth,
+                height: this.height,
+                difficulty: 1,
+                wallWidth: this.wallWidth,
+                isSpawnedWhite: config.isSpawnedWhite
+            })];   
+           // debugger;     
+        }
 
 
         if (config.isObstaclesSensors) {
@@ -47,8 +62,11 @@ export class Section{
 
     setObstaclesTintWhite() {
         this.obstacles.forEach((aBody)=>{
-            if(aBody.active)
-                aBody.setTintFill(0xffffff);
+            if(aBody.active){
+                //console.log(aBody.)
+                aBody.tintWhite();
+            }
+                
         });
     }
 

@@ -49,8 +49,8 @@ export class VectorWall {
     
         var graphics = this.scene.add.graphics();
     
-        graphics.lineStyle(1, 0x00aa00);
-        graphics.fillStyle(0x00aa00, 1.0);
+        graphics.lineStyle(2, 0xffffff );
+        graphics.fillStyle(0x00000);
         
         graphics.beginPath();
         this.graphicsObjects.push(graphics.moveTo(
@@ -67,8 +67,9 @@ export class VectorWall {
         }
 
         graphics.closePath();
-        graphics.strokePath();
+        
         graphics.fillPath();
+        graphics.strokePath();
         //TODO: research this for preformance boost 
        // graphics.generateTexture('starGraphics');
      

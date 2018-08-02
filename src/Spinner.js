@@ -1,13 +1,12 @@
 import { getRandomInt } from './Helper';
 import { destroyObject } from './matter/MatterHelper'
 
-export class SpaceRock extends Phaser.Physics.Matter.Sprite{
+export class Spinner extends Phaser.Physics.Matter.Sprite {
     constructor(config){
-        super(config.scene.matter.world, config.x, config.y, 'space_rock');
+        super(config.scene.matter.world, config.x, config.y, 'spinner');
         this.body.key=this.constructor.name; 
         this.body.changeDirection = this.changeDirection.bind(this);
         this.scene.add.existing(this);
-        //this.body.done = this.delete.bind(this);
         this.body.delete = this.delete.bind(this);
         this.velocity = 1;
         this.floatsLeft = getRandomInt(0,1);
@@ -20,20 +19,16 @@ export class SpaceRock extends Phaser.Physics.Matter.Sprite{
         this.velocity = -this.velocity;
     }
 
-    tintWhite() {
-        this.setTintFill(0xffffff);
-    }
-
     update(){   
         if(this.floatsLeft){   
-            this.x+=this.velocity;
-            this.angle+=0.2;
+          //  this.x+=this.velocity;
+            this.angle+=0.9;
         } else {
-            this.x-=this.velocity;
-            this.angle-=0.2;
+           // this.x-=this.velocity;
+            this.angle-=0.9;
         }
 
-        this.y -= 1;    
+       // this.y -= 1;    
     }
 
     delete(isExploding){
@@ -41,7 +36,7 @@ export class SpaceRock extends Phaser.Physics.Matter.Sprite{
     }
 
     tintWhite(){
-        this.setTintFill(0xffffff);
+        this.setTintFill(0xff0000);
     }
 
     removeTint() {
