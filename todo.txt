@@ -1,26 +1,36 @@
 -----------------Todo -----------------------------------------
 
-As a player, I want to destroy asteroids with thrusters 
-    -player gets thrust boost when asteroid is destroyed by thruster
-    -asteroid tints as it takes damage (maybe)
+As a player, I want a cap to the amount of asteroids/cargo ships that can be spawned at once
+so that the game is fair (TUNING 1) 
+    -implement cap per section size 
+
+As a player, I want differnt types of tracks 
+    -see phone notes 
+
+
+-if you dies when boosting
+Uncaught TypeError: Cannot set property 'frictionAir' of undefined
+    at Player.setFrictionAir (project.bundle.js:162461)
+    at Player.stop (project.bundle.js:172563)
+    at Player.callback (project.bundle.js:172551)
+    at Clock.update (project.bundle.js:169869)
+    at EventEmitter.emit (project.bundle.js:2696)
+    at Systems.step (project.bundle.js:35745)
+    at SceneManager.update (project.bundle.js:67854)
+    at Game.step (project.bundle.js:127936)
+    at TimeStep.step (project.bundle.js:132069)
+    at step (project.bundle.js:59382)
 
 -----------------Todo -----------------------------------------
 
 
 
 -----------------Backlog -----------------------------------------
-
-As a player, I want to be able to conserve momentum in wide areas when there isn't traffic 
-    -give asteroids random sizes 
-    -windmill thingy 
-        - make it move slowly and take out obstacles in its path
-
-
 As a player, I want to know when I'm grinding 
     -show emitter sparks on grind contact points 
 
-As a player, I want differnt types of tracks 
-    -see phone notes 
+As a player, I want each playthrough to have unique planet sizes  
+    - resize images each playthrough 
 
 As a player, I want a non-boost thruster that looks good 
     -animate existing thruster or find new one
@@ -30,13 +40,10 @@ As a player, I want a powertrust progress bar that looks good
     - maybe the thruster could change color to show boost progress instead 
     - it should be obvious when at full power (pulse purple?)
 
-As a player, I want backgrounds with multiple layers 
-    - the phaser 3 minimap delerium example shows this
-    - add a few random planets 
 
-As a player, I want a cap to the amount of asteroids/cargo ships that can be spawned at once
-so that the game is fair (TUNING 1) 
-    -implement cap per section size 
+As Greg McLean, I dont want to run into legal trouble for using open source art 
+    - Add a credits scene where art authors are credited  
+
 
 As a player, I want cargo ships that shoot each other (TUNING 2) 
     -starts at certain difficulty 
@@ -53,11 +60,16 @@ As a player, I want a score system
 
 As a player, I want the hitbox to match the image
 
+As a player, I want to destroy asteroids with thrusters 
+    -player gets thrust boost when asteroid is destroyed by thruster
+    -asteroid tints as it takes damage (maybe)
+
+
+
 -----------------Bugs -----------------------------------------
 
 -asteroids spawn inside and beyond walls 
--collisions don't always register as expected 
-    - use onstart and onactive for same collision detection
+-random things explode 
 
 - sometimes when player is deleted 
 Uncaught TypeError: Cannot read property 'position' of undefined
@@ -72,18 +84,7 @@ Uncaught TypeError: Cannot read property 'position' of undefined
     at SceneManager.update (project.bundle.js:67853)
     at Game.step (project.bundle.js:127935)
 
--when boosting
-Uncaught TypeError: Cannot set property 'frictionAir' of undefined
-    at Player.setFrictionAir (project.bundle.js:162461)
-    at Player.stop (project.bundle.js:172563)
-    at Player.callback (project.bundle.js:172551)
-    at Clock.update (project.bundle.js:169869)
-    at EventEmitter.emit (project.bundle.js:2696)
-    at Systems.step (project.bundle.js:35745)
-    at SceneManager.update (project.bundle.js:67854)
-    at Game.step (project.bundle.js:127936)
-    at TimeStep.step (project.bundle.js:132069)
-    at step (project.bundle.js:59382)
+
 
 -----------------Bugs -----------------------------------------
 

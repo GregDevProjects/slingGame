@@ -1,7 +1,7 @@
-import { GameBackground } from './GameBackground'
+import { Background } from './background/Background'
 import { Matter } from './matter/MatterHelper'
 import { Player } from './Player'
-import { SectionContainer, SECTION_TYPES } from './SectionContainer'
+import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
 import { moveObjectToPoint } from './Helper'
 import { CollisionHandler } from './matter/CollisionHandler'
@@ -33,6 +33,11 @@ export class GameplayScene extends Phaser.Scene {
         this.load.image('thrustFlame', 'assets/img/thrustFlame.png');
         this.load.spritesheet('explosion', 'assets/img/explosion.png', { 'frameWidth': 96, 'frameHeight': 96 });
         this.load.image('spinner', 'assets/img/spinner.png');
+        this.load.image('planet_1', 'assets/img/planet_19.png');
+        this.load.image('planet_2', 'assets/img/planet_20.png');
+        this.load.image('planet_3', 'assets/img/planet_29.png');
+        this.load.image('planet_4', 'assets/img/planet_24.png');
+        this.load.image('planet_5', 'assets/img/planet_22.png')
     }
 
     create() {
@@ -50,7 +55,7 @@ export class GameplayScene extends Phaser.Scene {
         this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
 
-        this.background = new GameBackground(this);
+        this.background = new Background({scene:this});
         // this.matterPhysics();
         this.createGameObjects();
 
@@ -62,6 +67,7 @@ export class GameplayScene extends Phaser.Scene {
     deleteGameObjects() {
         this.player.destroy();
         this.activeSections.deleteAllSections();
+        this.background.deletePlanet();
     }
 
     getPlayerStats() {
@@ -75,15 +81,17 @@ export class GameplayScene extends Phaser.Scene {
 
     onPlayerPowerThrustStart(){
         this.activeSections.setAllSectionObstaclesSensors(true);
-        this.background.changeBackground();
+        this.background.setSimulationBackground();
         this.activeSections.setAllSectionObstaclesTintWhite(true);
     }
 
     onPlayerPowerThrustEnd(){
-        this.background.changeBackground();
+        this.background.setRealityBackground();
         this.activeSections.setAllSectionObstaclesTintWhite(false);
         this.activeSections.setAllSectionObstaclesSensors(false);
     }
+
+
 
     createGameObjects() {
         this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });

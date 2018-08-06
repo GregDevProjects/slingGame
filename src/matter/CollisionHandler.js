@@ -81,8 +81,10 @@ export class CollisionHandler {
             return;
         }
         this.scene.player.onDeath().on('animationcomplete', function () {
+            //TODO: move this to GameplayScene
             this.scene.deleteGameObjects();
             this.scene.createGameObjects();
+            
         }.bind(this), this.scene);
     }
 }

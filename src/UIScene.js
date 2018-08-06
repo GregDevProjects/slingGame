@@ -9,6 +9,11 @@ export class UIScene extends Phaser.Scene {
        this.score = 0;
     }
 
+    preload()
+    {
+       // this.load.image('planet', 'assets/img/planet_19.png')
+    }
+
     create ()
     {
         //  Our Text object to display the Score
@@ -18,6 +23,8 @@ export class UIScene extends Phaser.Scene {
         this.ourGame = this.scene.get('GamePlay');
 
         this.progress = this.add.graphics();
+
+       // this.add.image(0,0,'planet');
 
     }
 

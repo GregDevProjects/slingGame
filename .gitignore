@@ -16,3 +16,7 @@ build/
 
 # Cordova
 cordova/*
+
+#images not yet implemented 
+assets/img/planets16
+assets/img/planets16.zip
