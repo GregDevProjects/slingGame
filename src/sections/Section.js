@@ -9,7 +9,7 @@ export class Section{
     constructor(config){
         this.wallWidth = 200;
         this.height= 2000; 
-        this.allObstacles =[ GridTraffic, FloatingSpaceRocks ];
+        this.allObstacles = [ FloatingSpaceRocks, GridTraffic ];
         this.allTracks = [ Diamond, Tube ];
 
         this.topY= config.y - this.height;
@@ -18,8 +18,10 @@ export class Section{
         this.width = config.width;
         this.scene = config.scene;
         this.tintWhiteOnSpawn = false;
-        let wallType = getRandomInt(0,this.allTracks.length - 1);
-        this.walls = this.allTracks[wallType].makeAndGetBodies({
+
+        let track = this.allTracks[getRandomInt(0,this.allTracks.length - 1)];
+
+        this.walls = track.makeAndGetBodies({
             x: this.x,
             y: this.y,
             width: this.width,
@@ -28,19 +30,21 @@ export class Section{
             scene: config.scene
         });
         
-        this.obstacles = this.allObstacles[getRandomInt(0,this.allObstacles.length - 1)].makeAndGetBodies({
+
+        let obstacle = this.allObstacles[getRandomInt(0,this.allObstacles.length - 1)];
+
+        this.obstacles = obstacle.makeAndGetBodies({
             scene: this.scene,
             x: this.x + this.wallWidth, 
             y: this.y, 
             width: this.width - this.wallWidth,
             height: this.height,
-            difficulty: config.difficulty,
+            difficulty: this.getDifficultyWithCap(track.prototype.constructor.name,obstacle.prototype.constructor.name, config.difficulty),//config.difficulty,
             wallWidth: this.wallWidth,
             isSpawnedWhite: config.isSpawnedWhite
         });      
 
-        if (wallType == 0) {
-         //   debugger;
+        if (track.prototype.constructor.name == 'Diamond' && config.difficulty != 1) {
             this.obstacles = [...this.obstacles, ...Spinners.makeAndGetBodies({
                 scene: this.scene,
                 x: this.x + this.wallWidth, 
@@ -50,14 +54,42 @@ export class Section{
                 difficulty: 1,
                 wallWidth: this.wallWidth,
                 isSpawnedWhite: config.isSpawnedWhite
-            })];   
-           // debugger;     
+            })];    
         }
 
 
         if (config.isObstaclesSensors) {
             this.setObstaclesSensors(true);
         }
+    }
+
+    getDifficultyWithCap(trackName, obstacleName, difficulty) {
+        //traffic has same difficulty cap regardless of track 
+        if (obstacleName == 'GridTraffic') {
+            if (difficulty >= 7){
+                return 7;
+            }
+            return difficulty;
+        }
+
+        if (trackName == 'Tube') {
+            if (obstacleName == 'FloatingSpaceRocks') {
+                if (difficulty >= 3) {
+                    return 3;
+                }
+                return difficulty;
+            }
+        }
+
+        if (trackName == 'Diamond') {
+            if (obstacleName == 'FloatingSpaceRocks') {
+                if (difficulty >= 10) {
+                    return 10;
+                }
+                return difficulty;
+            }
+        }
+
     }
 
     setObstaclesTintWhite() {

@@ -85,6 +85,11 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     onDeath() {
+        if (this.thrustTimer) {
+            this.thrustTimer.destroy();
+            this.powerThrust().stop();
+        }
+
         this.emitter.stopFollow();
         this.emitter.stop();
         this.particles.destroy();
