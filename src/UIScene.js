@@ -1,4 +1,4 @@
-import { getGameWidth } from './Helper'
+import { getGameWidth, getGameHeight } from './Helper'
 
 export class UIScene extends Phaser.Scene {
 
@@ -11,7 +11,8 @@ export class UIScene extends Phaser.Scene {
 
     preload()
     {
-       // this.load.image('planet', 'assets/img/planet_19.png')
+       this.load.image('arrowLeft', 'assets/img/arrow_left.png');
+       this.load.image('arrowRight', 'assets/img/arrow_right.png')
     }
 
     create ()
@@ -25,11 +26,20 @@ export class UIScene extends Phaser.Scene {
         this.progress = this.add.graphics();
 
        // this.add.image(0,0,'planet');
+       let offset = 50;
+       this.leftArrow = this.getArrow('arrowLeft', offset);
+       this.rightArrow = this.getArrow('arrowRight', getGameWidth() - offset);
+    }
 
+    getArrow(key, x) {
+        return this.add.image(
+            x,
+            getGameHeight() - 80,
+            key
+         ).setAlpha(0.5)
     }
 
     update(){
-        //console.log(this.ourGame.getPlayerYPosition());
         let stats = this.ourGame.getPlayerStats();
         if(!stats){
             return;
@@ -42,5 +52,21 @@ export class UIScene extends Phaser.Scene {
         this.progress.clear();
         this.progress.fillStyle(0xffffff, 1);
         this.progress.fillRect(0, 60,stats.power * getGameWidth(), 60);
+
+        //TODO: use event handler for this
+        if (stats.isTurningLeft) {
+            // console.log('r');
+            this.leftArrow.setAlpha(0.5);
+        } else {
+            this.leftArrow.setAlpha(0.1);
+        }
+        if (stats.isTurningRight) {
+            this.rightArrow.setAlpha(0.5);
+        } else {
+            this.rightArrow.setAlpha(0.1);
+        }
+
     }
+
+
 }

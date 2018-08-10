@@ -4,13 +4,14 @@ import { Tube } from './tracks/Tube'
 import { Diamond } from './tracks/Diamond'
 import { getRandomInt } from '../Helper'
 import { Spinners } from './obstacles/Spinners'
-
+import { SharpTurn } from './tracks/SharpTurn'
+//return 
 export class Section{
     constructor(config){
         this.wallWidth = 200;
         this.height= 2000; 
         this.allObstacles = [ FloatingSpaceRocks, GridTraffic ];
-        this.allTracks = [ Diamond, Tube ];
+        this.allTracks = [ Diamond, Tube, SharpTurn ];
 
         this.topY= config.y - this.height;
         this.x = config.x;
@@ -44,6 +45,8 @@ export class Section{
             isSpawnedWhite: config.isSpawnedWhite
         });      
 
+
+
         if (track.prototype.constructor.name == 'Diamond' && config.difficulty != 1) {
             this.obstacles = [...this.obstacles, ...Spinners.makeAndGetBodies({
                 scene: this.scene,
@@ -63,14 +66,22 @@ export class Section{
         }
     }
 
-    getDifficultyWithCap(trackName, obstacleName, difficulty) {
+    getTopLeft(){
+        //console.log();
+       // return {x:0, y:0}
+        return this.walls.topLeft;
+    }
+
+    getGridTrafficDifficulty( difficulty) {
         //traffic has same difficulty cap regardless of track 
-        if (obstacleName == 'GridTraffic') {
-            if (difficulty >= 7){
-                return 7;
-            }
-            return difficulty;
+        if (difficulty >= 7){
+            return 7;
         }
+        return difficulty;
+    }
+
+    getDifficultyWithCap(trackName, obstacleName, difficulty) {
+
 
         if (trackName == 'Tube') {
             if (obstacleName == 'FloatingSpaceRocks') {
@@ -78,6 +89,9 @@ export class Section{
                     return 3;
                 }
                 return difficulty;
+
+            } else if (obstacleName == 'GridTraffic') {
+                return this.getGridTrafficDifficulty(difficulty);
             }
         }
 
@@ -87,6 +101,8 @@ export class Section{
                     return 10;
                 }
                 return difficulty;
+            } else if (obstacleName == 'GridTraffic') {
+                return this.getGridTrafficDifficulty(difficulty);
             }
         }
 
@@ -117,11 +133,11 @@ export class Section{
     }
 
     getX(){
-        return this.x;
+        return this.getTopLeft().x;
     }
 
     getY(){
-        return this.x;
+        return getTopLeft().y;
     }
 
     getWidth(){
@@ -129,7 +145,7 @@ export class Section{
     }
 
     getTopY(){
-        return this.topY;
+        return this.walls.topLeft.y;
     }
 
     update(){
@@ -151,7 +167,7 @@ export class Section{
             aBody.delete(false);
         });
 
-        this.walls.forEach((aBody)=>{
+        this.walls.walls.forEach((aBody)=>{
             aBody.destroy();
         })
     }

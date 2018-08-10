@@ -1,13 +1,32 @@
 -----------------Todo -----------------------------------------
 
-As a player, I want differnt types of tracks 
-    -see phone notes 
+- sometimes when player is deleted 
+Uncaught TypeError: Cannot read property 'position' of undefined
+    at Player.get [as x] (project.bundle.js:163278)
+    at Particle.fire (project.bundle.js:75480)
+    at ParticleEmitter.emitParticle (project.bundle.js:77779)
+    at ParticleEmitter.preUpdate (project.bundle.js:77879)
+    at ParticleEmitterManager.preUpdate (project.bundle.js:41735)
+    at UpdateList.update (project.bundle.js:134261)
+    at EventEmitter.emit (project.bundle.js:2696)
+    at Systems.step (project.bundle.js:35703)
+    at SceneManager.update (project.bundle.js:67853)
+    at Game.step (project.bundle.js:127935)
+
+
+As a player, I want to get rewarded for going fast by staying alive 
+    -at higher difficulty spawn a cop that fires homing missiles 
+
+    
 
 -----------------Todo -----------------------------------------
 
 
 
 -----------------Backlog -----------------------------------------
+
+
+
 
 
 As a player, I want to know when I'm grinding 
@@ -27,18 +46,8 @@ As a player, I want a powertrust progress bar that looks good
 
 As Greg McLean, I dont want to run into legal trouble for using open source art 
     - Add a credits scene where art authors are credited  
+    - https://opengameart.org/content/missile-0 <- tell this dude about the game
 
-
-As a player, I want cargo ships that shoot each other (TUNING 2) 
-    -starts at certain difficulty 
-
-As a player, I want multiple types of obstacles in the same section (TUNING 3)
-    -research how to implement based on difficulty 
-    -implement in section 
-    -deal with obstacles colliding
-
-As a player, I want walls that aren't green
-    -walls should change colors and/or texture on burst
 
 As a player, I want a score system
 
@@ -50,23 +59,13 @@ As a player, I want to destroy asteroids with thrusters
 
 
 
+
 -----------------Bugs -----------------------------------------
 
 -asteroids spawn inside and beyond walls 
 
 - random things explode
-- sometimes when player is deleted 
-Uncaught TypeError: Cannot read property 'position' of undefined
-    at Player.get [as x] (project.bundle.js:163278)
-    at Particle.fire (project.bundle.js:75480)
-    at ParticleEmitter.emitParticle (project.bundle.js:77779)
-    at ParticleEmitter.preUpdate (project.bundle.js:77879)
-    at ParticleEmitterManager.preUpdate (project.bundle.js:41735)
-    at UpdateList.update (project.bundle.js:134261)
-    at EventEmitter.emit (project.bundle.js:2696)
-    at Systems.step (project.bundle.js:35703)
-    at SceneManager.update (project.bundle.js:67853)
-    at Game.step (project.bundle.js:127935)
+
 
 
 

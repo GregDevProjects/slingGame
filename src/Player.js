@@ -159,6 +159,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.turnRight();
         } else {
             this.setAngularVelocity(0);
+            this.isTurningLeft = false;
+            this.isTurningRight = false;
         }
 
         if (this.cursors.up.isDown) {
@@ -167,7 +169,12 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     powerThrust() {
+        
         this.start = function () {
+
+            this.isTurningLeft = true;
+            this.isTurningRight = true;
+
             if (this.isPowerThrusting || this.power < 1.00000) {
                 return;
             }
@@ -246,11 +253,13 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     turnLeft() {
         this.setAngularVelocity(-0.1);
+        this.isTurningLeft = true;
        // this.subractFromCurrentAngle(4);
     }
 
     turnRight() {
         this.setAngularVelocity(0.1);
+        this.isTurningRight = true;
       //  this.addToCurrentAngle(4);
     }
 

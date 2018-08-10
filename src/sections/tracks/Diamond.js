@@ -62,14 +62,20 @@ export class Diamond {
 
         ];
 
-        return [
-            new VectorWall({ scene: scene, vertices: leftWall }),
-            new VectorWall({ scene: scene, vertices: rightWall }),
-            new VectorWall({ scene: scene, vertices: leftWallStraight }),
-            new VectorWall({ scene: scene, vertices: rightWallStraight }),
-            new VectorWall({ scene: scene, vertices: closingWallLeft }),
-            new VectorWall({ scene: scene, vertices: closingWallRight })
-        ];
+        return { 
+            walls:  [
+                new VectorWall({ scene: scene, vertices: leftWall }),
+                new VectorWall({ scene: scene, vertices: rightWall }),
+                new VectorWall({ scene: scene, vertices: leftWallStraight }),
+                new VectorWall({ scene: scene, vertices: rightWallStraight }),
+                new VectorWall({ scene: scene, vertices: closingWallLeft }),
+                new VectorWall({ scene: scene, vertices: closingWallRight })
+            ], 
+            topLeft: {
+                x: config.x, 
+                y: config.y - config.height
+            } 
+        };
 
 
     }

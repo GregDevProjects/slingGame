@@ -16,9 +16,24 @@ export class Tube {
             {x:config.x + config.width, y:config.y}
         ]
 
+        return { 
+            walls:  [
+                new VectorWall({ 
+                        scene:config.scene, 
+                        vertices: leftWall 
+                    }),
+                new VectorWall({
+                        scene:config.scene, vertices: rightWall 
+                    })
+            ], 
+            topLeft: {
+                x: config.x, 
+                y: config.y - config.height
+            } 
+        };
+
         return [
-            new VectorWall({ scene:config.scene, vertices: leftWall }),
-            new VectorWall({ scene:config.scene, vertices: rightWall })
+          
         ]
            
         

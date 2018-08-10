@@ -74,7 +74,9 @@ export class GameplayScene extends Phaser.Scene {
         if (this.player) {
             return { 
                 'distance' : Math.floor(-this.player.y / 100),
-                'power' : this.player.power
+                'power' : this.player.power,
+                'isTurningLeft' : this.player.isTurningLeft,
+                'isTurningRight' : this.player.isTurningRight
             };
         }
     }
@@ -90,7 +92,6 @@ export class GameplayScene extends Phaser.Scene {
         this.activeSections.setAllSectionObstaclesTintWhite(false);
         this.activeSections.setAllSectionObstaclesSensors(false);
     }
-
 
 
     createGameObjects() {

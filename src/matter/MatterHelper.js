@@ -9,7 +9,7 @@ export class Matter{
     }
 
     getNonCollisionGroup(){
-        return  this.nonCollisionGroup;
+        return this.nonCollisionGroup;
     }
 }
 
