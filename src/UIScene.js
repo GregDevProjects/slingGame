@@ -55,7 +55,6 @@ export class UIScene extends Phaser.Scene {
 
         //TODO: use event handler for this
         if (stats.isTurningLeft) {
-            // console.log('r');
             this.leftArrow.setAlpha(0.5);
         } else {
             this.leftArrow.setAlpha(0.1);

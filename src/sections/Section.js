@@ -5,6 +5,7 @@ import { Diamond } from './tracks/Diamond'
 import { getRandomInt } from '../Helper'
 import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
+import { Missle } from './obstacles/Missle'
 //return 
 export class Section{
     constructor(config){
@@ -45,6 +46,9 @@ export class Section{
             isSpawnedWhite: config.isSpawnedWhite
         });      
 
+        // this.obstacles.push(
+        //     new Missle({ scene: this.scene, x: config.x + 300, y: config.y-500, matterHelper: this.matterHelper, player: this.scene.player })
+        // );
 
 
         if (track.prototype.constructor.name == 'Diamond' && config.difficulty != 1) {
@@ -58,6 +62,7 @@ export class Section{
                 wallWidth: this.wallWidth,
                 isSpawnedWhite: config.isSpawnedWhite
             })];    
+
         }
 
 
@@ -154,6 +159,9 @@ export class Section{
             if(aBody.active)
                 aBody.update();
         });
+
+        if (this.testMissle)
+        this.testMissle.update();
     }
 
     delete(){

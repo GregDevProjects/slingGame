@@ -2,6 +2,14 @@ export function getGameWidth() {
     return window.innerWidth;
 }
 
+export function getAngleBetweenObjects(obj1, obj2) {
+    return Phaser.Math.Angle.Between(obj1.x, obj1.y, obj2.x, obj2.y);
+}
+
+export function getDistanceBetweenObjects(obj1, obj2) {
+    return Phaser.Math.Distance.Between(obj1.x, obj1.y, obj2.x, obj2.y);
+}
+
 export function getCenterOfScreen() {
     return window.innerWidth / 2;
 }

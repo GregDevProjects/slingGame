@@ -80,7 +80,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         }
         
 
-        if(this.emitter)
+        if(this.body && this.emitter)
             this.emitter.setAngle(this.angle + 180);
     }
 
@@ -194,9 +194,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
                 callbackScope: this, 
                 startAt: 0 
             });
-
-            // this.scene.background.changeBackground();
-            // this.scene.activeSections.setAllSectionObstaclesTintWhite(true);
         };
 
         this.stop = function () {
@@ -207,8 +204,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.clearTint();
             this.emitter.setVisible(false);
             this.thrusterImage.setVisible(true);
-            // this.scene.background.changeBackground();
-            // this.scene.activeSections.setAllSectionObstaclesTintWhite(false);
             this.comboCounter = 0;
         };
         return this;

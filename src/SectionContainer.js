@@ -1,7 +1,7 @@
 import { Section } from './sections/Section'
 //chunck of gameplay that has variable difficulty options 
 //is deleted when safely offscreen 
-//can be chained on top (or possibly below) another SectionContainer 
+//can be chained on top another SectionContainer 
 export class SectionContainer {
     /**
      * 
