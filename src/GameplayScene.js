@@ -88,8 +88,16 @@ export class GameplayScene extends Phaser.Scene {
         this.createNewPointOfNoReturn();
     }
 
-    deleteGameObjects() {
+    onPlayerDeathExplostionStart() {
         this.globalObstacles.deleteAllObstacles();
+    }
+
+    onPlayerDeathExplosionEnd() {
+        this.deleteGameObjects();
+        this.createGameObjects();
+    }
+
+    deleteGameObjects() {
         this.player.destroy();
         this.activeSections.deleteAllSections();
         this.background.deletePlanet(); 
@@ -132,40 +140,47 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update() {
-
-       // this.missle.update();
-
+        this.activeSections.updateSections();
         if (this.player.isDead()) {
-            this.activeSections.updateSections();
             return;
         }
-        this.activeSections.updateSections();
+
+        this.globalObstacles.update();
+
         if (this.isPlayerPastActiveSection()) {
             this.deleteAndAddSections();
             this.activeSections.difficulty++;
-            if(this.activeSections.difficulty % 2 == 0){
-                this.globalObstacles.addObstacle(
-                    { 
-                        x:  this.activeSections.leftXOfNewestSectionContainer() + 300, 
-                        y: this.activeSections.getTopOfNewestSectionContainer() - 100, 
-                        player: this.player 
-                    }
-                )
+            if(this.isTimeToAddGlobalObstacle()){
+                this.addGlobalObstacleToTopOfSection();
             }
-            console.log(this.activeSections.difficulty);
         }
         this.player.update();
         this.background.update();
         this.moveCamera();
 
         if (this.isPlayerPastPointOfNoReturn()) {
-            moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
-            this.player.disableEngine();
-            this.player.addToCurrentAngle(10);
+            this.sendPlayerToBlackHole();
         }
+    }
 
-        this.globalObstacles.update();
-      
+    isTimeToAddGlobalObstacle() {
+        return this.activeSections.difficulty % 10 === 0;
+    } 
+
+    addGlobalObstacleToTopOfSection() {
+        this.globalObstacles.addObstacle(
+            { 
+                x:  this.activeSections.leftXOfNewestSectionContainer() + 300, 
+                y: this.activeSections.getTopOfNewestSectionContainer() - 100, 
+                player: this.player 
+            }
+        );
+    }
+
+    sendPlayerToBlackHole() {
+        moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
+        this.player.disableEngine();
+        this.player.addToCurrentAngle(10);
     }
 
     deleteAndAddSections() {

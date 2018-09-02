@@ -42,10 +42,11 @@ export class GlobalObstacleContainer {
     deleteAllObstacles() {
         this.obstaclesInGame.forEach((anObstacle) => {
             if (anObstacle.active)
-                anObstacle.delete(false); 
+                anObstacle.delete(true); 
         });
         this.obstaclesInGame = [];
     }
+
     
     update() {
         this.obstaclesInGame.forEach((anObstacle) => {

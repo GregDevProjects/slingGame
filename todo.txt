@@ -16,13 +16,14 @@ Uncaught TypeError: Cannot read property 'position' of undefined
 
 As a player, I want to dodge homing missles 
     -at difficulty 13 (distance 250) spawn homing missiles 
-        -use global enemies 
         -death conditions
             -on distance > 35
             -on collision with any game object 
             -on time limit expiration
+        -make it obvious to the player they are being chased 
+            - show exlamation mark over missle 
+            - show target over player 
     
-image frame remains 
 
 -----------------Todo -----------------------------------------
 
@@ -32,6 +33,9 @@ image frame remains
 
 
 
+As a player, I want cargo ships on straight lanes to provide a challenege
+    - small ships fly to the middle of the lane 
+
 As Greg McLean, I want my collision handling to make sense
     - refactor 
     - make sure walls are constantly colliding 
@@ -39,8 +43,7 @@ As Greg McLean, I want my collision handling to make sense
 As a player, I want to know when I'm grinding 
     -show emitter sparks on grind contact points 
 
-As a player, I want each playthrough to have unique planet sizes  
-    - resize images each playthrough 
+As a player, I want the hitbox to match the image
 
 As a player, I want a non-boost thruster that looks good 
     -animate existing thruster or find new one
@@ -58,20 +61,23 @@ As Greg McLean, I dont want to run into legal trouble for using open source art
 
 As a player, I want a score system
 
-As a player, I want the hitbox to match the image
+As a player, I want a cool explosion effect for my ship
+ - use particle burst 
 
 As a player, I want to destroy asteroids with thrusters 
     -player gets thrust boost when asteroid is destroyed by thruster
     -asteroid tints as it takes damage (maybe)
+    -asteroid get pushed instead of destroyed? 
 
-
+As a player, I want each playthrough to have unique planet sizes  
+    - resize images each playthrough 
 
 
 -----------------Bugs -----------------------------------------
 
 -asteroids spawn inside and beyond walls 
 
-- random things explode
+- random things explode (maybe fixed?)
 
 
 

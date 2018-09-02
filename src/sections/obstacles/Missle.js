@@ -31,7 +31,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
             this.minimap.hide();
         }
 
-        if(this.player.y < this.y) {
+        if (this.player.y < this.y) {
             this.activated = true;
         }
 
@@ -39,6 +39,8 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
             this.setAngularVelocity(-0.1);
             return;
         }
+
+        this.minimap.update();
           
         this.angleTowardsPlayer();
 
@@ -48,7 +50,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 
     isOffscreen() {
         //200 -> camera offset from player
-        return this.y >= this.player.y + 200 + this.height;
+        return this.y >= this.player.y + 200 + this.height + 15;
     }   
     
     angleTowardsPlayer() {
@@ -69,10 +71,8 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 
     delete(isExploding){
-       // debugger;
-        
-        if(this.active)
-            this.minimap.delete();
+       // if(this.active)
+        this.minimap.delete();
         destroyObject(this, isExploding);       
     }
     
@@ -92,6 +92,7 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
 
         this.redBorder = config.scene.add.image(config.x,config.y,'target').setVisible(false).setDisplaySize(125,125).setDepth(3);
         this.distanceText = config.scene.add.text(0, 10, '', { font: '50px Arial', fill: '#ffffff' }).setVisible(false);
+        this.distanceText.setDepth(4);
         config.scene.cameras.addExisting(this);
     }
 
@@ -114,18 +115,18 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
        return  (this.target.x - this.player.x )*0.4 + getGameWidth()/2 - this.width/2 
     }
 
-    show() {
-        this.redBorder.setVisible(true);
-        this.setVisible(true);
-        this.redBorder.setPosition(this.target.x, this.target.y);
-        this.positionCameraMapBehindPlayer();
-        
+    update() {
         this.distanceText.setText(
             Math.floor(getDistanceBetweenObjects(this.target, this.player) / 100)
         ).setPosition(this.target.x - 55, this.target.y - 60);
-        this.distanceText.setVisible(true);
-        this.distanceText.setDepth(4);
+        this.positionCameraMapBehindPlayer();
+        this.redBorder.setPosition(this.target.x, this.target.y);
+    }
 
+    show() {
+        this.redBorder.setVisible(true);
+        this.setVisible(true);
+        this.distanceText.setVisible(true);
     }
 
     hide() {

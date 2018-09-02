@@ -17,44 +17,28 @@ export class CollisionHandler {
     //reaaaaly sucks that I have to do this
     //TODO: setup base class for matter objects that have a key 
     static handleAllCollisions(event, bodyA, bodyB) {
+        let isTrustAppliedForThisLoop = false;
         for (let aPair of event.pairs) {
 
             if ((aPair.bodyA.key === "Player" || aPair.bodyB.key === "Player")) {
                 if (!this.scene.playerInvinsible) {
-                    //vector wall collides with thruster here 
                     this.onPlayerCollisionWithNonTruster(aPair.bodyA, aPair.bodyB);
-                   
                 }
-                continue;
             }  
 
             if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
-                if(!this.scene.player.getIsPowerThrusting()){
-                    this.scene.player.queueBoostThrust();
-                    this.scene.player.incrementPower();
-                    continue;
+                if (!isTrustAppliedForThisLoop){
+                    isTrustAppliedForThisLoop = true;
+                    this.onTrusterCollision();
                 }
             }
 
             if (aPair.bodyA.key === "SpaceRock" || aPair.bodyB.key === "SpaceRock") {
-                //gotta find a better way to do this
-                if (aPair.bodyA.key === "SpaceRock" && aPair.bodyB.key === "VectorWall") {
-                    aPair.bodyA.changeDirection();
-                } else if (aPair.bodyB.key === "SpaceRock" && aPair.bodyA.key === "VectorWall") {
-                    aPair.bodyB.changeDirection();
-                }
-                continue;
+                this.onSpaceRockCollision(aPair.bodyA, aPair.bodyB);
             }  
 
             if ((aPair.bodyA.key === "Spinner" || aPair.bodyB.key === "Spinner" )) {
-                if (bodyA.key === "SpaceRock" ||  bodyA.key === "CargoShip") {
-                    bodyA.delete(true);
-                }
-
-                if (bodyB.key === "SpaceRock" ||  bodyB.key === "CargoShip") {
-                    bodyB.delete(true);
-                }
-                continue;
+                this.onSpinnerCollision(aPair.bodyA, aPair.bodyB);
             } 
 
             if (aPair.bodyA.key === "Missle" || aPair.bodyB.key === "Missle") {
@@ -65,19 +49,65 @@ export class CollisionHandler {
 
     }
 
+    static onTrusterCollision() {
+        if (this.scene.player.getIsPowerThrusting()) {
+            return;
+        }
+        this.scene.player.queueBoostThrust();
+        this.scene.player.incrementPower();
+    }
 
-    static onMissleCollision(bodyA, bodyB) {
-        let missleObj;
+
+    static getCollisionObjects(objectKeyName,bodyA, bodyB) {
+        let keyObject;
         let otherObj;
-        if (bodyA.key === "Missle") {
-            missleObj = bodyA;
+        if (bodyA.key === objectKeyName) {
+            keyObject = bodyA;
             otherObj = bodyB;
-        } else if (bodyB.key === "Missle") {
-            missleObj = bodyB;
+        } else if (bodyB.key === objectKeyName) {
+            keyObject = bodyB;
             otherObj = bodyA;
         }
+        return { keyObject: keyObject, otherObj : otherObj };  
+    }
 
-        if (otherObj.key !== "VectorWall" && otherObj.key !== "Thruster" && otherObj.key !== "Player" ) {
+    static onSpinnerCollision(bodyA, bodyB) {
+        let otherObj = this.getCollisionObjects("Spinner", bodyA, bodyB).otherObj;
+        if (otherObj.key === "SpaceRock" || otherObj.key === "CargoShip") {
+            otherObj.delete(true);
+        }
+    }   
+
+    static onSpaceRockCollision(bodyA, bodyB) {
+        let objectPair = this.getCollisionObjects("SpaceRock", bodyA, bodyB);
+        let spackRockObj = objectPair.keyObject;
+        let otherObj = objectPair.otherObj;
+
+        if (otherObj.key === "Thruster") {
+            return;
+        }
+
+        if (otherObj.key === "CargoShip") {
+            spackRockObj.gameObject.delete(true);
+            return;
+        }
+        spackRockObj.changeDirection();
+    }
+
+    static onMissleCollision(bodyA, bodyB) {
+        let missleObj = this.getCollisionObjects("Missle", bodyA, bodyB).keyObject;
+        let otherObj = this.getCollisionObjects("Missle", bodyA, bodyB).otherObj;
+        //debugger;
+        if (otherObj.key === "VectorWall") {
+            return;
+        }
+
+        if (otherObj.key === "Spinner") {
+            missleObj.gameObject.delete(true);
+            return;
+        }
+
+        if (otherObj.key !== "Thruster" && otherObj.key !== "Player" ) {
             missleObj.gameObject.delete(true);
             otherObj.gameObject.delete(true);
         }
@@ -86,26 +116,15 @@ export class CollisionHandler {
 
     //TODO: use gameobject instead of attaching things to the body
     static onPlayerCollisionWithNonTruster(bodyA, bodyB) {
-
-        let playerObj;
-        let otherObj;
-        if (bodyA.key === "Player") {
-            playerObj = bodyA;
-            otherObj = bodyB;
-        } else if (bodyB.key === "Player") {
-            playerObj = bodyB;
-            otherObj = bodyA;
-        }
-
-        if (!otherObj) {
-            debugger;
-        }
+        let objectPair = this.getCollisionObjects("Player", bodyA, bodyB);
+        let playerObj = objectPair.keyObject;
+        let otherObj = objectPair.otherObj;
 
         if( otherObj.key === "Thruster"){
             return;
         }
 
-        if (this.scene.player.isPowerThrusting 
+        if (playerObj.gameObject.isPowerThrusting 
             && otherObj.key !== 'Spinner'
             && otherObj.key !== 'Missle'
             ){
@@ -114,18 +133,16 @@ export class CollisionHandler {
                     return;
                 }
                 otherObj.gameObject.delete(true);
-                this.scene.player.incrementCombo();
+                playerObj.gameObject.incrementCombo();
             
                 return;
             }
 
+        
+        this.scene.onPlayerDeathExplostionStart(); 
 
-
-
-        this.scene.player.onDeath().on('animationcomplete', function () {
-            //TODO: move this to GameplayScene
-            this.scene.deleteGameObjects();
-            this.scene.createGameObjects();
+        playerObj.gameObject.onDeath().on('animationcomplete', function () {
+            this.scene.onPlayerDeathExplosionEnd();
             
         }.bind(this), this.scene);
     }
