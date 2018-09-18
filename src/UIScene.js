@@ -25,7 +25,6 @@ export class UIScene extends Phaser.Scene {
 
         this.progress = this.add.graphics();
 
-       // this.add.image(0,0,'planet');
        let offset = 50;
        this.leftArrow = this.getArrow('arrowLeft', offset);
        this.rightArrow = this.getArrow('arrowRight', getGameWidth() - offset);

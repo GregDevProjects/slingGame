@@ -1,9 +1,9 @@
-import {getAngleBetweenObjects, getGameHeight, getGameWidth, getDistanceBetweenObjects} from '../../Helper'
+import {getAngleBetweenObjects, getGameHeight, getGameWidth, getDistanceBetweenObjects, getRandomInt} from '../../Helper'
 import {destroyObject} from '../../matter/MatterHelper'
 
 export class Missle extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
-        super(config.scene.matter.world, config.x, config.y, 'missle');
+        super(config.scene.matter.world, config.x, config.y, 'missile_engine');
         this.body.key = this.constructor.name;
         this.player = config.player;
        //  this.setDisplaySize(100,200);
@@ -15,8 +15,10 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         this.minimap = new OffscreenTargetCamera({scene:config.scene, player:config.player, target: this});
 
         this.minimap.startFollow(this);
-
+        //hack
+        this.deathTextWasShown = false;
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
+        this.play('missile_engine');
         
     }
 
@@ -31,8 +33,8 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
             this.minimap.hide();
         }
 
-        if (this.player.y < this.y) {
-            this.activated = true;
+        if ((this.player.y < this.y) && !this.activated) {
+            this.onActivation();
         }
 
         if(!this.activated) {
@@ -46,6 +48,24 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 
         this.thrust(0.004);
  
+    }
+
+    onActivation() {
+        this.activated = true;
+            
+        this.scene.tweens.add({
+            targets:  this.scene.add.text(this.x, this.y - 100,'! MISSILE INBOUND !' , { font: '60px Arial', fill: '#ff0000' }),
+            alpha: 0,
+            duration: 1000,
+            scaleX: 4,
+            scaleY:4,
+            y: getRandomInt(this.y-500, this.y -200),
+            x: getRandomInt(this.x-500,this.x+500),
+            onComplete: function (tween) {
+                tween.targets[0].destroy();
+            }
+        });
+
     }
 
     isOffscreen() {
@@ -71,9 +91,28 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 
     delete(isExploding){
-       // if(this.active)
+
         this.minimap.delete();
-        destroyObject(this, isExploding);       
+        destroyObject(this, isExploding);   
+
+        if(!this.player.isDead() && !this.deathTextWasShown) {
+            this.deathTextWasShown = true;
+            this.scene.tweens.add({
+                targets:  this.scene.add.text(this.player.x, this.player.y - 100, 'MISSILE DOWN', { font: '60px Arial', fill: '#ffffff' }),
+                alpha: 0,
+                duration: 1000,
+                scaleX: 1,
+                scaleY:1,
+                y: getRandomInt(this.player.y-500, this.player.y -200),
+                x: getRandomInt(this.player.x-500,this.player.x+500),
+                onComplete: function (tween) {
+                    tween.targets[0].destroy();
+                }
+            });
+        }
+
+
+    
     }
     
     tintWhite() {
@@ -82,7 +121,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 }
 
 class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
-    constructor(config) {//config.scene.matter.world,
+    constructor(config) {
         super( 0, getGameHeight() - 50, 50, 50); 
         this.setZoom(0.4);
         this.setVisible(false);
@@ -93,6 +132,7 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
         this.redBorder = config.scene.add.image(config.x,config.y,'target').setVisible(false).setDisplaySize(125,125).setDepth(3);
         this.distanceText = config.scene.add.text(0, 10, '', { font: '50px Arial', fill: '#ffffff' }).setVisible(false);
         this.distanceText.setDepth(4);
+        this.maxDistance = 30;
         config.scene.cameras.addExisting(this);
     }
 
@@ -116,11 +156,18 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
     }
 
     update() {
+        this.distance = Math.floor(getDistanceBetweenObjects(this.target, this.player) / 100);
+        if(this.distance > this.maxDistance && this.target.activated) {
+            this.target.delete(true);
+            return;
+        }
+      
         this.distanceText.setText(
-            Math.floor(getDistanceBetweenObjects(this.target, this.player) / 100)
+            this.distance
         ).setPosition(this.target.x - 55, this.target.y - 60);
         this.positionCameraMapBehindPlayer();
         this.redBorder.setPosition(this.target.x, this.target.y);
+
     }
 
     show() {

@@ -46,10 +46,6 @@ export class Section{
             isSpawnedWhite: config.isSpawnedWhite
         });      
 
-        // this.obstacles.push(
-        //     new Missle({ scene: this.scene, x: config.x + 300, y: config.y-500, matterHelper: this.matterHelper, player: this.scene.player })
-        // );
-
 
         if (track.prototype.constructor.name == 'Diamond' && config.difficulty != 1) {
             this.obstacles = [...this.obstacles, ...Spinners.makeAndGetBodies({
@@ -65,6 +61,7 @@ export class Section{
 
         }
 
+      
 
         if (config.isObstaclesSensors) {
             this.setObstaclesSensors(true);

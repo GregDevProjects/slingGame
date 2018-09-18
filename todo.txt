@@ -1,29 +1,12 @@
 -----------------Todo -----------------------------------------
 
-- sometimes when player is deleted 
-Uncaught TypeError: Cannot read property 'position' of undefined
-    at Player.get [as x] (project.bundle.js:163278)
-    at Particle.fire (project.bundle.js:75480)
-    at ParticleEmitter.emitParticle (project.bundle.js:77779)
-    at ParticleEmitter.preUpdate (project.bundle.js:77879)
-    at ParticleEmitterManager.preUpdate (project.bundle.js:41735)
-    at UpdateList.update (project.bundle.js:134261)
-    at EventEmitter.emit (project.bundle.js:2696)
-    at Systems.step (project.bundle.js:35703)
-    at SceneManager.update (project.bundle.js:67853)
-    at Game.step (project.bundle.js:127935)
+As a player, I want a menu 
+    - options for music 
+    - start endless mode 
+        - must complete training mode first 
+    - start training mode 
+    - credits  
 
-
-As a player, I want to dodge homing missles 
-    -at difficulty 13 (distance 250) spawn homing missiles 
-        -death conditions
-            -on distance > 35
-            -on collision with any game object 
-            -on time limit expiration
-        -make it obvious to the player they are being chased 
-            - show exlamation mark over missle 
-            - show target over player 
-    
 
 -----------------Todo -----------------------------------------
 
@@ -33,8 +16,18 @@ As a player, I want to dodge homing missles
 
 
 
+As a player, I want a training mode with pre selected sections to learn the game and 
+get some sense of achievement 
+    Levels 
+        - straight line 
+        - windy road with straight lines 
+        - straight line with asteriods 
+        - straight line with ships + asteroids 
+        - windy road with pursuer 
+        - open area with everything 
+
 As a player, I want cargo ships on straight lanes to provide a challenege
-    - small ships fly to the middle of the lane 
+    - small ships fly to the middle of the lane  
 
 As Greg McLean, I want my collision handling to make sense
     - refactor 
@@ -45,14 +38,17 @@ As a player, I want to know when I'm grinding
 
 As a player, I want the hitbox to match the image
 
-As a player, I want a non-boost thruster that looks good 
-    -animate existing thruster or find new one
+As a player, I want to the missile to have a thruster effect
+    -use an emitter or tack a truster on the bottom 
 
 As a player, I want a powertrust progress bar that looks good 
     - see if there is an open source progress bar that look good 
     - maybe the thruster could change color to show boost progress instead 
     - it should be obvious when at full power (pulse purple?)
 
+
+As a player, I want a non-boost thruster that looks good 
+    -animate existing thruster or find new one
 
 As Greg McLean, I dont want to run into legal trouble for using open source art 
     - Add a credits scene where art authors are credited  

@@ -65,7 +65,7 @@ export class GameplayScene extends Phaser.Scene {
         this.createGameObjects();
         // this.cameras.main.setBounds(0, 0, 3200, 600);
         
-        this.playerInvinsible = false;
+        this.playerInvinsible = true;
 
         CollisionHandler.startCollisionDetection({ scene: this });
 
@@ -89,6 +89,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     onPlayerDeathExplostionStart() {
+        this.player.dead = true;
         this.globalObstacles.deleteAllObstacles();
     }
 
@@ -164,7 +165,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     isTimeToAddGlobalObstacle() {
-        return this.activeSections.difficulty % 10 === 0;
+        return this.activeSections.difficulty % 5 === 0;
     } 
 
     addGlobalObstacleToTopOfSection() {
