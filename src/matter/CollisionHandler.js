@@ -95,9 +95,18 @@ export class CollisionHandler {
     }
 
     static onMissleCollision(bodyA, bodyB) {
+
         let missleObj = this.getCollisionObjects("Missle", bodyA, bodyB).keyObject;
         let otherObj = this.getCollisionObjects("Missle", bodyA, bodyB).otherObj;
-        //debugger;
+
+        if (!missleObj.gameObject) {
+            return;
+        }
+
+        if (!missleObj.gameObject.activated) {
+            return;
+        }
+
         if (otherObj.key === "VectorWall") {
             return;
         }

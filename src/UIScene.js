@@ -4,7 +4,7 @@ export class UIScene extends Phaser.Scene {
 
     constructor ()
     {
-        super({ key: 'UIScene', active: true });
+        super({ key: 'UIScene', active: false });
 
        this.score = 0;
     }

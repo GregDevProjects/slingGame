@@ -3,7 +3,7 @@ import {destroyObject} from '../../matter/MatterHelper'
 
 export class Missle extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
-        super(config.scene.matter.world, config.x, config.y, 'missile_engine');
+        super(config.scene.matter.world, config.x, config.y, 'missle');
         this.body.key = this.constructor.name;
         this.player = config.player;
        //  this.setDisplaySize(100,200);
@@ -18,7 +18,6 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         //hack
         this.deathTextWasShown = false;
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
-        this.play('missile_engine');
         
     }
 
@@ -54,7 +53,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         this.activated = true;
             
         this.scene.tweens.add({
-            targets:  this.scene.add.text(this.x, this.y - 100,'! MISSILE INBOUND !' , { font: '60px Arial', fill: '#ff0000' }),
+            targets:  this.scene.add.text(this.x, this.y - 100,'!' , { font: '60px Arial', fill: '#ff0000' }),
             alpha: 0,
             duration: 1000,
             scaleX: 4,
@@ -92,10 +91,9 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 
     delete(isExploding){
 
-        this.minimap.delete();
-        destroyObject(this, isExploding);   
 
-        if(!this.player.isDead() && !this.deathTextWasShown) {
+
+        if (!this.player.isDead() && !this.deathTextWasShown) {
             this.deathTextWasShown = true;
             this.scene.tweens.add({
                 targets:  this.scene.add.text(this.player.x, this.player.y - 100, 'MISSILE DOWN', { font: '60px Arial', fill: '#ffffff' }),
@@ -111,8 +109,9 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
             });
         }
 
+        this.minimap.delete();
+        destroyObject(this, isExploding);   
 
-    
     }
     
     tintWhite() {

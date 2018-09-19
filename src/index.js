@@ -1,6 +1,8 @@
 import 'phaser';
 import { GameplayScene } from './GameplayScene'
 import { UIScene } from './UIScene'
+import { MainMenu } from './mainMenuScene'
+import { LoaderScene } from './loaderScene'
 
 let config = {
     type: Phaser.AUTO,
@@ -19,6 +21,8 @@ let config = {
         }
     },
     scene: [
+        LoaderScene,
+        MainMenu,
         GameplayScene,
         UIScene
     ]
