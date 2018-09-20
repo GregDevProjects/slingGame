@@ -56,6 +56,10 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('planet_5', 'assets/img/planet_22.png');
     this.load.image('missle', 'assets/img/spr_missile.png');
     this.load.image('target', 'assets/img/target.png');
+    this.load.image('arrow_up', 'assets/img/arrow_up.png' )
+    this.load.image('arrow_down', 'assets/img/arrow_down.png' )
+    this.load.image('go', 'assets/img/go.png')
+    this.load.image('nah', 'assets/img/nah.png')
 
   }
 

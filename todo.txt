@@ -1,14 +1,8 @@
 -----------------Todo -----------------------------------------
 
-As a player, I want a training mode with pre selected sections to learn the game and 
-get some sense of achievement 
-    Levels 
-        - straight line 
-        - windy road with straight lines 
-        - straight line with asteriods 
-        - straight line with ships + asteroids 
-        - windy road with missles  
-        - open area with everything 
+    As a player, I want to play a campaign level with 
+        -straight line 
+    to learn to basics of drifting  
 
 -----------------Todo -----------------------------------------
 
@@ -16,12 +10,48 @@ get some sense of achievement
 
 -----------------Backlog -----------------------------------------
 
+
+    -----------------Levels -----------------------------------------
+
+
+    As a player, I want to play a campaign level with 
+        -windy roads
+        -straight lines 
+    to learn advanced drifting 
+
+    As a player, I want to play a campaign level with 
+        -straight lines
+        -asteriods 
+    to learn the power thrust 
+
+    As a player, I want to play a campaign level with 
+        - open area 
+        - cargo ship 
+        - asteroids 
+        - spinner
+    to learn how to use moving objects to drift 
+
+    As a player, I want to play a campaign level with 
+        - missile
+        - windy road  
+        - straight lines 
+        - asteriods
+        - cargo ship 
+    to learn how to play with missiles and use objects as cover 
+
+    As a player, I want to play a campaign level with 
+        - missile
+        - straight lines 
+        - windy roads 
+    to learn how to play with missiles without cover 
+
+    **add levels around the persuer after it's implemented 
+    -----------------Levels -----------------------------------------
+
+
 As a player, I want cargo ships on straight lanes to provide a challenege
     - small ships fly to the middle of the lane  
 
-As Greg McLean, I want my collision handling to make sense
-    - refactor 
-    - make sure walls are constantly colliding 
 
 As a player, I want to know when I'm grinding 
     -show emitter sparks on grind contact points 
@@ -40,8 +70,8 @@ As a player, I want a powertrust progress bar that looks good
 As a player, I want a non-boost thruster that looks good 
     -animate existing thruster or find new one
 
-As Greg McLean, I dont want to run into legal trouble for using open source art 
-    - Add a credits scene where art authors are credited  
+As Greg McLean, I want a credits scene so I don't run into legal trouble for using open source art 
+    - include the macissacs for game testing
     - https://opengameart.org/content/missile-0 <- tell this dude about the game
 
 

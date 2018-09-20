@@ -72,3 +72,8 @@ export function moveObjectToPoint(objectToMove, whereToMove, speed) {
         objectToMove.setVelocityY(0);
     }
 }
+
+export function placeTextInCenter(text) {
+    text.setX(getGameWidth()/2 - text.width/2);
+    return text;
+}

@@ -1,8 +1,11 @@
 import 'phaser';
 import { GameplayScene } from './GameplayScene'
 import { UIScene } from './UIScene'
-import { MainMenu } from './mainMenuScene'
+import { MainMenu } from './menu/mainMenuScene'
 import { LoaderScene } from './loaderScene'
+import { LevelSelect } from './menu/levelSelectScene'
+import { LevelPreview } from './menu/levelPreviewScene'
+import { Options } from './menu/optionsScene'
 
 let config = {
     type: Phaser.AUTO,
@@ -23,8 +26,12 @@ let config = {
     scene: [
         LoaderScene,
         MainMenu,
+        LevelSelect,
+        LevelPreview,
+        Options,
         GameplayScene,
-        UIScene
+        UIScene,
+        
     ]
 
 };
