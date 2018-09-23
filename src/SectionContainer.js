@@ -5,7 +5,7 @@ import { Section } from './sections/Section'
 export class SectionContainer {
     /**
      * 
-     * @param {scene, type, x, y, difficulty} config 
+     * @param {scene, type, x, y, difficulty, level} config 
      */
     constructor(config) {
 
@@ -13,29 +13,51 @@ export class SectionContainer {
         this.scene = config.scene;
         this.isSectionObstaclesSensors = false;
 
-        this.addSectionContainer(config);
+        this.addSection(config);
         this.difficulty = config.difficulty;
+        this.level = config.level;
         this.isSpawnedWhite = false;
+        this.isLastSection = false;
     }
 
     //first section generated calls this
-    addSectionContainer(config) {
-        this.activeSectionsArray.push(new Section(
-            config
-        ));
+    addSection(config) {
+
+        if (this.activeSectionsArray.length === 0) {
+            this.activeSectionsArray.push(new Section(
+                config
+            ))
+            return;
+        }
+     
+        if( this.activeSectionsArray[this.activeSectionsArray.length -1].getIsLastSection()){
+            this.isLastSection = true;
+            //TODO: 
+            // -need to signal to the GameplayScene that there's no need to keep adding sections and add a finish line 
+            // -pass the level from the menu scene
+            console.log('no mo')
+        } else {
+            this.activeSectionsArray.push(new Section(
+                config
+            ))
+            return;
+        }
+
+        
     }
 
     //all sections generated here except the fist
-    addAnotherSectionContainerAbove() {
+    addAnotherSectionAbove() {
         //TODO use top/bottom of section container rather than middle
-        this.addSectionContainer({
+        this.addSection({
             scene: this.scene,
             x: this.leftXOfNewestSectionContainer(),
             y: this.getTopOfNewestSectionContainer(),
             width: this.getWidthOfNewestSectionContainer(), //
             difficulty: this.difficulty,   //tie this to gameplay progression 
             isObstaclesSensors: this.isSectionObstaclesSensors,
-            isSpawnedWhite: this.isSpawnedWhite
+            isSpawnedWhite: this.isSpawnedWhite,
+            level: this.level
         });
     }
 
@@ -111,5 +133,9 @@ export class SectionContainer {
         this.activeSectionsArray.forEach((aSection) => {
             aSection.setObstaclesSensors(isSensor);
         });
+    }
+
+    getIsLastSection() {
+        return this.isLastSection;
     }
 }

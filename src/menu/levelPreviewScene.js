@@ -1,5 +1,6 @@
-import { getGameWidth, getGameHeight, placeTextInCenter } from '../Helper'
-
+import { getGameWidth, getGameHeight, placeTextInCenter, addGlowingTween } from '../Helper'
+import { Levels } from '../sections/Levels'
+import { LocalStorageHandler } from '../LocalStorageHandler'
 export class LevelPreview extends Phaser.Scene {
 
     constructor ()
@@ -19,34 +20,71 @@ export class LevelPreview extends Phaser.Scene {
 
         this.tileBackground = this.add.tileSprite(getGameWidth()/2, getGameHeight()/2, getGameWidth(), getGameHeight(), 'bg');
 
-        placeTextInCenter(this.add.text(
+        const titleText = placeTextInCenter(this.add.text(
             0, 
-            50, 
+            20, 
             this.props.name.toUpperCase(), 
             { font: '50px Arial', fill: '#ffffff' }
         ));
 
         placeTextInCenter(this.add.text(
             0, 
-            150, 
+            titleText.y+ 75, 
             this.props.description, 
             { font: '30px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
         ));
 
-        placeTextInCenter(this.add.text(
+        const objectiveText = placeTextInCenter(this.add.text(
             0, 
-            300, 
+            titleText.y+ 200, 
             this.props.objective, 
             { font: '30px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
         ));
+        
+        this.addMedals(objectiveText);
 
-        this.add.image(getGameWidth() - 60, getGameHeight() - 40, 'go')
+        addGlowingTween(this.add.image(getGameWidth() - 60, getGameHeight() - 40, 'go').setInteractive().on('pointerdown', (event) => { 
+            this.scene.stop();
+            this.scene.start('UIScene');
+            this.scene.start('GamePlay', {level: this.props.level});
+        }, this));
 
         this.add.image( 70, getGameHeight() - 40, 'nah').setInteractive().on('pointerdown', (event) => {   
             this.scene.stop();
             this.scene.start('LevelSelect');
         }, this);
 
+    }
+
+    addMedals(objectiveText) {
+        const medalOffset = 100;
+        const medalSpacing = 100;
+        const medalTextPosition = 380;
+
+        this.addMedal(getGameWidth()/2 - medalSpacing, objectiveText.y + medalOffset, 'medal_bronze', 'bronze');
+        this.addMedal(getGameWidth()/2, objectiveText.y + medalOffset, 'medal_silver', 'silver');
+        this.addMedal(getGameWidth()/2 + medalSpacing, objectiveText.y + medalOffset, 'medal_gold', 'gold');
+
+        const completeTime = LocalStorageHandler.getLevelCompleteTime(this.props.level);
+        if (completeTime == 0) {
+            return;
+        }
+
+        placeTextInCenter(
+            this.add.text(
+                getGameWidth()/2, 
+                medalTextPosition + 70, 
+                'Best Time: ' + completeTime,
+                { font: '20px Arial' }
+            )
+        );
+    }
+
+    addMedal(x, y, imageKey, medalKey) {
+        this.add.image(x, y, imageKey)
+        this.add.text(x - 35, 380, 
+        Levels.getLevel(this.props.level).getDecription().medalTimes[medalKey]+"\nSeconds",
+        {align : 'center'});       
     }
 
     update() {

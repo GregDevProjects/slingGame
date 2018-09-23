@@ -66,6 +66,7 @@ export class VectorWall {
             ));
         }
 
+        graphics.setDepth(2);
         graphics.closePath();
         
         graphics.fillPath();

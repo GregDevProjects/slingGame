@@ -77,3 +77,15 @@ export function placeTextInCenter(text) {
     text.setX(getGameWidth()/2 - text.width/2);
     return text;
 }
+
+export function addGlowingTween(target) {
+    target.scene.tweens.add(
+        { 
+            duration: 1000, 
+            alpha: 0, 
+            targets: target,
+            loop: -1,
+            yoyo: true
+        }
+    )
+}

@@ -9,13 +9,17 @@ export class Background {
     }
 
     setSimulationBackground() {
-        this.stars.setGridTexture();
-        this.planet.tint();
+        if (this.stars)
+            this.stars.setGridTexture();
+        if (this.planet)
+            this.planet.tint();
     }
 
     setRealityBackground() {
-        this.stars.setStarsTexture();
-        this.planet.clearTint();
+        if (this.stars)
+            this.stars.setStarsTexture();
+        if (this.planet)
+            this.planet.clearTint();
     }
 
     addRandomPlanet() {

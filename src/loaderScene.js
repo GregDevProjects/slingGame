@@ -30,7 +30,8 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('endless', 'assets/img/endless.png');
     this.load.image('options', 'assets/img/option.png');
     this.load.image('credits', 'assets/img/credits.png');
-
+    this.load.image('arrowLeft', 'assets/img/arrow_left.png');
+    this.load.image('arrowRight', 'assets/img/arrow_right.png')
     this.load.image('player', 'assets/img/player.png');
     this.load.image('bg', 'assets/img/bg.png');
     this.load.image('gridBg', 'assets/img/Grid.png');
@@ -60,6 +61,12 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('arrow_down', 'assets/img/arrow_down.png' )
     this.load.image('go', 'assets/img/go.png')
     this.load.image('nah', 'assets/img/nah.png')
+    this.load.image('finish', 'assets/img/finish.png')
+    this.load.image('level_complete', 'assets/img/level_complete.png'); 
+    this.load.image('replay', 'assets/img/50_61ff33.png');
+    this.load.image('medal_bronze', 'assets/img/bronze.png');
+    this.load.image('medal_silver', 'assets/img/silver.png');
+    this.load.image('medal_gold', 'assets/img/gold.png');
 
   }
 

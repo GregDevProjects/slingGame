@@ -17,7 +17,7 @@ export class MainMenu extends Phaser.Scene {
         // this.scene.stop();
         // this.scene.start('LevelSelect');
 
-        this.isEndlessUnlocked = LocalStorageHandler.isEndlessUnlocked();
+        this.isEndlessUnlocked = true;//LocalStorageHandler.isEndlessUnlocked();
 
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
         this.add.image(getGameWidth() / 2, 50, 'title');
@@ -50,7 +50,7 @@ export class MainMenu extends Phaser.Scene {
             return;
         }
         this.scene.stop();
-        this.scene.start('GamePlay');
+        this.scene.start('GamePlay', {level : 0});
         this.scene.start('UIScene');
     }
 

@@ -1,18 +1,6 @@
 -----------------Todo -----------------------------------------
 
-    As a player, I want to play a campaign level with 
-        -straight line 
-    to learn to basics of drifting  
-
------------------Todo -----------------------------------------
-
-
-
------------------Backlog -----------------------------------------
-
-
     -----------------Levels -----------------------------------------
-
 
     As a player, I want to play a campaign level with 
         -windy roads
@@ -48,6 +36,19 @@
     **add levels around the persuer after it's implemented 
     -----------------Levels -----------------------------------------
 
+-----------------Todo -----------------------------------------
+
+pink menu - #ff33dc
+
+
+-----------------Backlog -----------------------------------------
+
+
+
+
+As a player, I want a dead screen to give my the option to retry or go back 
+
+As a player, I want to be respawned when killed by black hole
 
 As a player, I want cargo ships on straight lanes to provide a challenege
     - small ships fly to the middle of the lane  

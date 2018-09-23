@@ -3,7 +3,7 @@ import { Matter } from './matter/MatterHelper'
 import { Player } from './Player'
 import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
-import { moveObjectToPoint } from './Helper'
+import { moveObjectToPoint, getGameWidth } from './Helper'
 import { CollisionHandler } from './matter/CollisionHandler'
 import { GlobalObstacleContainer } from './GlobalObstacleContainer'
 
@@ -14,6 +14,10 @@ export class GameplayScene extends Phaser.Scene {
             key: 'GamePlay',
             active: false
         });
+    }
+
+    init(data) {
+        this.level = data.level;
     }
 
     preload() {
@@ -34,6 +38,8 @@ export class GameplayScene extends Phaser.Scene {
         // this.cameras.main.setBounds(0, 0, 3200, 600);
         
         this.playerInvinsible = false;
+        this.isLevelFinished = false;
+        this.finishLine = false;
 
         CollisionHandler.startCollisionDetection({ scene: this });
 
@@ -48,11 +54,12 @@ export class GameplayScene extends Phaser.Scene {
             y: 0,
             difficulty: 1,
             width: 1000,
-            matterHelper: this.matterHelper
+            matterHelper: this.matterHelper,
+            level: this.level
         });
         this.globalObstacles = new GlobalObstacleContainer({ scene: this, matterHelper: this.matterHelper });
 
-        this.activeSections.addAnotherSectionContainerAbove();
+        this.activeSections.addAnotherSectionAbove();
         this.createNewPointOfNoReturn();
     }
 
@@ -79,7 +86,8 @@ export class GameplayScene extends Phaser.Scene {
                 'distance' : Math.floor(-this.player.y / 100),
                 'power' : this.player.power,
                 'isTurningLeft' : this.player.isTurningLeft,
-                'isTurningRight' : this.player.isTurningRight
+                'isTurningRight' : this.player.isTurningRight,
+                'time' : this.player.getSecondsAlive()
             };
         }
     }
@@ -110,20 +118,36 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update() {
+
+        if (this.isLevelFinished) {
+            this.player.update();
+            this.background.update();
+            this.moveCamera();
+            return;
+        }
+
         this.activeSections.updateSections();
+
         if (this.player.isDead()) {
             return;
         }
 
-        this.globalObstacles.update();
-
-        if (this.isPlayerPastActiveSection()) {
+        if (this.isPlayerPastActiveSection() && !this.activeSections.getIsLastSection()) {
             this.deleteAndAddSections();
             this.activeSections.difficulty++;
-            if(this.isTimeToAddGlobalObstacle()){
-                this.addGlobalObstacleToTopOfSection();
+        } //else {
+
+        if(this.activeSections.getIsLastSection()){
+            
+            if (!this.finishLine){
+                this.finishLine = this.addFinishLine();
+            }
+
+            if (this.isPlayerOverFinish()) {
+                this.onLevelCompletedSuccessfully();
             }
         }
+
         this.player.update();
         this.background.update();
         this.moveCamera();
@@ -131,6 +155,28 @@ export class GameplayScene extends Phaser.Scene {
         if (this.isPlayerPastPointOfNoReturn()) {
             this.sendPlayerToBlackHole();
         }
+    }
+
+    onLevelCompletedSuccessfully() {
+        //start finish sequence here
+        this.player.setIsFinishedLevel();
+        this.scene.get('UIScene').setLevelComplete();
+        this.isLevelFinished = true;
+    }
+
+    addFinishLine() {
+        //const linePosition = this.activeSections.getTopOfNewestSectionContainer();
+        return this.add.tileSprite(
+            this.activeSections.leftXOfNewestSectionContainer(), 
+            this.activeSections.getTopOfNewestSectionContainer() - 200, 
+            4000,
+            400,
+            'finish'
+        ).setDepth(3);
+    }
+
+    isPlayerOverFinish() {
+        return this.player.y < this.finishLine.y + this.finishLine.height/2;
     }
 
     isTimeToAddGlobalObstacle() {
@@ -154,7 +200,8 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     deleteAndAddSections() {
-        this.activeSections.addAnotherSectionContainerAbove();
+        console.log('added section')
+        this.activeSections.addAnotherSectionAbove();
         if (this.activeSections.activeSectionsArray.length >= 4) {
             this.activeSections.deleteOldestSection();
             this.createNewPointOfNoReturn();

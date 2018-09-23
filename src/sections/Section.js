@@ -1,18 +1,9 @@
-import { FloatingSpaceRocks } from './obstacles/FloatingSpaceRocks'
-import { GridTraffic } from './obstacles/GridTraffic'
-import { Tube } from './tracks/Tube'
-import { Diamond } from './tracks/Diamond'
-import { getRandomInt } from '../Helper'
-import { Spinners } from './obstacles/Spinners'
-import { SharpTurn } from './tracks/SharpTurn'
-import { Missle } from './obstacles/Missle'
-//return 
+import { ObstacleTrackProvider } from './ObstacleTrackProvider'
+
 export class Section{
     constructor(config){
         this.wallWidth = 200;
         this.height= 2000; 
-        this.allObstacles = [ FloatingSpaceRocks, GridTraffic ];
-        this.allTracks = [ Diamond, Tube, SharpTurn ];
 
         this.topY= config.y - this.height;
         this.x = config.x;
@@ -21,8 +12,12 @@ export class Section{
         this.scene = config.scene;
         this.tintWhiteOnSpawn = false;
 
-        let track = this.allTracks[getRandomInt(0,this.allTracks.length - 1)];
+        const objects = ObstacleTrackProvider.get(config.level, config.difficulty);
 
+        const track = objects.track;
+        const obstacle = objects.obstacle;
+        const difficulty = objects.difficulty;
+        this.isLastSection = objects.isLastTrack;
         this.walls = track.makeAndGetBodies({
             x: this.x,
             y: this.y,
@@ -31,34 +26,35 @@ export class Section{
             wallWidth: this.wallWidth,
             scene: config.scene
         });
-        
 
-        let obstacle = this.allObstacles[getRandomInt(0,this.allObstacles.length - 1)];
+        if (typeof obstacle === 'object') {
+            //checking to see if there are multiple objects
+            this.obstacles = [];
+            obstacle.forEach(function(anObstacle){
+                this.obstacles = [...this.obstacles, ...anObstacle.makeAndGetBodies({
+                    scene: this.scene,
+                    x: this.x + this.wallWidth, 
+                    y: this.y, 
+                    width: this.width - this.wallWidth,
+                    height: this.height,
+                    difficulty: anObstacle.prototype.constructor.name == 'Spinners' ? 1 : difficulty, //hack to ensure there aren't multiple spinners
+                    wallWidth: this.wallWidth,
+                    isSpawnedWhite: config.isSpawnedWhite
+                })];   
 
-        this.obstacles = obstacle.makeAndGetBodies({
-            scene: this.scene,
-            x: this.x + this.wallWidth, 
-            y: this.y, 
-            width: this.width - this.wallWidth,
-            height: this.height,
-            difficulty: this.getDifficultyWithCap(track.prototype.constructor.name,obstacle.prototype.constructor.name, config.difficulty),//config.difficulty,
-            wallWidth: this.wallWidth,
-            isSpawnedWhite: config.isSpawnedWhite
-        });      
+            }.bind(this))
 
-
-        if (track.prototype.constructor.name == 'Diamond' && config.difficulty != 1) {
-            this.obstacles = [...this.obstacles, ...Spinners.makeAndGetBodies({
+        } else if (typeof obstacle === 'function') {
+            this.obstacles = obstacle.makeAndGetBodies({
                 scene: this.scene,
                 x: this.x + this.wallWidth, 
                 y: this.y, 
                 width: this.width - this.wallWidth,
                 height: this.height,
-                difficulty: 1,
+                difficulty: difficulty,
                 wallWidth: this.wallWidth,
                 isSpawnedWhite: config.isSpawnedWhite
-            })];    
-
+            });              
         }
 
       
@@ -68,47 +64,16 @@ export class Section{
         }
     }
 
+    getIsLastSection() {
+        return this.isLastSection;
+    }
+
     getTopLeft(){
         //console.log();
        // return {x:0, y:0}
         return this.walls.topLeft;
     }
 
-    getGridTrafficDifficulty( difficulty) {
-        //traffic has same difficulty cap regardless of track 
-        if (difficulty >= 7){
-            return 7;
-        }
-        return difficulty;
-    }
-
-    getDifficultyWithCap(trackName, obstacleName, difficulty) {
-
-
-        if (trackName == 'Tube') {
-            if (obstacleName == 'FloatingSpaceRocks') {
-                if (difficulty >= 3) {
-                    return 3;
-                }
-                return difficulty;
-
-            } else if (obstacleName == 'GridTraffic') {
-                return this.getGridTrafficDifficulty(difficulty);
-            }
-        }
-
-        if (trackName == 'Diamond') {
-            if (obstacleName == 'FloatingSpaceRocks') {
-                if (difficulty >= 10) {
-                    return 10;
-                }
-                return difficulty;
-            } else if (obstacleName == 'GridTraffic') {
-                return this.getGridTrafficDifficulty(difficulty);
-            }
-        }
-
-    }
 
     setObstaclesTintWhite() {
         this.obstacles.forEach((aBody)=>{

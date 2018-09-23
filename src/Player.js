@@ -5,6 +5,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         super(config.scene.matter.world, config.x, config.y, 'player');
         this.setDepth(1);
         this.angle = -45;
+        this.isFinishedLevel = false;
         this.scene = config.scene;
         this.setFrictionAir(0.01);
         this.setMass(30);
@@ -24,6 +25,25 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.powerThrustTime = 3000;
         this.scene.input.addPointer(1);
         this.comboCounter = 0;
+        this.setDepth(4);
+        this.aliveTimer = this.scene.time.addEvent({ delay: 0, repeat: -1, startAt: 0 });
+
+    }
+
+    getSecondsAlive() {
+        return this.aliveTimer.getElapsedSeconds();
+    }
+
+    setIsFinishedLevel() {
+        this.isFinishedLevel = true;
+    }
+
+    flyStaightDisableControlls(){
+        this.powerThrust().stop();
+        this.angle = -85;
+        this.applyThrust(0.05);
+        //so thruster can be seen over finish line
+        this.thrusterImage.setDepth(4);
     }
 
     getIsPowerThrusting() {
@@ -58,19 +78,34 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.thrustSensor3 = this.scene.matter.add.rectangle(0, 0, trustSizeY, thrustSizeX, { isSensor: true });
         this.thrustSensor3.collisionFilter.category = this.scene.matterHelper.getMainCollisionGroup();
         this.thrustSensor3.key = 'Thruster';
-        this.thrusterImage = this.scene.add.image(0,0,'thrustFlame');
+        this.thrusterImage = this.scene.add.image(0,0,'thrustFlame').setDepth(2);
     }
 
     update() {
+
+      
+
         if (this.dead) {
             this.setVelocityX(0);
             this.setVelocityY(0);
             return;
         }
+
+        if(this.body && this.emitter){
+            this.emitter.setAngle(this.angle + 180);
+            
+        }
+       
+        this.positionThrustSensorBehindPlayer();
+
+        if (this.isFinishedLevel) {
+            this.flyStaightDisableControlls();
+            return;
+        }
         this.assignKeyboardControlToPlayerAction();
         this.assignPointerToPlayerAction();
         this.applyBoostThrust();
-        this.positionThrustSensorBehindPlayer();
+        
         if(this.isPowerThrusting){
             this.applyThrust(0.20);
             let progress = this.thrustTimer.getProgress();
@@ -78,10 +113,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         } else {
             this.applyThrust(this.regularSpeed);
         }
-        
 
-        if(this.body && this.emitter)
-            this.emitter.setAngle(this.angle + 180);
     }
 
     onDeath() {
@@ -89,7 +121,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.thrustTimer.destroy();
             this.powerThrust().stop();
         }
-
+        this.aliveTimer.destroy();
         this.emitter.stopFollow();
         this.emitter.stop();
         this.particles.destroy();

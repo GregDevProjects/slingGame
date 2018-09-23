@@ -1,19 +1,36 @@
 const totalLevels = 6;
-const levelKey = 'SpaceSlingLevelProgress';
 const isMusicEnabledKey = 'SpaceSlingMusic';
 const isArrowEnabledKey = 'SpaceSlingArrow';
+const levelTimeKey = "SpaceSlingLevelTime";
 
 export class LocalStorageHandler {
+
+    //only save if it's better than the current best time 
+    static saveLevelCompletionTime(level, seconds) {
+        const previousTime = this.getLevelCompleteTime(level);
+        if (previousTime != 0 && previousTime <= seconds) {
+            return;
+        }
+
+        this.saveItem(
+            this.getLevelKey(level), 
+            seconds
+        );    
+    }
+
+    static getLevelCompleteTime(level) {
+        this.initializeStorage(this.getLevelKey(level), 0);  
+        return parseFloat(this.getItem(
+            this.getLevelKey(level), 
+            0
+        ));
+    }
+
     //set a default value in the localstorage if there isn't an entry for the key
     static initializeStorage(key, value) {
         if(!localStorage.getItem(key)) {
             this.saveItem(key, value);  
         }
-    }
-
-    static getGameProgress(){
-        this.initializeStorage(levelKey, 1);
-        return this.getItem(levelKey, 1);
     }
 
     static getIsMusicEnabled(){
@@ -68,5 +85,9 @@ export class LocalStorageHandler {
             return false;
         }
         return true;
+    }
+
+    static getLevelKey(level) {
+        return levelTimeKey + '_' +level;
     }
 }
