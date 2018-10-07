@@ -43,7 +43,7 @@ export class GameplayScene extends Phaser.Scene {
 
         CollisionHandler.startCollisionDetection({ scene: this });
 
-        this.addGlobalObstacleToTopOfSection();
+       // this.addGlobalObstacleToTopOfSection();
     }
 
     createGameObjects() {

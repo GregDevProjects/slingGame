@@ -21,12 +21,12 @@ export class MainMenu extends Phaser.Scene {
 
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
         this.add.image(getGameWidth() / 2, 50, 'title');
-        this.add.image(getGameWidth() / 2, 200, 'campaign').setInteractive().on('pointerdown', (event) => {
+        this.add.image(getGameWidth() / 2, 150, 'campaign').setInteractive().on('pointerdown', (event) => {
             this.scene.stop();
             this.scene.start('LevelSelect');
         }, this);
 
-        this.endlessButton = this.add.image(getGameWidth() / 2, 300, 'endless').setInteractive().on('pointerdown', (event) => {
+        this.endlessButton = this.add.image(getGameWidth() / 2, 250, 'endless').setInteractive().on('pointerdown', (event) => {
             this.onEndlessButtonClick();
         }, this);
 
@@ -34,12 +34,12 @@ export class MainMenu extends Phaser.Scene {
             this.endlessButton.setAlpha(disabledAlphaValue);
         }
 
-        this.add.image(getGameWidth() / 2, 400, 'options').setInteractive().on('pointerdown', (event) => {
+        this.add.image(getGameWidth() / 2, 350, 'options').setInteractive().on('pointerdown', (event) => {
             this.scene.stop();
             this.scene.start('Options');
         }, this);
 
-        this.add.image(getGameWidth() / 2, 500, 'credits');
+        this.add.image(getGameWidth() / 2, 450, 'credits');
 
 
     }

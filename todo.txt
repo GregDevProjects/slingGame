@@ -1,16 +1,6 @@
 -----------------Todo -----------------------------------------
 
-    -----------------Levels -----------------------------------------
-
-    As a player, I want to play a campaign level with 
-        -windy roads
-        -straight lines 
-    to learn advanced drifting 
-
-    As a player, I want to play a campaign level with 
-        -straight lines
-        -asteriods 
-    to learn the power thrust 
+    -----------------Levels -----------------------------------------  
 
     As a player, I want to play a campaign level with 
         - open area 
@@ -46,9 +36,11 @@ pink menu - #ff33dc
 
 
 
-As a player, I want a dead screen to give my the option to retry or go back 
+As a player, I need a way to get back to the menu while in game 
 
 As a player, I want to be respawned when killed by black hole
+
+get the missile working again 
 
 As a player, I want cargo ships on straight lanes to provide a challenege
     - small ships fly to the middle of the lane  
@@ -97,6 +89,7 @@ As a player, I want each playthrough to have unique planet sizes
 - random things explode (maybe fixed?)
 
 - this could be fixed in .12
+- don't destroy the player object on death
 Uncaught TypeError: Cannot read property 'position' of undefined
     at Player.get [as x] (project.bundle.js:162585)
     at Particle.fire (project.bundle.js:75508)

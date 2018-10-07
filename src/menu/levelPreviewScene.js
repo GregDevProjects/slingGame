@@ -24,14 +24,14 @@ export class LevelPreview extends Phaser.Scene {
             0, 
             20, 
             this.props.name.toUpperCase(), 
-            { font: '50px Arial', fill: '#ffffff' }
+            { font: '40px Arial', fill: '#ffffff' }
         ));
 
         placeTextInCenter(this.add.text(
             0, 
             titleText.y+ 75, 
             this.props.description, 
-            { font: '30px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
+            { font: '25px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
         ));
 
         const objectiveText = placeTextInCenter(this.add.text(
