@@ -76,8 +76,7 @@ export class LoaderScene extends Phaser.Scene {
         key: 'kaboom',
         frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
         frameRate: 20,
-        repeat: 0,
-        hideOnComplete: true
+        repeat: 0
     });
 
     this.scene.start('MainMenu');

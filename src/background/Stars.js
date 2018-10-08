@@ -4,7 +4,13 @@ export class Stars extends Phaser.GameObjects.TileSprite {
     constructor(scene){
         super(scene, getGameWidth() / 2, getGameHeight() / 2, getGameWidth()*3, getGameHeight()*5, 'bg'); //FIXME: calculate this using camera zoom
         scene.add.existing(this);
-        this.gridBackground = scene.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth()*3, getGameHeight()*5, 'gridBg').setVisible(false);
+        this.gridBackground = scene.add.tileSprite(
+            getGameWidth() / 2, 
+            getGameHeight() / 2, 
+            getGameWidth()*3, 
+            getGameHeight()*5, 
+            'gridBg'
+        ).setVisible(false).setDepth(-2);
         this.scene = scene;
         this.setDepth(-2);
     }   

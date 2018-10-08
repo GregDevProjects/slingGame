@@ -34,6 +34,7 @@ export class GameplayScene extends Phaser.Scene {
         this.background = new Background({scene:this});
         
         // this.matterPhysics();
+        this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
         this.createGameObjects();
         // this.cameras.main.setBounds(0, 0, 3200, 600);
         
@@ -47,7 +48,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     createGameObjects() {
-        this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
+        
         this.activeSections = new SectionContainer({
             scene: this,
             x: 0,
@@ -64,18 +65,16 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     onPlayerDeathExplostionStart() {
-        this.player.dead = true;
         this.globalObstacles.deleteAllObstacles();
     }
 
     onPlayerDeathExplosionEnd() {
-        
         this.deleteGameObjects();
         this.createGameObjects();
+        this.player.reset();
     }
 
     deleteGameObjects() {
-        this.player.destroy();
         this.activeSections.deleteAllSections();
         this.background.deletePlanet(); 
     }

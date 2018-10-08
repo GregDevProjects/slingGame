@@ -24,6 +24,6 @@
     "webpack-dev-server": "^2.11.3"
   },
   "dependencies": {
-    "phaser": "git+https://github.com/photonstorm/phaser.git"
+    "phaser": "3.14"
   }
 }

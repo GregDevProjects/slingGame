@@ -30,6 +30,19 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     }
 
+    //set player values to starting position after death
+    reset(){
+        this.dead = false;
+        this.aliveTimer.reset({ delay: 0, repeat: -1, startAt: 0 });
+       // this.aliveTimer.start();
+        this.x =280 
+        this.y = 0;
+        this.angle = -45;
+        this.thrusterImage.setVisible(true);
+        this.setVisible(true);
+        this.setTexture('player');
+    }
+
     getSecondsAlive() {
         return this.aliveTimer.getElapsedSeconds();
     }
@@ -82,9 +95,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     update() {
-
-      
-
         if (this.dead) {
             this.setVelocityX(0);
             this.setVelocityY(0);
@@ -121,14 +131,17 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.thrustTimer.destroy();
             this.powerThrust().stop();
         }
-        this.aliveTimer.destroy();
-        this.emitter.stopFollow();
-        this.emitter.stop();
-        this.particles.destroy();
+        // this.aliveTimer.destroy();
+        // this.emitter.stopFollow();
+        // this.emitter.stop();
+        // this.particles.destroy();
+       // this.setVisible(false);
         this.anims.play('kaboom', true);
-        this.thrusterImage.destroy();
-        this.scene.matter.world.remove(this.thrustSensor3);
-        this.scene.matter.world.remove(this);
+       // debugger;
+        this.thrusterImage.setVisible(false);
+        // this.thrusterImage.destroy();
+        // this.scene.matter.world.remove(this.thrustSensor3);
+        // this.scene.matter.world.remove(this);
         this.dead = true;
         this.power = 0;
         return this;

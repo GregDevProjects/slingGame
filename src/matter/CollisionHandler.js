@@ -1,3 +1,5 @@
+import { getRandomInt, getDistanceBetweenObjects } from "../Helper";
+
 //TODO: don't call objects through the scene
 export class CollisionHandler {
     static startCollisionDetection(config) {
@@ -29,7 +31,9 @@ export class CollisionHandler {
             if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
                 if (!isTrustAppliedForThisLoop){
                     isTrustAppliedForThisLoop = true;
-                    this.onTrusterCollision();
+                   // console.log(aPair.collision.supports[0],aPair.collision.supports[1])
+
+                    this.onTrusterCollision(aPair);
                 }
             }
 
@@ -49,12 +53,65 @@ export class CollisionHandler {
 
     }
 
-    static onTrusterCollision() {
+    static onTrusterCollision(aPair) {
         if (this.scene.player.getIsPowerThrusting()) {
             return;
         }
+        
+
+        let contactPoints = {
+            x : aPair.collision.supports[0].x + aPair.collision.penetration.x, 
+            y : aPair.collision.supports[0].y + aPair.collision.penetration.y 
+        };
+
+
+
+
+        if (getDistanceBetweenObjects(this.scene.player, contactPoints) <= 200 ) {
+            if(getRandomInt(0,1)){
+                this.emitter(
+                    {
+                        x : aPair.collision.supports[0].x + aPair.collision.penetration.x, 
+                        y : aPair.collision.supports[0].y + aPair.collision.penetration.y 
+                    }
+                );
+            }
+        } else {
+            if(getRandomInt(0,1)){
+                this.emitter(
+                    {
+                        x : this.scene.player.thrusterImage.x, 
+                        y : this.scene.player.thrusterImage.y
+                    }
+                );
+            }            
+        }
+
+
+       // debugger;
+
+
         this.scene.player.queueBoostThrust();
         this.scene.player.incrementPower();
+    }
+
+    static emitter(source) {
+        var particles = this.scene.add.particles('red');
+        particles.setDepth(4)
+        particles.createEmitter({
+            x: source.x, 
+            y: source.y,
+            speed: 400,
+            lifespan: 250,
+            quantity: 1,
+            yoyo: true,
+            scale: { start: 1, end: 0 },
+            blendMode: 'ADD'
+        });
+
+        this.scene.time.delayedCall(250, function() {
+            particles.destroy();
+        });
     }
 
 
@@ -125,11 +182,16 @@ export class CollisionHandler {
 
     //TODO: use gameobject instead of attaching things to the body
     static onPlayerCollisionWithNonTruster(bodyA, bodyB) {
+      //  debugger;
         let objectPair = this.getCollisionObjects("Player", bodyA, bodyB);
         let playerObj = objectPair.keyObject;
         let otherObj = objectPair.otherObj;
 
         if( otherObj.key === "Thruster"){
+            return;
+        }
+
+        if (playerObj.gameObject.dead) {
             return;
         }
 
@@ -139,18 +201,18 @@ export class CollisionHandler {
             ){
 
             if (otherObj.key === 'VectorWall') {
-                    return;
-                }
-                otherObj.gameObject.delete(true);
-                playerObj.gameObject.incrementCombo();
-            
                 return;
             }
+            otherObj.gameObject.delete(true);
+            playerObj.gameObject.incrementCombo(); 
+            return;
+        }
 
         
         this.scene.onPlayerDeathExplostionStart(); 
 
         playerObj.gameObject.onDeath().on('animationcomplete', function () {
+            console.log('death collision')
             this.scene.onPlayerDeathExplosionEnd();
             
         }.bind(this), this.scene);

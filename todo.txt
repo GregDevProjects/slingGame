@@ -1,5 +1,16 @@
 -----------------Todo -----------------------------------------
 
+As a player, I want to know when I'm grinding 
+    -show emitter sparks on grind contact points 
+    -use graphics fadeout after emitter 
+
+-----------------Todo -----------------------------------------
+
+pink menu - #ff33dc
+
+
+-----------------Backlog -----------------------------------------
+
     -----------------Levels -----------------------------------------  
 
     As a player, I want to play a campaign level with 
@@ -26,15 +37,6 @@
     **add levels around the persuer after it's implemented 
     -----------------Levels -----------------------------------------
 
------------------Todo -----------------------------------------
-
-pink menu - #ff33dc
-
-
------------------Backlog -----------------------------------------
-
-
-
 
 As a player, I need a way to get back to the menu while in game 
 
@@ -44,10 +46,6 @@ get the missile working again
 
 As a player, I want cargo ships on straight lanes to provide a challenege
     - small ships fly to the middle of the lane  
-
-
-As a player, I want to know when I'm grinding 
-    -show emitter sparks on grind contact points 
 
 As a player, I want the hitbox to match the image
 
@@ -88,20 +86,19 @@ As a player, I want each playthrough to have unique planet sizes
 
 - random things explode (maybe fixed?)
 
-- this could be fixed in .12
-- don't destroy the player object on death
-Uncaught TypeError: Cannot read property 'position' of undefined
-    at Player.get [as x] (project.bundle.js:162585)
-    at Particle.fire (project.bundle.js:75508)
-    at ParticleEmitter.emitParticle (project.bundle.js:77807)
-    at ParticleEmitter.preUpdate (project.bundle.js:77907)
-    at ParticleEmitterManager.preUpdate (project.bundle.js:40909)
-    at UpdateList.update (project.bundle.js:134113)
-    at EventEmitter.emit (project.bundle.js:2506)
-    at Systems.step (project.bundle.js:34974)
-    at SceneManager.update (project.bundle.js:68259)
-    at Game.step (project.bundle.js:128415)
-
+- on player death when an astroid is spawned 
+-only happens on endless 
+project.bundle.js:22435 Uncaught TypeError: Cannot read property 'isPlaying' of undefined
+    at destroyObject (project.bundle.js:22435)
+    at SpaceRock.delete (project.bundle.js:115534)
+    at obstacles.forEach (project.bundle.js:186652)
+    at Array.forEach (<anonymous>)
+    at Section.delete (project.bundle.js:186647)
+    at activeSectionsArray.forEach (project.bundle.js:186466)
+    at Array.forEach (<anonymous>)
+    at SectionContainer.deleteAllSections (project.bundle.js:186465)
+    at GameplayScene.deleteGameObjects (project.bundle.js:185737)
+    at GameplayScene.onPlayerDeathExplosionEnd (project.bundle.js:185731)
 
 -----------------Bugs -----------------------------------------
 
