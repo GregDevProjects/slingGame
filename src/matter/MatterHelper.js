@@ -15,6 +15,11 @@ export class Matter{
 
 export function destroyObject(matterObj, isExploding) {
     //debugger;
+    if (!matterObj.anims) {
+        matterObj.destroy();
+        return;
+    }
+
     if (matterObj.anims.isPlaying) {
         return;
     }

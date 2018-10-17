@@ -5,7 +5,7 @@ import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
 import { moveObjectToPoint, getGameWidth } from './Helper'
 import { CollisionHandler } from './matter/CollisionHandler'
-import { GlobalObstacleContainer } from './GlobalObstacleContainer'
+
 
 
 export class GameplayScene extends Phaser.Scene {
@@ -43,12 +43,11 @@ export class GameplayScene extends Phaser.Scene {
         this.finishLine = false;
 
         CollisionHandler.startCollisionDetection({ scene: this });
-
-       // this.addGlobalObstacleToTopOfSection();
+        
+       
     }
 
     createGameObjects() {
-        
         this.activeSections = new SectionContainer({
             scene: this,
             x: 0,
@@ -58,14 +57,15 @@ export class GameplayScene extends Phaser.Scene {
             matterHelper: this.matterHelper,
             level: this.level
         });
-        this.globalObstacles = new GlobalObstacleContainer({ scene: this, matterHelper: this.matterHelper });
+        
 
         this.activeSections.addAnotherSectionAbove();
         this.createNewPointOfNoReturn();
+        //this.addGlobalObstacleToTopOfSection();
     }
 
     onPlayerDeathExplostionStart() {
-        this.globalObstacles.deleteAllObstacles();
+        this.activeSections.deleteGlobalObstacles();
     }
 
     onPlayerDeathExplosionEnd() {
@@ -76,6 +76,7 @@ export class GameplayScene extends Phaser.Scene {
 
     deleteGameObjects() {
         this.activeSections.deleteAllSections();
+        this.activeSections.deleteGlobalObstacles();
         this.background.deletePlanet(); 
     }
 
@@ -95,14 +96,12 @@ export class GameplayScene extends Phaser.Scene {
         this.activeSections.setAllSectionObstaclesSensors(true);
         this.background.setSimulationBackground();
         this.activeSections.setAllSectionObstaclesTintWhite(true);
-        this.globalObstacles.setAllObstaclesTintWhite(true);
     }
 
     onPlayerPowerThrustEnd(){
         this.background.setRealityBackground();
         this.activeSections.setAllSectionObstaclesTintWhite(false);
         this.activeSections.setAllSectionObstaclesSensors(false);
-        this.globalObstacles.setAllObstaclesTintWhite(false);
     }
 
     createNewPointOfNoReturn() {
@@ -126,7 +125,7 @@ export class GameplayScene extends Phaser.Scene {
         }
 
         this.activeSections.updateSections();
-
+      
         if (this.player.isDead()) {
             return;
         }
@@ -134,7 +133,7 @@ export class GameplayScene extends Phaser.Scene {
         if (this.isPlayerPastActiveSection() && !this.activeSections.getIsLastSection()) {
             this.deleteAndAddSections();
             this.activeSections.difficulty++;
-        } //else {
+        }
 
         if(this.activeSections.getIsLastSection()){
             
@@ -182,16 +181,6 @@ export class GameplayScene extends Phaser.Scene {
         return this.activeSections.difficulty % 5 === 0;
     } 
 
-    addGlobalObstacleToTopOfSection() {
-        this.globalObstacles.addObstacle(
-            { 
-                x:  this.activeSections.leftXOfNewestSectionContainer() + 300, 
-                y: this.activeSections.getTopOfNewestSectionContainer() - 100, 
-                player: this.player 
-            }
-        );
-    }
-
     sendPlayerToBlackHole() {
         moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
         this.player.disableEngine();
@@ -199,7 +188,6 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     deleteAndAddSections() {
-        console.log('added section')
         this.activeSections.addAnotherSectionAbove();
         if (this.activeSections.activeSectionsArray.length >= 4) {
             this.activeSections.deleteOldestSection();

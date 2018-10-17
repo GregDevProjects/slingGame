@@ -11,7 +11,7 @@ export class GlobalObstacleContainer {
     }
 
     addObstacle(config) {
-        let newObstacle = new this.allObstaclesTypes[0]({ 
+        let newObstacle = new config.obstacle({ 
             scene: this.scene, 
             x:  config.x, 
             y: config.y, 

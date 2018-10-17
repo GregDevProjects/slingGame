@@ -17,16 +17,45 @@ export class Section{
         const track = objects.track;
         const obstacle = objects.obstacle;
         const difficulty = objects.difficulty;
+        const globalObstacle = objects.globalObstacles;
+        //debugger;
         this.isLastSection = objects.isLastTrack;
+        this.createGlobalObstacles(globalObstacle);
+        this.createTrack(track);
+        this.createObstacles(obstacle, difficulty, config);
+
+        
+
+        if (config.isObstaclesSensors) {
+            this.setObstaclesSensors(true);
+        }
+    }
+
+    createGlobalObstacles(globalObstacle) {
+        if(!globalObstacle){
+            return;
+        }  
+        //this is insanely bad
+        this.scene.activeSections.addGlobalObstacle({
+            x: this.x + 100,
+            y: this.y,
+            globalObstacle 
+        });
+    }
+
+    createTrack(track) {
         this.walls = track.makeAndGetBodies({
             x: this.x,
             y: this.y,
             width: this.width,
             height: this.height,
             wallWidth: this.wallWidth,
-            scene: config.scene
+            scene: this.scene
         });
+    }
 
+    //WASH ME
+    createObstacles(obstacle, difficulty, config) {
         if (typeof obstacle === 'object') {
             //checking to see if there are multiple objects
             this.obstacles = [];
@@ -56,12 +85,6 @@ export class Section{
                 isSpawnedWhite: config.isSpawnedWhite
             });              
         }
-
-      
-
-        if (config.isObstaclesSensors) {
-            this.setObstaclesSensors(true);
-        }
     }
 
     getIsLastSection() {
@@ -69,8 +92,6 @@ export class Section{
     }
 
     getTopLeft(){
-        //console.log();
-       // return {x:0, y:0}
         return this.walls.topLeft;
     }
 

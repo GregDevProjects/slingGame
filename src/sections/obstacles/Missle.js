@@ -14,9 +14,8 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
  
         this.minimap = new OffscreenTargetCamera({scene:config.scene, player:config.player, target: this});
 
-        this.minimap.startFollow(this);
+        //this.minimap.camera.startFollow(this);
         //hack
-        this.deathTextWasShown = false;
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
         
     }
@@ -91,24 +90,6 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 
     delete(isExploding){
 
-
-
-        if (!this.player.isDead() && !this.deathTextWasShown) {
-            this.deathTextWasShown = true;
-            this.scene.tweens.add({
-                targets:  this.scene.add.text(this.player.x, this.player.y - 100, 'MISSILE DOWN', { font: '60px Arial', fill: '#ffffff' }),
-                alpha: 0,
-                duration: 1000,
-                scaleX: 1,
-                scaleY:1,
-                y: getRandomInt(this.player.y-500, this.player.y -200),
-                x: getRandomInt(this.player.x-500,this.player.x+500),
-                onComplete: function (tween) {
-                    tween.targets[0].destroy();
-                }
-            });
-        }
-
         this.minimap.delete();
         destroyObject(this, isExploding);   
 
@@ -119,11 +100,15 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 }
 
-class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
+class OffscreenTargetCamera {
     constructor(config) {
-        super( 0, getGameHeight() - 50, 50, 50); 
-        this.setZoom(0.4);
-        this.setVisible(false);
+
+        this.camera = config.scene.cameras.add(0, getGameHeight() - 50, 50, 50);
+        this.camera.startFollow(config.target);
+       // super( 0, getGameHeight() - 50, 50, 50); 
+        this.camera.setZoom(0.4);
+       this.camera.setVisible(false);
+
         this.player = config.player;
         this.target = config.target;
         this.scene = config.scene;
@@ -132,35 +117,43 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
         this.distanceText = config.scene.add.text(0, 10, '', { font: '50px Arial', fill: '#ffffff' }).setVisible(false);
         this.distanceText.setDepth(4);
         this.maxDistance = 30;
-        config.scene.cameras.addExisting(this);
+        
+       // config.scene.cameras.addExisting(this);
     }
 
     delete() {
         this.redBorder.destroy();
         this.distanceText.destroy();
-        this.scene.cameras.remove(this);
+        this.scene.cameras.remove(this.camera);
+        this.isDead = true;
     }
 
     positionCameraMapBehindPlayer() {
-        this.x = Phaser.Math.Clamp(
+        this.camera.x = Phaser.Math.Clamp(
             this.getCameraPosition() ,
                 0, 
-                getGameWidth() -this.width
+                getGameWidth() -this.camera.width
         );
     }
 
     getCameraPosition() {
         // 0.4 -> camera zoom
-       return  (this.target.x - this.player.x )*0.4 + getGameWidth()/2 - this.width/2 
+       return  (this.target.x - this.player.x )*0.4 + getGameWidth()/2 - this.camera.width/2 
     }
 
     update() {
+
+        if(this.isDead) {
+            return;
+        }
+
         this.distance = Math.floor(getDistanceBetweenObjects(this.target, this.player) / 100);
+
         if(this.distance > this.maxDistance && this.target.activated) {
             this.target.delete(true);
             return;
         }
-      
+        
         this.distanceText.setText(
             this.distance
         ).setPosition(this.target.x - 55, this.target.y - 60);
@@ -171,13 +164,13 @@ class OffscreenTargetCamera extends Phaser.Cameras.Scene2D.Camera {
 
     show() {
         this.redBorder.setVisible(true);
-        this.setVisible(true);
+        this.camera.setVisible(true);
         this.distanceText.setVisible(true);
     }
 
     hide() {
         this.redBorder.setVisible(false);
-        this.setVisible(false);  
+        this.camera.setVisible(false);  
         this.distanceText.setVisible(false);   
     }
 

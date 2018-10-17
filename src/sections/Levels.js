@@ -7,11 +7,12 @@ import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
 import { LocalStorageHandler } from '../LocalStorageHandler'
 import { SpaceRock } from '../SpaceRock';
+import { Missle } from '../sections/obstacles/Missle';
 
 export class Levels {
     static getAllLevels() {
         //levels must be added to this array in ascending order 
-        return [Level1, Level2, Level3, Level4, Level5];
+        return [Level1, Level2, Level3, Level4, Level5, Level6];
     }
 
     static getLevel(level) {
@@ -109,15 +110,15 @@ class Level3 {
             description: 'Dodge or destroy the asteroids by boosting. Press both turn directions to boost.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 27.00,
-                'silver' : 29.00,
-                'bronze' : 31.00
+                'gold' : 47.00,
+                'silver' : 49.00,
+                'bronze' : 51.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
-        const lastTrack = 3;
+        const lastTrack = 6;
         return {track: Tube, obstacle: [FloatingSpaceRocks], difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 }
@@ -176,5 +177,50 @@ class Level5 {
     static getObstaclesAndTracks(sectionsCompleted) {
         const lastTrack = 12;
         return {track: Diamond, obstacle: [GridTraffic], difficulty: 5, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
+    }
+}
+//add spinner level here 
+class Level6 {
+    static getDecription() {
+        return { 
+            name: 'Missile Run',
+            level: 6,
+            description: 'Missiles are great on a straightway but terrible at turning. Boosting will not save you.',
+            objective: 'Reach the finish line',
+            medalTimes: {
+                'gold' : 30.00,
+                'silver' : 35.00,
+                'bronze' : 40.00
+            }
+        }
+    }
+
+    static getObstaclesAndTracks(sectionsCompleted) {
+        const lastTrack = 6;
+        const spawnMissile = sectionsCompleted == 2 ? Missle : false; 
+        console.log(sectionsCompleted, spawnMissile);
+        return {track: this.getTrack(sectionsCompleted), globalObstacles: spawnMissile ,obstacle: this.getObstacles(), difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
+    }
+
+    static getObstacles() {
+        if (getRandomInt(0,2)) {
+            
+            return []; 
+        }
+        //console.log(' no racks')
+        return [FloatingSpaceRocks];
+    }
+
+    static getTrack(sectionsCompleted) {
+
+        if (sectionsCompleted <=2){
+            return Tube;
+        }
+
+        if (getRandomInt(0,2)) {
+            return Tube;
+        }
+        return SharpTurn;
+        
     }
 }

@@ -1,4 +1,6 @@
 import { Section } from './sections/Section'
+import { GlobalObstacleContainer } from './GlobalObstacleContainer'
+
 //chunck of gameplay that has variable difficulty options 
 //is deleted when safely offscreen 
 //can be chained on top another SectionContainer 
@@ -8,16 +10,15 @@ export class SectionContainer {
      * @param {scene, type, x, y, difficulty, level} config 
      */
     constructor(config) {
-
         this.activeSectionsArray = [];
         this.scene = config.scene;
         this.isSectionObstaclesSensors = false;
-
         this.addSection(config);
         this.difficulty = config.difficulty;
         this.level = config.level;
         this.isSpawnedWhite = false;
         this.isLastSection = false;
+        this.globalObstacles = new GlobalObstacleContainer({ scene: this.scene, matterHelper: this.scene.matterHelper });
     }
 
     //first section generated calls this
@@ -43,7 +44,6 @@ export class SectionContainer {
             return;
         }
 
-        
     }
 
     //all sections generated here except the fist
@@ -94,6 +94,7 @@ export class SectionContainer {
         this.activeSectionsArray.forEach((aSection) => {
             aSection.update();
         })
+        this.globalObstacles.update();
     }
 
     deleteAllSections() {
@@ -124,6 +125,8 @@ export class SectionContainer {
                 aSection.setObstaclesTintOff();
             }
         });
+
+        this.globalObstacles.setAllObstaclesTintWhite(isWhite);
     }
 
     //TODO: find better way to keep player from slight collisions 
@@ -137,5 +140,20 @@ export class SectionContainer {
 
     getIsLastSection() {
         return this.isLastSection;
+    }
+
+    deleteGlobalObstacles() {
+        this.globalObstacles.deleteAllObstacles();
+    }
+
+    addGlobalObstacle(config) {
+        this.globalObstacles.addObstacle(
+            {
+                obstacle: config.globalObstacle,
+                x:  config.x,
+                y: config.y,
+                player: this.scene.player 
+            }
+        );
     }
 }
