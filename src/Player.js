@@ -27,7 +27,54 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.comboCounter = 0;
         this.setDepth(4);
         this.aliveTimer = this.scene.time.addEvent({ delay: 0, repeat: -1, startAt: 0 });
+        this.isIncrementingPower = false;
+        this.isPowerThrustChargeFinished = true;
+        
+        this.powerFullEmitter = this.scene.add.particles('red')
+        .createEmitter({
+            frequency: 0,
+            x: this.x,
+            y: this.y,
+            angle: { start: 0, end: 360, steps: 64 },
+            speed: 800,
+            scale: { start: 3, end: 0 },
+            blendMode: 'SCREEN',
+            quantity: 100,
+            lifespan: 600,
+            gravityY: 0,
+            maxParticles: 100
+        }).stop();
 
+        this.flashRed = this.scene.tweens.addCounter({
+            from: 255,
+            to: 0,
+            yoyo: true,
+            duration: 500,
+            repeat: -1,
+            onUpdate: function (tween)
+            {
+                var value = Math.floor(tween.getValue());
+                this.setTint(Phaser.Display.Color.GetColor(255, value, value));
+            }.bind(this)
+        });
+        this.flashRed.pause();
+
+    }
+
+    startRedFlash() {
+        this.flashRed.resume();
+    }
+
+    stopRedFlash() {
+       // debugger;
+        this.flashRed.pause();
+        this.clearTint();
+    }
+
+    surroundPulse() {
+        this.powerFullEmitter.setPosition(this.x, this.y);
+        this.powerFullEmitter.start();
+        this.scene.time.delayedCall(300, function(){this.powerFullEmitter.stop()}.bind(this));
     }
 
     //set player values to starting position after death
@@ -39,6 +86,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.y = 0;
         this.angle = -45;
         this.thrusterImage.setVisible(true);
+        this.boostSpeed = 0.03;
+        this.regularSpeed = 0.004;
         this.setVisible(true);
         this.setTexture('player');
     }
@@ -81,8 +130,15 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     incrementPower() {
-        if (this.power < 1)
+        if (this.power < 1) {
             this.power += 0.01;
+        }
+
+        if (this.power >= 1 && this.isPowerThrustChargeFinished) {
+            this.surroundPulse();
+            this.startRedFlash();
+            this.isPowerThrustChargeFinished = false;
+        }
     }
 
     createThruster() {
@@ -103,7 +159,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
         if(this.body && this.emitter){
             this.emitter.setAngle(this.angle + 180);
-            
         }
        
         this.positionThrustSensorBehindPlayer();
@@ -126,22 +181,14 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     }
 
+
     onDeath() {
         if (this.thrustTimer) {
             this.thrustTimer.destroy();
             this.powerThrust().stop();
         }
-        // this.aliveTimer.destroy();
-        // this.emitter.stopFollow();
-        // this.emitter.stop();
-        // this.particles.destroy();
-       // this.setVisible(false);
         this.anims.play('kaboom', true);
-       // debugger;
         this.thrusterImage.setVisible(false);
-        // this.thrusterImage.destroy();
-        // this.scene.matter.world.remove(this.thrustSensor3);
-        // this.scene.matter.world.remove(this);
         this.dead = true;
         this.power = 0;
         return this;
@@ -223,6 +270,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             if (this.isPowerThrusting || this.power < 1.00000) {
                 return;
             }
+            this.stopRedFlash();
             this.isPowerThrusting = true;
             this.setFrictionAir(0.15);
             this.power = 0;
@@ -250,6 +298,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.emitter.setVisible(false);
             this.thrusterImage.setVisible(true);
             this.comboCounter = 0;
+            this.isPowerThrustChargeFinished = true;
         };
         return this;
     }

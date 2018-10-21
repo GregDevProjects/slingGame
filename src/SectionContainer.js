@@ -1,9 +1,7 @@
 import { Section } from './sections/Section'
 import { GlobalObstacleContainer } from './GlobalObstacleContainer'
 
-//chunck of gameplay that has variable difficulty options 
-//is deleted when safely offscreen 
-//can be chained on top another SectionContainer 
+//manages the sections in the game 
 export class SectionContainer {
     /**
      * 

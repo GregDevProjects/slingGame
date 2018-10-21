@@ -1,6 +1,9 @@
 import { ObstacleTrackProvider } from './ObstacleTrackProvider'
 
-export class Section{
+//a chunk of gameplay that holds obstacles and tracks, is 
+//chained on top of other sections and deleted when it is out of the playspace  
+//gets objects and tracks from the ObstacleTrackProvider
+export class Section {
     constructor(config){
         this.wallWidth = 200;
         this.height= 2000; 

@@ -6,13 +6,12 @@ import { getRandomInt } from '../Helper'
 import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
 import { LocalStorageHandler } from '../LocalStorageHandler'
-import { SpaceRock } from '../SpaceRock';
 import { Missle } from '../sections/obstacles/Missle';
 
 export class Levels {
     static getAllLevels() {
         //levels must be added to this array in ascending order 
-        return [Level1, Level2, Level3, Level4, Level5, Level6];
+        return [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8];
     }
 
     static getLevel(level) {
@@ -179,7 +178,7 @@ class Level5 {
         return {track: Diamond, obstacle: [GridTraffic], difficulty: 5, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 }
-//add spinner level here 
+
 class Level6 {
     static getDecription() {
         return { 
@@ -198,21 +197,17 @@ class Level6 {
     static getObstaclesAndTracks(sectionsCompleted) {
         const lastTrack = 6;
         const spawnMissile = sectionsCompleted == 2 ? Missle : false; 
-        console.log(sectionsCompleted, spawnMissile);
         return {track: this.getTrack(sectionsCompleted), globalObstacles: spawnMissile ,obstacle: this.getObstacles(), difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 
     static getObstacles() {
-        if (getRandomInt(0,2)) {
-            
+        if (getRandomInt(0,2)) {   
             return []; 
         }
-        //console.log(' no racks')
         return [FloatingSpaceRocks];
     }
 
     static getTrack(sectionsCompleted) {
-
         if (sectionsCompleted <=2){
             return Tube;
         }
@@ -221,6 +216,117 @@ class Level6 {
             return Tube;
         }
         return SharpTurn;
+    }
+}
+
+class Level7 {
+    static getDecription() {
+        return { 
+            name: 'Gridlock',
+            level: 7,
+            description: 'Avoid the spinning satellite of death. Boost wisely and often. Stay focused.',
+            objective: 'Reach the finish line',
+            medalTimes: {
+                'gold' : 52.00,
+                'silver' : 57.00,
+                'bronze' : 64.00
+            }
+        }
+    }
+
+    static getObstaclesAndTracks(sectionsCompleted) {
+        const lastTrack = 12;
+        const spawnMissile = sectionsCompleted == 6 ? Missle : false; 
+        return {
+            globalObstacles: spawnMissile, 
+            track: this.getTrackAndObstacles(sectionsCompleted).track, 
+            obstacle: this.getTrackAndObstacles(sectionsCompleted).obstacles, 
+            difficulty: 5, 
+            isLastTrack: sectionsCompleted >= lastTrack ? true : false 
+        };
+    }   
+
+    static getTrackAndObstacles(sectionsCompleted) {
+        if(sectionsCompleted <= 1) {
+            return {track:SharpTurn, obstacles:[]};
+        }
+
+        if (sectionsCompleted <= 5){
+            return {track:Diamond, obstacles: [GridTraffic, Spinners]};
+        }
+
+        if (sectionsCompleted == 6){
+            return {track:Tube, obstacles: []};
+        }
+
+        if (sectionsCompleted <= 7){
+            return {track:Diamond, obstacles: [GridTraffic]};
+        }
+
+        if (sectionsCompleted <= 10){
+            return {track:Diamond, obstacles: [GridTraffic, Spinners]};
+        }
+
+        return {track:Diamond, obstacles: [GridTraffic]};
+    }
+}
+
+class Level8 {
+    static getDecription() {
+        return { 
+            name: 'Unoccupied',
+            level: 8,
+            description: 'Outrun the missiles without anything to hide behind.',
+            objective: 'Reach the finish line',
+            medalTimes: {
+                'gold' : 47.00,
+                'silver' : 53.00,
+                'bronze' : 60.00
+            }
+        }
+    }    
+
+    static getObstaclesAndTracks(sectionsCompleted) {
+        const lastTrack = 12;
+        const spawnMissile = (sectionsCompleted == 2 || sectionsCompleted == 6) ? Missle : false; 
+        return {
+            globalObstacles: spawnMissile, 
+            track: this.getTrackAndObstacles(sectionsCompleted).track, 
+            obstacle: this.getTrackAndObstacles(sectionsCompleted).obstacles, 
+            difficulty: 0, 
+            isLastTrack: sectionsCompleted >= lastTrack ? true : false 
+        };
+
         
+    }   
+
+    static getTrackAndObstacles(sectionsCompleted) {
+        if(sectionsCompleted <= 2) {
+            return {track:Tube, obstacles:[]};
+        }
+
+        if (sectionsCompleted <= 5){
+            return {
+                track:getRandomInt(0,1) ? Tube : SharpTurn, 
+                obstacles: []
+            };
+        }
+
+        if (sectionsCompleted == 6){
+            return {track:Tube, obstacles: []};
+        }
+
+        if (sectionsCompleted <= 7){
+            return {track:Diamond, obstacles: []};
+        }
+
+        if (sectionsCompleted <= 10){
+            return {
+                track:getRandomInt(0,1) ? Tube : SharpTurn, 
+                obstacles: []
+            };
+        }
+
+        return {track:Diamond, obstacles: [Spinners]};
     }
 }

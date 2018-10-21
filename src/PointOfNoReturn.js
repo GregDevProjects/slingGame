@@ -1,4 +1,5 @@
 import { VectorWall } from './VectorWall'
+import { moveObjectToPoint } from './Helper'
 //if the player backtracks too much they run into this 
 export class PointOfNoReturn {
     constructor(config) {
@@ -64,14 +65,30 @@ export class PointOfNoReturn {
         this.bodies.push(this.blackHoleImg);
     }
 
-    getPointOfNoReturn() {
-        return this.pointOfNoReturn;
+    sendPlayerToBlackHole() {
+        moveObjectToPoint(this.scene.player, this.blackHoleImg, 5);
+        this.scene.player.disableEngine();
+        this.scene.player.addToCurrentAngle(10);
+        if (!this.blackHoleKillTimer) {
+            this.blackHoleKillTimer = this.scene.time.delayedCall(
+                2000, 
+                function () {
+                    this.scene.killPlayer();
+                    this.blackHoleKillTimer.destroy();
+                    this.blackHoleKillTimer = false;
+                }.bind(this)
+            )
+        }   
     }
 
     delete() {
         this.bodies.forEach(aBody => {
             aBody.destroy();
         });
+    }
+
+    isPlayerPastPointOfNoReturn() {
+        return this.scene.player.y > this.pointOfNoReturn;
     }
 
 }

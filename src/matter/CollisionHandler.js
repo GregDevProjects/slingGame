@@ -17,7 +17,6 @@ export class CollisionHandler {
     }
 
     //reaaaaly sucks that I have to do this
-    //TODO: setup base class for matter objects that have a key 
     static handleAllCollisions(event, bodyA, bodyB) {
         let isTrustAppliedForThisLoop = false;
         for (let aPair of event.pairs) {
@@ -31,11 +30,9 @@ export class CollisionHandler {
             if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
                 if (!isTrustAppliedForThisLoop){
                     isTrustAppliedForThisLoop = true;
-                   // console.log(aPair.collision.supports[0],aPair.collision.supports[1])
-
                     this.onTrusterCollision(aPair);
                 }
-            }
+            } 
 
             if (aPair.bodyA.key === "SpaceRock" || aPair.bodyB.key === "SpaceRock") {
                 this.onSpaceRockCollision(aPair.bodyA, aPair.bodyB);
@@ -49,8 +46,6 @@ export class CollisionHandler {
                 this.onMissleCollision(aPair.bodyA, aPair.bodyB);
             }
         }
-
-
     }
 
     static onTrusterCollision(aPair) {
@@ -64,9 +59,7 @@ export class CollisionHandler {
             y : aPair.collision.supports[0].y + aPair.collision.penetration.y 
         };
 
-
-
-
+        //TODO: break the thruster into another class and put this code there 
         if (getDistanceBetweenObjects(this.scene.player, contactPoints) <= 200 ) {
             if(getRandomInt(0,1)){
                 this.emitter(
@@ -86,10 +79,6 @@ export class CollisionHandler {
                 );
             }            
         }
-
-
-       // debugger;
-
 
         this.scene.player.queueBoostThrust();
         this.scene.player.incrementPower();
@@ -156,11 +145,11 @@ export class CollisionHandler {
         let missleObj = this.getCollisionObjects("Missle", bodyA, bodyB).keyObject;
         let otherObj = this.getCollisionObjects("Missle", bodyA, bodyB).otherObj;
 
-        if (!missleObj.gameObject) {
+        if (!missleObj.gameObject || !otherObj.gameObject) {
             return;
         }
 
-        if (!missleObj.gameObject.activated) {
+        if (!missleObj.gameObject.activated || !otherObj.gameObject.activated) {
             return;
         }
 
@@ -182,7 +171,6 @@ export class CollisionHandler {
 
     //TODO: use gameobject instead of attaching things to the body
     static onPlayerCollisionWithNonTruster(bodyA, bodyB) {
-      //  debugger;
         let objectPair = this.getCollisionObjects("Player", bodyA, bodyB);
         let playerObj = objectPair.keyObject;
         let otherObj = objectPair.otherObj;
@@ -208,13 +196,6 @@ export class CollisionHandler {
             return;
         }
 
-        
-        this.scene.onPlayerDeathExplostionStart(); 
-
-        playerObj.gameObject.onDeath().on('animationcomplete', function () {
-            console.log('death collision')
-            this.scene.onPlayerDeathExplosionEnd();
-            
-        }.bind(this), this.scene);
+        this.scene.killPlayer(); 
     }
 }

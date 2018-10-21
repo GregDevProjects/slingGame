@@ -1,8 +1,15 @@
 -----------------Todo -----------------------------------------
 
-As a player, I need a way to get back to the menu while in game 
+    Bugs 
+        -ship doesn't always flash 
+        -mobile music not working
+        -try to get it flashing white instead of red 
+        -stop collecting boost 
+            -on death 
+            -on level finish
 
-As a player, I want to be respawned when killed by black hole
+    redu asteroid tube time ??
+    set z index on thruster
 
 -----------------Todo -----------------------------------------
 
@@ -13,59 +20,47 @@ pink menu - #ff33dc
 
     -----------------Levels -----------------------------------------  
 
-    As a player, I want to play a campaign level with 
-        - open area 
-        - cargo ship 
-        - asteroids 
-        - spinner
-    to learn how to use moving objects to drift 
 
-    As a player, I want to play a campaign level with 
-        - missile
-        - windy road  
-        - straight lines 
-        - asteriods
-        - cargo ship 
-    to learn how to play with missiles and use objects as cover 
-
-    As a player, I want to play a campaign level with 
-        - missile
-        - straight lines 
-        - windy roads 
-    to learn how to play with missiles without cover 
 
     **add levels around the persuer after it's implemented 
     -----------------Levels -----------------------------------------
-
-
-
 
 As a player, I want a persuer that flies ahead of me like the cops on need for speed 
     - drops mines that the player can collide with 
     - it is possible to kill the persuer by boosting, but not easy 
     - sometimes firies a missle 
 
+
+
+As a player, I want the game to run smoothly as possible 
+    -inventroy possible ways to boost preformance 
+    -use event handlers instead of constant checks 
+
 As a player, I want cargo ships on straight lanes to provide a challenege
     - small ships fly to the middle of the lane  
 
 As a player, I want the hitbox to match the image
 
+As a player, I want the game to take up as little space as possbile 
+    - convert wav to mp3 
+    - see about resizing the planets with phaser 
+
 As a player, I want to the missile to have a thruster effect
     -use an emitter or tack a truster on the bottom 
     - use the same as players?
 
-As a player, I want a powertrust progress bar that looks good 
-    - see if there is an open source progress bar that look good 
-    - maybe the thruster could change color to show boost progress instead 
-    - it should be obvious when at full power (pulse purple?)
-
-
-As a player, I want a non-boost thruster that looks good 
-    -animate existing thruster or find new one
 
 As Greg McLean, I want a credits scene so I don't run into legal trouble for using open source art 
     - include the macissacs for game testing
     - https://opengameart.org/content/missile-0 <- tell this dude about the game
+    Design 
+        - credits top centered 
+        - cargo ships scroll past bottome endlessly 
+        - asteriods/players come down from the top
+
+
+As a mobile user, I don't want to hear the app when it's minimized 
+    - https://github.com/GregDevProjects/mathGame/blob/cordova/src/Music.js
 
 
 As a player, I want a cool explosion effect for my ship
@@ -96,7 +91,6 @@ As a player, I want each playthrough to have unique planet sizes
     -squad flyers 
         -fly in random patteren from bottom to top starting in a random X plane 
 
--make 1 variable for wallwidth
 
 -As Greg McLean, I want my game to to have a retro asthetic 
     - music 

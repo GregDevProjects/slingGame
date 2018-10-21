@@ -3,9 +3,9 @@ import { Matter } from './matter/MatterHelper'
 import { Player } from './Player'
 import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
-import { moveObjectToPoint, getGameWidth } from './Helper'
 import { CollisionHandler } from './matter/CollisionHandler'
-
+import { MuisicPlayer } from './Music'
+import { LocalStorageHandler } from './LocalStorageHandler'
 
 
 export class GameplayScene extends Phaser.Scene {
@@ -32,6 +32,10 @@ export class GameplayScene extends Phaser.Scene {
         this.matter.world.setBounds(0, 0, 0, 0);
 
         this.background = new Background({scene:this});
+        if (LocalStorageHandler.getIsMusicEnabled()) {
+            this.music = new MuisicPlayer({scene:this}).playRandomGameSongs();
+        }
+        
         
         // this.matterPhysics();
         this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
@@ -45,6 +49,53 @@ export class GameplayScene extends Phaser.Scene {
         CollisionHandler.startCollisionDetection({ scene: this });
         
        
+    }
+
+    stopMusic() {
+        if(this.music){
+            this.music.destroyAudio();
+        }
+        
+    }
+
+    update() {
+
+        if (this.isLevelFinished) {
+            this.player.update();
+            this.background.update();
+            this.moveCamera();
+            return;
+        }
+
+        this.activeSections.updateSections();
+      
+        if (this.player.isDead()) {
+            return;
+        }
+
+        if (this.isPlayerPastActiveSection() && !this.activeSections.getIsLastSection()) {
+            this.deleteAndAddSections();
+            this.activeSections.difficulty++;
+        }
+
+        if(this.activeSections.getIsLastSection()){
+            
+            if (!this.finishLine){
+                this.finishLine = this.addFinishLine();
+            }
+
+            if (this.isPlayerOverFinish()) {
+                this.onLevelCompletedSuccessfully();
+            }
+        }
+
+        this.player.update();
+        this.background.update();
+        this.moveCamera();
+
+        if (this.pointOfNoReturn.isPlayerPastPointOfNoReturn()) {
+            this.pointOfNoReturn.sendPlayerToBlackHole();
+        }
     }
 
     createGameObjects() {
@@ -64,9 +115,16 @@ export class GameplayScene extends Phaser.Scene {
         //this.addGlobalObstacleToTopOfSection();
     }
 
-    onPlayerDeathExplostionStart() {
+    killPlayer() {
         this.activeSections.deleteGlobalObstacles();
+
+        this.player.onDeath().on('animationcomplete', function () {
+            console.log('death collision')
+            this.onPlayerDeathExplosionEnd();
+            
+        }.bind(this));
     }
+
 
     onPlayerDeathExplosionEnd() {
         this.deleteGameObjects();
@@ -109,54 +167,16 @@ export class GameplayScene extends Phaser.Scene {
             this.pointOfNoReturn.delete();
         }
         this.pointOfNoReturn = new PointOfNoReturn({
-            scene: this, x: this.activeSections.getOldestSection().x,
+            scene: this, 
+            x: this.activeSections.getOldestSection().x,
             y: this.activeSections.getOldestSection().y,
             width: this.activeSections.getOldestSection().width
         });
     }
 
-    update() {
-
-        if (this.isLevelFinished) {
-            this.player.update();
-            this.background.update();
-            this.moveCamera();
-            return;
-        }
-
-        this.activeSections.updateSections();
-      
-        if (this.player.isDead()) {
-            return;
-        }
-
-        if (this.isPlayerPastActiveSection() && !this.activeSections.getIsLastSection()) {
-            this.deleteAndAddSections();
-            this.activeSections.difficulty++;
-        }
-
-        if(this.activeSections.getIsLastSection()){
-            
-            if (!this.finishLine){
-                this.finishLine = this.addFinishLine();
-            }
-
-            if (this.isPlayerOverFinish()) {
-                this.onLevelCompletedSuccessfully();
-            }
-        }
-
-        this.player.update();
-        this.background.update();
-        this.moveCamera();
-
-        if (this.isPlayerPastPointOfNoReturn()) {
-            this.sendPlayerToBlackHole();
-        }
-    }
-
     onLevelCompletedSuccessfully() {
         //start finish sequence here
+        this.activeSections.deleteGlobalObstacles();
         this.player.setIsFinishedLevel();
         this.scene.get('UIScene').setLevelComplete();
         this.isLevelFinished = true;
@@ -177,16 +197,6 @@ export class GameplayScene extends Phaser.Scene {
         return this.player.y < this.finishLine.y + this.finishLine.height/2;
     }
 
-    isTimeToAddGlobalObstacle() {
-        return this.activeSections.difficulty % 5 === 0;
-    } 
-
-    sendPlayerToBlackHole() {
-        moveObjectToPoint(this.player, this.pointOfNoReturn.blackHoleImg, 5);
-        this.player.disableEngine();
-        this.player.addToCurrentAngle(10);
-    }
-
     deleteAndAddSections() {
         this.activeSections.addAnotherSectionAbove();
         if (this.activeSections.activeSectionsArray.length >= 4) {
@@ -197,10 +207,6 @@ export class GameplayScene extends Phaser.Scene {
 
     isPlayerPastActiveSection() {
         return this.player.y <= this.activeSections.getTopOfSectionContainerThePlayerIsIn();
-    }
-
-    isPlayerPastPointOfNoReturn() {
-        return this.player.y > this.pointOfNoReturn.getPointOfNoReturn();
     }
 
     moveCamera() {

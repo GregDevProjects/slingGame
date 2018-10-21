@@ -51,7 +51,7 @@ export class LevelSelect extends Phaser.Scene {
             const levelDetails = element.getDecription();
             let text = this.add.text(
                 10, 
-                100 + 100*index + 1, 
+                50 + 100*index + 1, 
                 levelDetails.level + ' ' + levelDetails.name.toUpperCase(), 
                 { font: '30px Arial', fill: '#ffffff' }
             ).setInteractive().on('pointerdown', function(event) {   

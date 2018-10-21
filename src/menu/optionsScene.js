@@ -23,10 +23,8 @@ export class Options extends Phaser.Scene {
     }
 
     create() {
-       // this.isMusicEnabled = LocalStorageHandler.isMusicEnabled();
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
-        let test =this.add.image(getGameWidth() / 2, 50, 'options').setScale(1.4, 1.4);
-       // debugger;
+        this.add.image(getGameWidth() / 2, 50, 'options').setScale(1.4, 1.4);
         placeTextInCenter(this.add.text(
                 getGameWidth()/2,
                 150,

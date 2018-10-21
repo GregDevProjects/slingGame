@@ -18,20 +18,42 @@ export class UIScene extends Phaser.Scene {
 
     create ()
     {
+        this.ourGame = this.scene.get('GamePlay');
         //  Our Text object to display the Score
-        this.distanceText = this.add.text(0, 10, 'Distance: 0', { font: '30px Arial', fill: '#ffffff' });
+        this.distanceText = this.add.text(5, 10, '', { font: '30px Arial', fill: '#ffffff' });
+        this.isTurnArrowEnabled = LocalStorageHandler.getIsTurnArrowEnabled(); 
+        this.addTurnArrows();
+        addGlowingTween(
+            this.add.image(getGameWidth() - 50, 30, 'menu').setInteractive().on('pointerdown', (event) => {
+                //replay
+                this.ourGame.stopMusic();
+                this.scene.start('MainMenu');
+                this.scene.stop();
+                this.ourGame.scene.stop();
+            }, this)
+        );
 
         //  Grab a reference to the Game Scene
-        this.ourGame = this.scene.get('GamePlay');
-
+        
+        this.level = this.ourGame.level;
         this.progress = this.add.graphics();
 
-       let offset = 50;
-       this.leftArrow = this.getArrow('arrowLeft', offset);
-       this.rightArrow = this.getArrow('arrowRight', getGameWidth() - offset);
-       this.isLevelComplete = false;;
+        this.progressWrapper = this.add.rectangle(
+            getGameWidth()/2, 
+            getGameHeight() - 145,
+            50, 
+            10
+        );
+        this.progressWrapper.setStrokeStyle(2, 0xff33dc);
+        this.isLevelComplete = false;
+    }
 
-       
+    addTurnArrows() {
+        if (this.isTurnArrowEnabled) {
+            const offset = 50;
+            this.leftArrow = this.getArrow('arrowLeft', offset);
+            this.rightArrow = this.getArrow('arrowRight', getGameWidth() - offset);
+        }
     }
 
     setLevelComplete() {
@@ -48,26 +70,66 @@ export class UIScene extends Phaser.Scene {
     }
 
     update() {
-
         if(this.isLevelComplete) {
             return;
         }
 
-        let stats = this.ourGame.getPlayerStats();
+        const stats = this.ourGame.getPlayerStats();
+        
         if(!stats){
             return;
         }
+        if (this.isPowerThrustIncrementing(stats.power)) {
+            this.hidePowerThrustBar();
+        } else {
+            this.setPowerThrustProgressBar(stats);
+        }
+        this.lastPower = stats.power;
+        this.setLevelDistanceAndTime(stats);
+        
+        if (this.isTurnArrowEnabled) {
+            this.lightUpTurnArrows(stats);
+        } 
+    }
+
+    isPowerThrustIncrementing(currentPower) {
+        return (this.lastPower && currentPower == this.lastPower) || currentPower == 0;
+    }
+
+    setLevelDistanceAndTime(stats) {
+        let text = '';
+        if (this.level === 0) {
+            text = 'Distance: ' + stats.distance;
+        } else {
+            text = 'Time: ' + Phaser.Math.RoundTo(stats.time, -2);
+        }
 
         this.distanceText.setText(
-            'Distance: ' + stats.distance + ' Time: ' + Phaser.Math.RoundTo(stats.time, -2)
+            text
         );
+    }
 
-        
-       // debugger;
+    setPowerThrustProgressBar(stats) {
+        this.progressWrapper.setVisible(true);
+        this.progress.setVisible(true);
+        const width = 50;
         this.progress.clear();
         this.progress.fillStyle(0xffffff, 1);
-        this.progress.fillRect(0, 60,stats.power * getGameWidth(), 60);
 
+        this.progress.fillRect(
+            getGameWidth()/2 - width/2, 
+            getGameHeight() - 150,
+            stats.power * width, 
+            10
+        );
+    }
+
+    hidePowerThrustBar() {
+        this.progressWrapper.setVisible(false);
+        this.progress.setVisible(false);
+    }
+
+    lightUpTurnArrows(stats) {
         //TODO: use event handler for this
         if (stats.isTurningLeft) {
             this.leftArrow.setAlpha(0.5);
@@ -79,12 +141,13 @@ export class UIScene extends Phaser.Scene {
         } else {
             this.rightArrow.setAlpha(0.1);
         }
-
     }
     
     showLevelComplete() {
-        this.leftArrow.destroy();
-        this.rightArrow.destroy();
+        if (this.isTurnArrowEnabled) {
+            this.leftArrow.destroy();
+            this.rightArrow.destroy();
+        }
         this.distanceText.destroy();
         this.progress.destroy();
 
@@ -93,6 +156,7 @@ export class UIScene extends Phaser.Scene {
         LocalStorageHandler.saveLevelCompletionTime(this.ourGame.level, levelTime);
 
         this.add.image(getGameWidth()/2, 100, 'level_complete');
+
         placeTextInCenter(
             this.add.text(0, 200, levelTime + ' SECONDS', { font: '25px Arial', fill: '#ffffff' })
         )
@@ -116,9 +180,6 @@ export class UIScene extends Phaser.Scene {
                
             }, this)
         );
-
-
-
     }
 
     addMedalImage(levelTime) {

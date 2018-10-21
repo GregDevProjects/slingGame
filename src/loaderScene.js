@@ -24,7 +24,10 @@ export class LoaderScene extends Phaser.Scene {
         progress.destroy();
         loadingText.destroy();
     });
-
+    this.load.audio('game_song_1', 'assets/audio/game_1.wav');
+    this.load.audio('game_song_2', 'assets/audio/game_2.mp3');
+    this.load.audio('game_song_3', 'assets/audio/game_3.mp3');
+    this.load.audio('game_song_4', 'assets/audio/game_4.mp3');
     this.load.image('title', 'assets/img/title.png');
     this.load.image('campaign', 'assets/img/camp.png');
     this.load.image('endless', 'assets/img/endless.png');
@@ -67,7 +70,7 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('medal_bronze', 'assets/img/bronze.png');
     this.load.image('medal_silver', 'assets/img/silver.png');
     this.load.image('medal_gold', 'assets/img/gold.png');
-
+    this.load.image('menu', 'assets/img/menu.png');
   }
 
   create() {
