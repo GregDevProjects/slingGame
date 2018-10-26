@@ -12,6 +12,7 @@ export class SpaceRock extends Phaser.Physics.Matter.Sprite{
         this.velocity = 1;
         this.floatsLeft = getRandomInt(0,1);
         this.setCollisionCategory(this.scene.matterHelper.getMainCollisionGroup());
+        this.setDepth(2);
     }
     //TODO
     //setType()

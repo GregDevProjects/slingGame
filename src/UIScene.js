@@ -11,6 +11,10 @@ export class UIScene extends Phaser.Scene {
        this.score = 0;
     }
 
+    init(data) {
+        this.level = data.level;
+    }
+
     preload()
     {
 
@@ -35,7 +39,8 @@ export class UIScene extends Phaser.Scene {
 
         //  Grab a reference to the Game Scene
         
-        this.level = this.ourGame.level;
+        // this.level = this.ourGame.getLevel();
+        console.log( this.level)
         this.progress = this.add.graphics();
 
         this.progressWrapper = this.add.rectangle(
@@ -71,6 +76,7 @@ export class UIScene extends Phaser.Scene {
 
     update() {
         if(this.isLevelComplete) {
+            this.hidePowerThrustBar();
             return;
         }
 
@@ -79,10 +85,12 @@ export class UIScene extends Phaser.Scene {
         if(!stats){
             return;
         }
+
         if (this.isPowerThrustIncrementing(stats.power)) {
-            this.hidePowerThrustBar();
-        } else {
             this.setPowerThrustProgressBar(stats);
+            
+        } else {
+            this.hidePowerThrustBar();
         }
         this.lastPower = stats.power;
         this.setLevelDistanceAndTime(stats);
@@ -93,7 +101,7 @@ export class UIScene extends Phaser.Scene {
     }
 
     isPowerThrustIncrementing(currentPower) {
-        return (this.lastPower && currentPower == this.lastPower) || currentPower == 0;
+        return !((this.lastPower && currentPower == this.lastPower) || (currentPower == 0));
     }
 
     setLevelDistanceAndTime(stats) {
@@ -161,23 +169,21 @@ export class UIScene extends Phaser.Scene {
             this.add.text(0, 200, levelTime + ' SECONDS', { font: '25px Arial', fill: '#ffffff' })
         )
 
-        //this.add.image(getGameWidth()/2, 300, 'medal_bronze');
         this.addMedalImage(levelTime);
 
         addGlowingTween(
             this.add.image(getGameWidth() - 90, getGameHeight() - 50, 'replay').setInteractive().on('pointerdown', (event) => {
-                //replay
                 this.scene.restart();
+                this.ourGame.stopMusic();
                 this.ourGame.scene.restart();
             }, this)
         );
         addGlowingTween(
             this.add.image(90, getGameHeight() - 50, 'nah').setInteractive().on('pointerdown', (event) => {
-                //back
-                this.scene.start('LevelSelect');
+                this.ourGame.stopMusic();
                 this.scene.stop('GamePlay');
                 this.scene.stop('UIScene');
-               
+                this.scene.start('LevelSelect');
             }, this)
         );
     }

@@ -6,6 +6,7 @@ import { LoaderScene } from './loaderScene'
 import { LevelSelect } from './menu/levelSelectScene'
 import { LevelPreview } from './menu/levelPreviewScene'
 import { Options } from './menu/optionsScene'
+import { Credits } from './menu/creditsScene'
 
 let config = {
     type: Phaser.AUTO,
@@ -31,7 +32,7 @@ let config = {
         Options,
         GameplayScene,
         UIScene,
-        
+        Credits  
     ]
 
 };

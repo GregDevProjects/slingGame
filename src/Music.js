@@ -1,11 +1,10 @@
 import { getRandomInt } from './Helper'
 
-const TOTAL_GAME_SONGS = 3;
+const TOTAL_GAME_SONGS = 4;
 
 export class MuisicPlayer {
     constructor(config) {
         this.scene = config.scene;
-        this.playedSongs = [2];
     }
 
     //keep playing random songs 
@@ -26,6 +25,15 @@ export class MuisicPlayer {
         const nextSong = new Phaser.Math.RandomDataGenerator(this.playedSongs).integerInRange(1,TOTAL_GAME_SONGS);
         this.playedSongs.push(nextSong);
         return nextSong;
+    }
+
+    playCreditsMusic() {
+        this.currentSong = this.scene.sound.add('credits_song');
+        this.currentSong.play();
+        this.currentSong.on('ended', function(){
+            this.playCreditsMusic();
+        }.bind(this));
+        return this;
     }
 
     destroyAudio() {

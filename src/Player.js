@@ -30,11 +30,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.isIncrementingPower = false;
         this.isPowerThrustChargeFinished = true;
         
-        this.powerFullEmitter = this.scene.add.particles('red')
-        .createEmitter({
+        this.powerFullEmitter =this.scene.add.particles('red').setDepth(10).createEmitter({
             frequency: 0,
-            x: this.x,
-            y: this.y,
             angle: { start: 0, end: 360, steps: 64 },
             speed: 800,
             scale: { start: 3, end: 0 },
@@ -45,6 +42,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             maxParticles: 100
         }).stop();
 
+        //pretty hacky
         this.flashRed = this.scene.tweens.addCounter({
             from: 255,
             to: 0,
@@ -53,35 +51,40 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             repeat: -1,
             onUpdate: function (tween)
             {
-                var value = Math.floor(tween.getValue());
-                this.setTint(Phaser.Display.Color.GetColor(255, value, value));
+                if (this.flashRed.show) {
+                    var value = Math.floor(tween.getValue());
+                    this.setTint(Phaser.Display.Color.GetColor(255, value, 255));
+                }
+
             }.bind(this)
         });
-        this.flashRed.pause();
-
+        this.flashRed.show = false;
+        this.recordPosition = false;
+        this.lastPosition = { x :this.x, y: this.y };
     }
 
     startRedFlash() {
-        this.flashRed.resume();
+        this.flashRed.show = true;
     }
 
     stopRedFlash() {
-       // debugger;
-        this.flashRed.pause();
+        this.flashRed.show = false;
         this.clearTint();
     }
 
     surroundPulse() {
-        this.powerFullEmitter.setPosition(this.x, this.y);
+       this.powerFullEmitter.setPosition(this.x, this.y);
         this.powerFullEmitter.start();
-        this.scene.time.delayedCall(300, function(){this.powerFullEmitter.stop()}.bind(this));
+        this.scene.time.delayedCall(300, function(){
+            this.powerFullEmitter.stop();
+        }.bind(this));
     }
 
     //set player values to starting position after death
     reset(){
+        this.stopRedFlash();
         this.dead = false;
         this.aliveTimer.reset({ delay: 0, repeat: -1, startAt: 0 });
-       // this.aliveTimer.start();
         this.x =280 
         this.y = 0;
         this.angle = -45;
@@ -130,11 +133,11 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     incrementPower() {
-        if (this.power < 1) {
+        if (!this.isPowerFullEnoughForThrust()) {
             this.power += 0.01;
         }
 
-        if (this.power >= 1 && this.isPowerThrustChargeFinished) {
+        if (this.isPowerFullEnoughForThrust() && this.isPowerThrustChargeFinished) {
             this.surroundPulse();
             this.startRedFlash();
             this.isPowerThrustChargeFinished = false;
@@ -157,10 +160,12 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             return;
         }
 
-        if(this.body && this.emitter){
+        if (this.body && this.emitter){
             this.emitter.setAngle(this.angle + 180);
         }
-       
+
+
+        this.moveSurroundPulseParticlesWithPlayer();
         this.positionThrustSensorBehindPlayer();
 
         if (this.isFinishedLevel) {
@@ -179,6 +184,18 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.applyThrust(this.regularSpeed);
         }
 
+    }
+
+    moveSurroundPulseParticlesWithPlayer() {
+        if ((this.lastPosition.x !== this.x && this.lastPosition.y !== this.y)) {
+
+            this.powerFullEmitter.alive.forEach(function(particle){
+                particle.y += this.y - this.lastPosition.y ;
+                particle.x += this.x - this.lastPosition.x;
+            }.bind(this))
+
+            this.lastPosition = { x :this.x, y: this.y };
+        }
     }
 
 
@@ -260,6 +277,10 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         }
     }
 
+    isPowerFullEnoughForThrust() {
+        return this.power >= 1.00;
+    }
+
     powerThrust() {
         
         this.start = function () {
@@ -267,7 +288,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.isTurningLeft = true;
             this.isTurningRight = true;
 
-            if (this.isPowerThrusting || this.power < 1.00000) {
+            if (this.isPowerThrusting || !this.isPowerFullEnoughForThrust()) {
                 return;
             }
             this.stopRedFlash();

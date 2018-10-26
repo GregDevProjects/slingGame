@@ -18,6 +18,9 @@ export class CollisionHandler {
 
     //reaaaaly sucks that I have to do this
     static handleAllCollisions(event, bodyA, bodyB) {
+        if (this.scene.player.dead) {
+            return;
+        }
         let isTrustAppliedForThisLoop = false;
         for (let aPair of event.pairs) {
 
@@ -149,7 +152,7 @@ export class CollisionHandler {
             return;
         }
 
-        if (!missleObj.gameObject.activated || !otherObj.gameObject.activated) {
+        if (!missleObj.gameObject.activated) {
             return;
         }
 

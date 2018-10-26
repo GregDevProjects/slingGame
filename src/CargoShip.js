@@ -22,6 +22,7 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
         this.isWarping = false;
         this.body.done = this.onPowerThrustCollision.bind(this);
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
+        this.setDepth(2);
     }
 
 

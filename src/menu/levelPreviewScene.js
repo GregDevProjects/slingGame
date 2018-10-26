@@ -45,7 +45,7 @@ export class LevelPreview extends Phaser.Scene {
 
         addGlowingTween(this.add.image(getGameWidth() - 60, getGameHeight() - 40, 'go').setInteractive().on('pointerdown', (event) => { 
             this.scene.stop();
-            this.scene.start('UIScene');
+            this.scene.start('UIScene', {level: this.props.level});
             this.scene.start('GamePlay', {level: this.props.level});
         }, this));
 

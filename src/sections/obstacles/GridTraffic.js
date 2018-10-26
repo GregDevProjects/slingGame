@@ -17,7 +17,6 @@ export class GridTraffic {
                 config.y -  distanceY * i,
                 config
             ));
-            //debugger;
         }
 
         return bodies;
@@ -25,7 +24,7 @@ export class GridTraffic {
 
     //spawn 2 ships on the same y plane that fly together 
     static createCargoShipPair(y, config) {
-    
+
         let leftShip = new CargoShip({ 
             scene: config.scene, 
             straighPathPostion: {x: config.x, y: y},

@@ -6,17 +6,13 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         super(config.scene.matter.world, config.x, config.y, 'missle');
         this.body.key = this.constructor.name;
         this.player = config.player;
-       //  this.setDisplaySize(100,200);
         this.activated = false;
         this.scene = config.scene;
         
         config.scene.add.existing(this);
- 
         this.minimap = new OffscreenTargetCamera({scene:config.scene, player:config.player, target: this});
-
-        //this.minimap.camera.startFollow(this);
-        //hack
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
+        this.setDepth(2);
         
     }
 
@@ -102,12 +98,10 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
 
 class OffscreenTargetCamera {
     constructor(config) {
-
         this.camera = config.scene.cameras.add(0, getGameHeight() - 50, 50, 50);
         this.camera.startFollow(config.target);
-       // super( 0, getGameHeight() - 50, 50, 50); 
         this.camera.setZoom(0.4);
-       this.camera.setVisible(false);
+        this.camera.setVisible(false);
 
         this.player = config.player;
         this.target = config.target;
@@ -117,8 +111,6 @@ class OffscreenTargetCamera {
         this.distanceText = config.scene.add.text(0, 10, '', { font: '50px Arial', fill: '#ffffff' }).setVisible(false);
         this.distanceText.setDepth(4);
         this.maxDistance = 30;
-        
-       // config.scene.cameras.addExisting(this);
     }
 
     delete() {

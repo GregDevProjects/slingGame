@@ -1,66 +1,56 @@
------------------Todo -----------------------------------------
+-----------------In Progress -----------------------------------------
 
-    Bugs 
-        -ship doesn't always flash 
-        -mobile music not working
-        -try to get it flashing white instead of red 
-        -stop collecting boost 
-            -on death 
-            -on level finish
+    As Greg McLean, I want a credits scene so I don't run into legal trouble for using open source art 
+    - include the macissacs for game testing
+    - https://opengameart.org/content/missile-0 https://opengameart.org/content/brown-asteroid <- tell this dude about the game
+    Design 
+        - credits top centered 
+        - cargo ships scroll past bottome endlessly 
+        - asteriods/players come down from the top
 
-    redu asteroid tube time ??
-    set z index on thruster
+-----------------In Progress -----------------------------------------
+
 
 -----------------Todo -----------------------------------------
 
 pink menu - #ff33dc
+As a player, I want the hitbox to match the image so I don't die by crashing into an invisible barrier 
 
-
------------------Backlog -----------------------------------------
-
-    -----------------Levels -----------------------------------------  
-
-
-
-    **add levels around the persuer after it's implemented 
-    -----------------Levels -----------------------------------------
+As a player, I want to the missile to have a thruster effect
+    -use an emitter or tack a truster on the bottom 
+    - use the same as players?
 
 As a player, I want a persuer that flies ahead of me like the cops on need for speed 
     - drops mines that the player can collide with 
     - it is possible to kill the persuer by boosting, but not easy 
     - sometimes firies a missle 
 
+As a player, I want a final campaign boss type level with the persuer 
+
+As a player, I want my endless score recorded 
+    - create a scene before endless starts 
+
+As a mobile user, I don't want to hear the app when it's minimized 
+    - https://github.com/GregDevProjects/mathGame/blob/cordova/src/Music.js
+
+
+lock endless
+
+Once game is finished, replay the campaign from scratch 
+
+-----------------Todo -----------------------------------------
+
+-----------------Backlog -----------------------------------------
 
 
 As a player, I want the game to run smoothly as possible 
     -inventroy possible ways to boost preformance 
     -use event handlers instead of constant checks 
 
-As a player, I want cargo ships on straight lanes to provide a challenege
-    - small ships fly to the middle of the lane  
-
-As a player, I want the hitbox to match the image
 
 As a player, I want the game to take up as little space as possbile 
     - convert wav to mp3 
     - see about resizing the planets with phaser 
-
-As a player, I want to the missile to have a thruster effect
-    -use an emitter or tack a truster on the bottom 
-    - use the same as players?
-
-
-As Greg McLean, I want a credits scene so I don't run into legal trouble for using open source art 
-    - include the macissacs for game testing
-    - https://opengameart.org/content/missile-0 <- tell this dude about the game
-    Design 
-        - credits top centered 
-        - cargo ships scroll past bottome endlessly 
-        - asteriods/players come down from the top
-
-
-As a mobile user, I don't want to hear the app when it's minimized 
-    - https://github.com/GregDevProjects/mathGame/blob/cordova/src/Music.js
 
 
 As a player, I want a cool explosion effect for my ship
@@ -71,16 +61,10 @@ As a player, I want a cool explosion effect for my ship
 As a player, I want each playthrough to have unique planet sizes  
     - resize images each playthrough 
 
+As a player, I want cargo ships on straight lanes to provide a challenege
+    - small ships fly to the middle of the lane  
 
------------------Bugs -----------------------------------------
-
--asteroids spawn inside and beyond walls 
-
-- random things explode (maybe fixed?)
-
-
-
------------------Bugs -----------------------------------------
+asteroids spawn inside and beyond walls 
 
 -----------------Backlog -----------------------------------------
 

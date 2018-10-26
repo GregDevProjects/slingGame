@@ -14,9 +14,6 @@ export class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        // this.scene.stop();
-        // this.scene.start('LevelSelect');
-
         this.isEndlessUnlocked = true;//LocalStorageHandler.isEndlessUnlocked();
 
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
@@ -39,9 +36,10 @@ export class MainMenu extends Phaser.Scene {
             this.scene.start('Options');
         }, this);
 
-        this.add.image(getGameWidth() / 2, 450, 'credits');
-
-
+        this.add.image(getGameWidth() / 2, 450, 'credits').setInteractive().on('pointerdown', (event) => {
+            this.scene.stop();
+            this.scene.start('Credits');
+        }, this);
     }
 
     onEndlessButtonClick() {
@@ -51,7 +49,7 @@ export class MainMenu extends Phaser.Scene {
         }
         this.scene.stop();
         this.scene.start('GamePlay', {level : 0});
-        this.scene.start('UIScene');
+        this.scene.start('UIScene', {level : 0});
     }
 
     showErrorText() {
