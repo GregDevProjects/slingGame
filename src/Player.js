@@ -150,7 +150,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.thrustSensor3 = this.scene.matter.add.rectangle(0, 0, trustSizeY, thrustSizeX, { isSensor: true });
         this.thrustSensor3.collisionFilter.category = this.scene.matterHelper.getMainCollisionGroup();
         this.thrustSensor3.key = 'Thruster';
-        this.thrusterImage = this.scene.add.image(0,0,'thrustFlame').setDepth(2);
+        this.thrusterImage = this.scene.add.image(0,0,'thrustFlame').setDepth(1);
     }
 
     update() {

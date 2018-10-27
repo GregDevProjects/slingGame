@@ -7,6 +7,7 @@ import { CollisionHandler } from './matter/CollisionHandler'
 import { MuisicPlayer } from './Music'
 import { LocalStorageHandler } from './LocalStorageHandler'
 
+import { SpaceRock } from './SpaceRock'
 
 export class GameplayScene extends Phaser.Scene {
     constructor() {
@@ -25,6 +26,11 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     create() {
+        //config.scene.matter.world, config.x, config.y, 'space_rock'
+        this.matterHelper = new Matter({ scene: this });
+        //new SpaceRock({scene: this, x: 200, y: 250});
+
+       // return;
 
         this.matterHelper = new Matter({ scene: this });
 
@@ -32,10 +38,10 @@ export class GameplayScene extends Phaser.Scene {
         this.matter.world.setBounds(0, 0, 0, 0);
 
         this.background = new Background({scene:this});
+
         if (LocalStorageHandler.getIsMusicEnabled()) {
             this.music = new MuisicPlayer({scene:this}).playRandomGameSongs();
         }
-        
         
         // this.matterPhysics();
         this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
@@ -59,7 +65,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update() {
-
+        //return;
         if (this.isLevelFinished) {
             this.player.update();
             this.background.update();

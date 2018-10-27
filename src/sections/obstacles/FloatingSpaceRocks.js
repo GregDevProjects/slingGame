@@ -1,5 +1,4 @@
 import { SpaceRock } from '../../SpaceRock'
-import { getRandomInt } from '../../Helper'
 
 export class FloatingSpaceRocks {
 
@@ -11,7 +10,7 @@ export class FloatingSpaceRocks {
                 {
                     scene: config.scene,
                     y: config.y - SpaceRockDistance * i,
-                    x: getRandomInt(config.x, config.x + config.width)
+                    x: config.x + config.width/2
                 }
             )
 

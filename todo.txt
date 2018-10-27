@@ -1,13 +1,7 @@
 -----------------In Progress -----------------------------------------
+    - fix credits typo
 
-    As Greg McLean, I want a credits scene so I don't run into legal trouble for using open source art 
-    - include the macissacs for game testing
-    - https://opengameart.org/content/missile-0 https://opengameart.org/content/brown-asteroid <- tell this dude about the game
-    Design 
-        - credits top centered 
-        - cargo ships scroll past bottome endlessly 
-        - asteriods/players come down from the top
-
+    -make it clear the game involves lots of  boosting 
 -----------------In Progress -----------------------------------------
 
 

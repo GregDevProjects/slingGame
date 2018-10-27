@@ -1,4 +1,4 @@
-import { getGameWidth, getGameHeight, placeTextInCenter } from '../Helper'
+import { getGameWidth, getGameHeight, placeTextInCenter, getRandomInt } from '../Helper'
 import { LocalStorageHandler } from '../LocalStorageHandler'
 import { MuisicPlayer } from '../Music'
 
@@ -21,15 +21,20 @@ export class Credits extends Phaser.Scene {
 
         this.loopCredits(0);
 
-        this.add.image( 70, getGameHeight() - 40, 'nah').setInteractive().on('pointerdown', (event) => {   
+        this.add.image( 70, getGameHeight() - 40, 'nah').setDepth(10).setInteractive().on('pointerdown', (event) => {   
             this.scene.stop();
             this.scene.start('MainMenu');
             this.music.destroyAudio();
         }, this);
+        
+        this.cargoShips = [new scrollingCargoShip(this)];
+        this.spawnShipsRandomly();
     }
 
     update() {
         this.tileBackground.tilePositionY += 1;
+        this.manageShips();
+ 
     }
 
     loopCredits(creditIndex) {
@@ -39,7 +44,7 @@ export class Credits extends Phaser.Scene {
             alpha: 1,
             duration: 1000,
             yoyo: true,
-            hold: 1500,
+            hold: 2500,
             onComplete: function (tween) {
                 this.parent.scene.loopCredits(this.parent.scene.isCreditLoopRestarted(creditIndex) ? 0 : creditIndex + 1)
             }
@@ -73,6 +78,49 @@ export class Credits extends Phaser.Scene {
         return allText;
     }
 
+    manageShips() {
+        this.cargoShips.forEach((ship, index, object) => {
+            if(ship.isOffScreen()) {
+                ship.kill();
+                object.splice(index, 1);
+            } else {
+                ship.update();
+            }
+        })
+
+        console.log(this.cargoShips)
+    }
+
+    spawnShipsRandomly() {
+        this.time.delayedCall(
+            getRandomInt(5000, 20000), 
+            function() {
+                this.cargoShips.push(new scrollingCargoShip(this));
+                this.spawnShipsRandomly();
+            }.bind(this)
+        );
+    }
+
+}
+
+class scrollingCargoShip extends Phaser.GameObjects.Image {
+    constructor(scene) {
+        super(scene, -200, getRandomInt(getGameHeight(), getGameHeight() - 300), 'cargo_' + getRandomInt(2,8));
+        this.setAngle(90);
+        scene.add.existing(this);
+    }
+
+    update() {
+        this.x++;
+    }
+
+    isOffScreen() {
+        return (this.x - this.height/2) >= getGameWidth();
+    }   
+
+    kill() {
+        this.destroy();
+    }
 }
 
 const credits = [
