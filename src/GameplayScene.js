@@ -9,6 +9,8 @@ import { LocalStorageHandler } from './LocalStorageHandler'
 
 import { SpaceRock } from './SpaceRock'
 
+import { getGameHeight, getGameWidth } from './Helper'
+
 export class GameplayScene extends Phaser.Scene {
     constructor() {
         super({
@@ -26,12 +28,6 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     create() {
-        //config.scene.matter.world, config.x, config.y, 'space_rock'
-        this.matterHelper = new Matter({ scene: this });
-        //new SpaceRock({scene: this, x: 200, y: 250});
-
-       // return;
-
         this.matterHelper = new Matter({ scene: this });
 
         this.cameras.main.setZoom(0.4);
@@ -65,7 +61,6 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update() {
-        //return;
         if (this.isLevelFinished) {
             this.player.update();
             this.background.update();

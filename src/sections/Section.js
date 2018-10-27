@@ -21,7 +21,7 @@ export class Section {
         const obstacle = objects.obstacle;
         const difficulty = objects.difficulty;
         const globalObstacle = objects.globalObstacles;
-        //debugger;
+
         this.isLastSection = objects.isLastTrack;
         this.createGlobalObstacles(globalObstacle);
         this.createTrack(track);
@@ -40,7 +40,7 @@ export class Section {
         }  
         //this is insanely bad
         this.scene.activeSections.addGlobalObstacle({
-            x: this.x + 100,
+            x: this.x + 150,
             y: this.y,
             globalObstacle 
         });

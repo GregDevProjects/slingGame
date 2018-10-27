@@ -1,14 +1,15 @@
 -----------------In Progress -----------------------------------------
-    - fix credits typo
 
-    -make it clear the game involves lots of  boosting 
+
+
+hard code turn angles 
+
 -----------------In Progress -----------------------------------------
 
 
 -----------------Todo -----------------------------------------
 
 pink menu - #ff33dc
-As a player, I want the hitbox to match the image so I don't die by crashing into an invisible barrier 
 
 As a player, I want to the missile to have a thruster effect
     -use an emitter or tack a truster on the bottom 
@@ -29,6 +30,10 @@ As a mobile user, I don't want to hear the app when it's minimized
 
 
 lock endless
+
+make it clear the game involves lots of  boosting 
+
+
 
 Once game is finished, replay the campaign from scratch 
 

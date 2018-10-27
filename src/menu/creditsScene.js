@@ -158,7 +158,7 @@ const credits = [
         ]
     },
     {
-        role : 'Explostion Animation',
+        role : 'Explosion Animation',
         names : [
             'J-Robot'
         ]

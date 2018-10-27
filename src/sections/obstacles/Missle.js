@@ -4,6 +4,7 @@ import {destroyObject} from '../../matter/MatterHelper'
 export class Missle extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
         super(config.scene.matter.world, config.x, config.y, 'missle');
+        this.setBodyVertices();
         this.body.key = this.constructor.name;
         this.player = config.player;
         this.activated = false;
@@ -15,6 +16,20 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         this.setDepth(2);
         
     }
+
+    setBodyVertices() {
+        this.setPolygon(0,0, {
+            vertices: [
+                {x: 1, y: 18},
+                {x: 89, y: 17},
+                {x: 93, y: 24},
+                {x: 93, y: 38},
+                {x: 89, y: 46},
+                {x: 1, y: 45}
+            ]
+        });
+    }
+
 
     update() {
         if(!this.player.body) {
@@ -40,7 +55,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
           
         this.angleTowardsPlayer();
 
-        this.thrust(0.004);
+        this.thrust(0.002);
  
     }
 
@@ -107,9 +122,9 @@ class OffscreenTargetCamera {
         this.target = config.target;
         this.scene = config.scene;
 
-        this.redBorder = config.scene.add.image(config.x,config.y,'target').setVisible(false).setDisplaySize(125,125).setDepth(3);
+        this.redBorder = config.scene.add.image(config.x,config.y,'target').setVisible(false).setDisplaySize(125,125).setDepth(5);
         this.distanceText = config.scene.add.text(0, 10, '', { font: '50px Arial', fill: '#ffffff' }).setVisible(false);
-        this.distanceText.setDepth(4);
+        this.distanceText.setDepth(6);
         this.maxDistance = 30;
     }
 
