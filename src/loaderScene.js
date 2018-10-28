@@ -73,6 +73,7 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('medal_silver', 'assets/img/silver.png');
     this.load.image('medal_gold', 'assets/img/gold.png');
     this.load.image('menu', 'assets/img/menu.png');
+    this.load.image('orange', 'assets/img/orange.png')
   }
 
   create() {

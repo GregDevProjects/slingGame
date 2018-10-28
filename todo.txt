@@ -11,9 +11,6 @@ hard code turn angles
 
 pink menu - #ff33dc
 
-As a player, I want to the missile to have a thruster effect
-    -use an emitter or tack a truster on the bottom 
-    - use the same as players?
 
 As a player, I want a persuer that flies ahead of me like the cops on need for speed 
     - drops mines that the player can collide with 

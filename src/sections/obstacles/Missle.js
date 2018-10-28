@@ -1,4 +1,4 @@
-import {getAngleBetweenObjects, getGameHeight, getGameWidth, getDistanceBetweenObjects, getRandomInt} from '../../Helper'
+import {getAngleBetweenObjects, getGameHeight, getGameWidth, getDistanceBetweenObjects, getRandomInt, degreesToRadians} from '../../Helper'
 import {destroyObject} from '../../matter/MatterHelper'
 
 export class Missle extends Phaser.Physics.Matter.Sprite {
@@ -14,7 +14,35 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         this.minimap = new OffscreenTargetCamera({scene:config.scene, player:config.player, target: this});
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
         this.setDepth(2);
+
+        this.particles = this.scene.add.particles('orange');
+
+        this.emitter = this.particles.createEmitter({
+            speed: 100,
+            scale: { start: 1, end: 0 },
+            blendMode: 'ADD',
+            lifespan : 500
+        })
+       .setVisible(false)
+       // .startFollow(this, -30, 0 );
+       // debugger;
+      
         
+    }
+
+    positionEmitterBehind() {
+    
+
+        let x = this.x -20  * Math.cos(degreesToRadians(this.angle ));
+        let y = this.y -20 * Math.sin(degreesToRadians(this.angle ));
+
+        this.emitter.setPosition(x,y);
+
+        this.emitter.setAngle(this.angle);
+    
+        // this.thrusterImage.x = x;
+        // this.thrusterImage.y = y;
+        // this.thrusterImage.setAngle(this.angle);
     }
 
     setBodyVertices() {
@@ -56,12 +84,14 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
         this.angleTowardsPlayer();
 
         this.thrust(0.002);
+        if(this.x)
+            this.positionEmitterBehind();
  
     }
 
     onActivation() {
         this.activated = true;
-            
+        this.emitter.setVisible(true);
         this.scene.tweens.add({
             targets:  this.scene.add.text(this.x, this.y - 100,'!' , { font: '60px Arial', fill: '#ff0000' }),
             alpha: 0,
@@ -100,7 +130,7 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 
     delete(isExploding){
-
+        this.particles.destroy();
         this.minimap.delete();
         destroyObject(this, isExploding);   
 
