@@ -29,7 +29,7 @@ export class LoaderScene extends Phaser.Scene {
     this.load.audio('game_song_3', 'assets/audio/game_3.mp3');
     this.load.audio('game_song_4', 'assets/audio/game_4.wav');
     this.load.audio('credits_song', 'assets/audio/credits.mp3');
-
+    
     this.load.image('title', 'assets/img/title.png');
     this.load.image('campaign', 'assets/img/camp.png');
     this.load.image('endless', 'assets/img/endless.png');
@@ -54,6 +54,7 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('cargo_8', 'assets/img/ship_8.png');
     this.load.image('thrustFlame', 'assets/img/thrustFlame.png');
     this.load.spritesheet('explosion', 'assets/img/explosion.png', { 'frameWidth': 96, 'frameHeight': 96 });
+    this.load.spritesheet('mine', 'assets/img/mine.png',{ 'frameWidth': 256, 'frameHeight': 256 } );
     this.load.image('spinner', 'assets/img/spinner.png');
     this.load.image('planet_1', 'assets/img/planet_19.png');
     this.load.image('planet_2', 'assets/img/planet_20.png');
@@ -73,7 +74,9 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('medal_silver', 'assets/img/silver.png');
     this.load.image('medal_gold', 'assets/img/gold.png');
     this.load.image('menu', 'assets/img/menu.png');
-    this.load.image('orange', 'assets/img/orange.png')
+    this.load.image('orange', 'assets/img/orange.png');
+    this.load.image('green', 'assets/img/green.png');
+    this.load.image('pursuer', 'assets/img/pursuer.png')
   }
 
   create() {
@@ -83,6 +86,13 @@ export class LoaderScene extends Phaser.Scene {
         frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 11 }),
         frameRate: 20,
         repeat: 0
+    });
+
+    this.anims.create({
+        key: 'pulse',
+        frames: this.anims.generateFrameNumbers('mine'),
+        frameRate: 20,
+        repeat: -1
     });
 
     this.scene.start('MainMenu');

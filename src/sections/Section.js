@@ -102,7 +102,6 @@ export class Section {
     setObstaclesTintWhite() {
         this.obstacles.forEach((aBody)=>{
             if(aBody.active){
-                //console.log(aBody.)
                 aBody.tintWhite();
             }
                 

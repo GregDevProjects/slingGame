@@ -192,6 +192,12 @@ const credits = [
         ]
     },
     {
+        role: 'Pursuer Mine Animation',
+        names : [
+            'ashishlko11'
+        ]
+    },
+    {
         role : 'Everything Else',
         names : [
             'Greg McLean'

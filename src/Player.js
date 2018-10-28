@@ -21,7 +21,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.createThruster();
         this.createEmitter();
         this.dead = false;
-        this.setCollidesWith(config.matterHelper.getMainCollisionGroup());
+     //   this.setCollidesWith(config.matterHelper.getMainCollisionGroup());
         this.isPowerThrusting = false;
         this.powerThrustTime = 3000;
         this.scene.input.addPointer(1);
@@ -52,17 +52,16 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             repeat: -1,
             onUpdate: function (tween)
             {
-                if (this.flashRed.show) {
-                    var value = Math.floor(tween.getValue());
-                    this.setTint(Phaser.Display.Color.GetColor(255, value, 255));
-                }
+                // if (this.flashRed.show) {
+                //     var value = Math.floor(tween.getValue());
+                //     this.setTint(Phaser.Display.Color.GetColor(255, value, 255));
+                // }
 
             }.bind(this)
         });
         this.flashRed.show = false;
         this.recordPosition = false;
         this.lastPosition = { x :this.x, y: this.y };
-
         
     }
 
@@ -138,6 +137,9 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     incrementPower() {
         if (!this.isPowerFullEnoughForThrust()) {
             this.power += 1;
+        } else {
+            //hack to get the power bar to show 
+            this.power += 0.00001;
         }
 
         if (this.isPowerFullEnoughForThrust() && this.isPowerThrustChargeFinished) {

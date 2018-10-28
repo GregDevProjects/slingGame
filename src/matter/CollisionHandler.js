@@ -1,4 +1,5 @@
 import { getRandomInt, getDistanceBetweenObjects } from "../Helper";
+import { debug } from "util";
 
 //TODO: don't call objects through the scene
 export class CollisionHandler {
@@ -48,6 +49,20 @@ export class CollisionHandler {
             if (aPair.bodyA.key === "Missle" || aPair.bodyB.key === "Missle") {
                 this.onMissleCollision(aPair.bodyA, aPair.bodyB);
             }
+
+            // if (aPair.bodyA.key === "Mine" || aPair.bodyB.key === "Mine") {
+            //     this.onMineCollision(aPair.bodyA, aPair.bodyB);
+            // }
+        }
+    }
+
+    static onMineCollision(bodyA, bodyB){
+        let objectPair = this.getCollisionObjects("Mine", bodyA, bodyB);
+        let mineObj = objectPair.keyObject;
+        let otherObj = objectPair.otherObj;
+
+        if (otherObj === "Player") {
+            debugger;
         }
     }
 
@@ -55,7 +70,9 @@ export class CollisionHandler {
         if (this.scene.player.getIsPowerThrusting()) {
             return;
         }
-        
+        else {
+            console.log('sdfl')
+        }
 
         let contactPoints = {
             x : aPair.collision.supports[0].x + aPair.collision.penetration.x, 
@@ -161,15 +178,28 @@ export class CollisionHandler {
         }
 
         if (otherObj.key === "Spinner") {
+
             missleObj.gameObject.delete(true);
             return;
         }
 
-        if (otherObj.key !== "Thruster" && otherObj.key !== "Player" ) {
-            missleObj.gameObject.delete(true);
-            otherObj.gameObject.delete(true);
+        if (otherObj.key === "Mine") {
+            return;
         }
 
+        if (otherObj.key === "Player") {
+            //debugger;
+            
+            otherObj.gameObject.power -=60
+            missleObj.gameObject.delete(true);
+            return;
+        }
+
+        if (otherObj.key === "Thruster" ) {
+            return;
+        }
+        missleObj.gameObject.delete(true);
+        otherObj.gameObject.delete(true);
     }
 
     //TODO: use gameobject instead of attaching things to the body
@@ -181,6 +211,12 @@ export class CollisionHandler {
         if( otherObj.key === "Thruster"){
             return;
         }
+
+
+
+        // if (otherObj.key === "Mine") {
+        //     debugger;
+        // }
 
         if (playerObj.gameObject.dead) {
             return;
@@ -198,6 +234,8 @@ export class CollisionHandler {
             playerObj.gameObject.incrementCombo(); 
             return;
         }
+
+      
 
         this.scene.killPlayer(); 
     }

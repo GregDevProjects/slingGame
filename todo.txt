@@ -12,6 +12,24 @@ As a player, I want a persuer that flies ahead of me like the cops on need for s
 
 -----------------Todo -----------------------------------------
 
+Gaint turrets on the side 
+    -scale with Gimp
+
+As a player, I would rather have a shield managing mechanic than ding constantly 
+    - boost enery = shield enery
+    - combo = boost energy 
+
+Use try catches if there's any doubt 
+
+small emitters under cargo ships
+
+small emitter on tip of thruster 
+
+no more huge explosions
+
+refactor really common terms into objects
+    
+
 pink menu - #ff33dc
 
 add riding spinners level 
@@ -28,8 +46,8 @@ as a player, I want campaign levels that stay the same each playthrough so the t
 
 lock endless
 
-make it clear the game involves lots of  boosting 
-
+As a player, I want some guidance as to how to play the game effectively 
+    - make it clear the game involves lots of  boosting in game description and game itself  
 
 
 Once game is finished, replay the campaign from scratch 

@@ -34,7 +34,6 @@ export class SectionContainer {
             //TODO: 
             // -need to signal to the GameplayScene that there's no need to keep adding sections and add a finish line 
             // -pass the level from the menu scene
-            console.log('no mo')
         } else {
             this.activeSectionsArray.push(new Section(
                 config

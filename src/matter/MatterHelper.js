@@ -14,9 +14,13 @@ export class Matter{
 }
 
 export function destroyObject(matterObj, isExploding) {
-    //debugger;
-    if (!matterObj.anims) {
-        matterObj.destroy();
+ //   debugger;
+    // if (!matterObj.anims) {
+    //     matterObj.destroy();
+    //     return;
+    // }
+
+    if(matterObj.anims == undefined) {
         return;
     }
 
@@ -32,7 +36,11 @@ export function destroyObject(matterObj, isExploding) {
     //matterObj.setSensor(true);
     matterObj.body.destroy()
     let kaboomAnimationHeight = 65;
-    matterObj.setScale(matterObj.height / kaboomAnimationHeight);
+
+    matterObj.setScale(
+        matterObj.key == 'Missle' ? matterObj.width : matterObj.height 
+        / 
+        kaboomAnimationHeight);
     matterObj.anims.play('kaboom', true);
     matterObj.on('animationcomplete', () => {matterObj.setScale(1); matterObj.destroy(); }, matterObj);
 }

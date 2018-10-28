@@ -7,11 +7,12 @@ import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
 import { LocalStorageHandler } from '../LocalStorageHandler'
 import { Missle } from '../sections/obstacles/Missle';
+import { Pursuer } from './obstacles/pursuer/Pursuer'
 
 export class Levels {
     static getAllLevels() {
         //levels must be added to this array in ascending order 
-        return [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8];
+        return [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9];
     }
 
     static getLevel(level) {
@@ -328,5 +329,27 @@ class Level8 {
         }
 
         return {track:Diamond, obstacles: [Spinners]};
+    }
+}
+
+class Level9 {
+    static getDecription() {
+        return { 
+            name: 'Duel',
+            level: 9,
+            description: 'Defeat the persuer!',
+            objective: 'This level will not end until the persuer is destroyed.',
+            medalTimes: {
+                'gold' : 23.00,
+                'silver' : 25.00,
+                'bronze' : 27.00
+            }
+        }
+    }
+
+    static getObstaclesAndTracks(sectionsCompleted) {
+        const lastTrack = 20;
+        const spawnPursuer = sectionsCompleted == 2 ? Pursuer : false;
+        return {track: Tube, globalObstacles: spawnPursuer ,obstacle: [], difficulty: 1, isLastTrack: false };
     }
 }

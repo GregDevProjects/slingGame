@@ -108,6 +108,9 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 
     isOffscreen() {
+        if(!this.body) {
+            return;
+        }
         //200 -> camera offset from player
         return this.y >= this.player.y + 200 + this.height + 15;
     }   
@@ -130,10 +133,15 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
     }
 
     delete(isExploding){
+       
         this.particles.destroy();
         this.minimap.delete();
         destroyObject(this, isExploding);   
 
+    }
+
+    removeTint() {
+        this.clearTint();
     }
     
     tintWhite() {

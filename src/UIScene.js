@@ -40,7 +40,6 @@ export class UIScene extends Phaser.Scene {
         //  Grab a reference to the Game Scene
         
         // this.level = this.ourGame.getLevel();
-        console.log( this.level)
         this.progress = this.add.graphics();
 
         this.progressWrapper = this.add.rectangle(
@@ -102,6 +101,10 @@ export class UIScene extends Phaser.Scene {
 
     isPowerThrustIncrementing(currentPower) {
         return !((this.lastPower && currentPower == this.lastPower) || (currentPower == 0));
+    }
+
+    isPowerThrustFull(currentPower) {
+        return currentPower >= 100;
     }
 
     setLevelDistanceAndTime(stats) {

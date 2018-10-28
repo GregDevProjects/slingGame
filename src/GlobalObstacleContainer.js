@@ -34,7 +34,7 @@ export class GlobalObstacleContainer {
                 anObstacle.tintWhite();
             } else {
                 this.isSpawnedWhite = false;
-                anObstacle.clearTint();
+                anObstacle.removeTint();
             }
         });
     }

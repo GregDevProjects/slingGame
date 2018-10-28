@@ -14,6 +14,11 @@ export class MainMenu extends Phaser.Scene {
     }
 
     create() {
+        // this.scene.stop();
+        // this.scene.start('UIScene', {level: 9});
+        // this.scene.start('GamePlay', {level: 9});
+
+
         this.isEndlessUnlocked = true;//LocalStorageHandler.isEndlessUnlocked();
 
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');

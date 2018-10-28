@@ -7,9 +7,11 @@ import { CollisionHandler } from './matter/CollisionHandler'
 import { MuisicPlayer } from './Music'
 import { LocalStorageHandler } from './LocalStorageHandler'
 
-import { SpaceRock } from './SpaceRock'
+import { Pursuer } from './sections/obstacles/pursuer/Pursuer'
 
 import { getGameHeight, getGameWidth } from './Helper'
+
+
 
 export class GameplayScene extends Phaser.Scene {
     constructor() {
@@ -28,6 +30,9 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     create() {
+        
+        
+
         this.matterHelper = new Matter({ scene: this });
 
         this.cameras.main.setZoom(0.4);
@@ -50,6 +55,8 @@ export class GameplayScene extends Phaser.Scene {
 
         CollisionHandler.startCollisionDetection({ scene: this });
         
+     //  this.p = new Pursuer({scene: this, x:0, y:0, player: this.player})
+
        
     }
 
@@ -61,6 +68,7 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update() {
+     //  this.p.update();
         if (this.isLevelFinished) {
             this.player.update();
             this.background.update();
@@ -116,11 +124,23 @@ export class GameplayScene extends Phaser.Scene {
         //this.addGlobalObstacleToTopOfSection();
     }
 
+    drainPlayerBoost() {
+        this.player.power -=20;
+    }
+
+    isBoostEnergyDepleted() {
+   
+        this.drainPlayerBoost()
+        return this.player.power < 0;
+    }
+
     killPlayer() {
+        if(!this.isBoostEnergyDepleted()){
+            return;
+        }
         this.activeSections.deleteGlobalObstacles();
 
         this.player.onDeath().on('animationcomplete', function () {
-            console.log('death collision')
             this.onPlayerDeathExplosionEnd();
             
         }.bind(this));
