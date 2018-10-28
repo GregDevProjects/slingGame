@@ -24,6 +24,7 @@ export class MainMenu extends Phaser.Scene {
         }, this);
 
         this.endlessButton = this.add.image(getGameWidth() / 2, 250, 'endless').setInteractive().on('pointerdown', (event) => {
+
             this.onEndlessButtonClick();
         }, this);
 
@@ -48,8 +49,7 @@ export class MainMenu extends Phaser.Scene {
             return;
         }
         this.scene.stop();
-        this.scene.start('GamePlay', {level : 0});
-        this.scene.start('UIScene', {level : 0});
+        this.scene.start('Endless');
     }
 
     showErrorText() {

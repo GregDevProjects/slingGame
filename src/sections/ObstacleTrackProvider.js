@@ -5,6 +5,7 @@ import { Diamond } from './tracks/Diamond'
 import { getRandomInt } from '../Helper'
 import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
+import { Missle } from './obstacles/Missle'
 
 import { Levels } from './Levels'
 
@@ -37,7 +38,9 @@ export class ObstacleTrackProvider{
             obstacle = [Spinners, obstacle] ;
         }
 
-        return {track: track, obstacle: obstacle, difficulty: difficulty};
+        const spawnMissile = sectionDifficulty % 6 == 0 ? Missle : false;
+
+        return {track: track, obstacle: obstacle, difficulty: difficulty, globalObstacles: spawnMissile};
     }
 
     static getEndlessDifficultyWithCap(trackName, obstacleName, difficulty) {

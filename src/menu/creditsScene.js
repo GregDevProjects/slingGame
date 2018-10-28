@@ -87,8 +87,6 @@ export class Credits extends Phaser.Scene {
                 ship.update();
             }
         })
-
-        console.log(this.cargoShips)
     }
 
     spawnShipsRandomly() {

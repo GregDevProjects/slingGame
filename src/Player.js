@@ -1,4 +1,5 @@
 import { degreesToRadians, getCenterOfScreen, getRandomInt } from './Helper'
+import { LocalStorageHandler } from './LocalStorageHandler'
 
 export class Player extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
@@ -61,6 +62,8 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.flashRed.show = false;
         this.recordPosition = false;
         this.lastPosition = { x :this.x, y: this.y };
+
+        
     }
 
     startRedFlash() {
@@ -134,7 +137,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
 
     incrementPower() {
         if (!this.isPowerFullEnoughForThrust()) {
-            this.power += 0.01;
+            this.power += 1;
         }
 
         if (this.isPowerFullEnoughForThrust() && this.isPowerThrustChargeFinished) {
@@ -179,7 +182,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         if(this.isPowerThrusting){
             this.applyThrust(0.20);
             let progress = this.thrustTimer.getProgress();
-            this.power = 1 - progress; 
+            this.power = 100 - progress*100; 
         } else {
             this.applyThrust(this.regularSpeed);
         }
@@ -208,6 +211,10 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.thrusterImage.setVisible(false);
         this.dead = true;
         this.power = 0;
+        this.isPowerThrustChargeFinished = true;
+        if (this.scene.level == 0) {
+            LocalStorageHandler.saveLevelCompletionTime(0,Math.floor(-this.y / 100));
+        }
         return this;
     }
 
@@ -278,7 +285,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     isPowerFullEnoughForThrust() {
-        return this.power >= 1.00;
+        return this.power >= 100;
     }
 
     powerThrust() {
@@ -294,7 +301,6 @@ export class Player extends Phaser.Physics.Matter.Sprite {
             this.stopRedFlash();
             this.isPowerThrusting = true;
             this.setFrictionAir(0.15);
-            this.power = 0;
             this.scene.onPlayerPowerThrustStart();
             this.setTintFill(0xffffff);
             this.emitter.setVisible(true);

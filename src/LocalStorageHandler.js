@@ -6,9 +6,9 @@ const levelTimeKey = "SpaceSlingLevelTime";
 export class LocalStorageHandler {
 
     //only save if it's better than the current best time 
+    //note: seconds and distance are used interchangeably for Level 0
     static saveLevelCompletionTime(level, seconds) {
-        const previousTime = this.getLevelCompleteTime(level);
-        if (previousTime != 0 && previousTime <= seconds) {
+        if (!this.isLevelStatSaved(level, seconds)) {
             return;
         }
 
@@ -16,6 +16,19 @@ export class LocalStorageHandler {
             this.getLevelKey(level), 
             seconds
         );    
+    }
+
+    static isLevelStatSaved(level, stat) {
+        const previousTime = this.getLevelCompleteTime(level);
+        if (previousTime == 0) {
+            return false;
+        }
+
+        if (level == 0) {
+            return previousTime <= stat;
+        }
+
+        return previousTime >= stat;
     }
 
     static getLevelCompleteTime(level) {

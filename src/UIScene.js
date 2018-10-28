@@ -127,7 +127,7 @@ export class UIScene extends Phaser.Scene {
         this.progress.fillRect(
             getGameWidth()/2 - width/2, 
             getGameHeight() - 150,
-            stats.power * width, 
+            stats.power/100 * width, 
             10
         );
     }

@@ -40,7 +40,7 @@ export class Section {
         }  
         //this is insanely bad
         this.scene.activeSections.addGlobalObstacle({
-            x: this.x + 150,
+            x: this.x + 220,
             y: this.y,
             globalObstacle 
         });
