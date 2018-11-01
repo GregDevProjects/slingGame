@@ -85,7 +85,7 @@ export class UIScene extends Phaser.Scene {
             return;
         }
 
-        if (this.isPowerThrustIncrementing(stats.power)) {
+        if (stats.isBoostBarShown) {
             this.setPowerThrustProgressBar(stats);
             
         } else {
@@ -99,9 +99,6 @@ export class UIScene extends Phaser.Scene {
         } 
     }
 
-    isPowerThrustIncrementing(currentPower) {
-        return !((this.lastPower && currentPower == this.lastPower) || (currentPower == 0));
-    }
 
     isPowerThrustFull(currentPower) {
         return currentPower >= 100;
@@ -121,6 +118,9 @@ export class UIScene extends Phaser.Scene {
     }
 
     setPowerThrustProgressBar(stats) {
+        if(stats.power < 0) {
+            return;
+        }
         this.progressWrapper.setVisible(true);
         this.progress.setVisible(true);
         const width = 50;

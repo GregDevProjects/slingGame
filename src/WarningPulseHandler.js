@@ -1,27 +1,31 @@
-export class WarningPulseHandler {
+const defaultEmiiterConfig = {
+    frequency: 0,
+    angle: { start: 0, end: 360, steps: 64 },
+    speed: 150,
+    scale: { start: 2, end: 0 },
+    blendMode: 'SCREEN',
+    yoyo:true,
+    quantity: 100,
+    lifespan: 1500,
+    gravityY: 0,
+    maxParticles: 100
+}
 
-    constructor(target, scene) {
+export class WarningPulseHandler {
+    constructor(target, scene, emitterConfig) {
         this.scene = scene;
         this.target = target;
 
-         this.particles = this.scene.add.particles('green').setDepth(10);
-         this.powerFullEmitter = this.particles.createEmitter({
-            frequency: 0,
-            angle: { start: 0, end: 360, steps: 64 },
-            speed: 150,
-            scale: { start: 2, end: 0 },
-            blendMode: 'SCREEN',
-            yoyo:true,
-            quantity: 100,
-            lifespan: 1500,
-            gravityY: 0,
-            maxParticles: 100
-        })
+        this.particles = this.scene.add.particles('green').setDepth(10);
+        this.powerFullEmitter = this.particles.createEmitter(
+            emitterConfig ? emitterConfig : defaultEmiiterConfig
+        )
         .stop()
-
-        
-
         this.lastPosition = { x :this.target.x, y: this.target.y };
+    }
+
+    configEmitter(key,value){
+        this.powerFullEmitter[key] = value;
     }
 
     update(){

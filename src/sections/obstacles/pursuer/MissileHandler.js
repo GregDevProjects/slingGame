@@ -65,13 +65,13 @@ export class MissileHandler {
     }
 
     tintWhite() {
-        if(!this.missile.gameObject.body)
+        if(!this.missile.gameObject || !this.missile.gameObject.body)
             return
         this.missile.gameObject.tintWhite();
     }
 
     removeTint() {
-        if(!this.missile.gameObject.body)
+        if(!this.missile.gameObject || !this.missile.gameObject.body)
             return
         this.missile.gameObject.clearTint();
     }

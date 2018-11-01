@@ -1,6 +1,6 @@
 import { Background } from './background/Background'
 import { Matter } from './matter/MatterHelper'
-import { Player } from './Player'
+import { Player } from './player/Player'
 import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
 import { CollisionHandler } from './matter/CollisionHandler'
@@ -124,22 +124,8 @@ export class GameplayScene extends Phaser.Scene {
         //this.addGlobalObstacleToTopOfSection();
     }
 
-    drainPlayerBoost() {
-        this.player.power -=20;
-    }
-
-    isBoostEnergyDepleted() {
-   
-        this.drainPlayerBoost()
-        return this.player.power < 0;
-    }
-
     killPlayer() {
-        if(!this.isBoostEnergyDepleted()){
-            return;
-        }
         this.activeSections.deleteGlobalObstacles();
-
         this.player.onDeath().on('animationcomplete', function () {
             this.onPlayerDeathExplosionEnd();
             
@@ -163,7 +149,8 @@ export class GameplayScene extends Phaser.Scene {
         if (this.player) {
             return { 
                 'distance' : Math.floor(-this.player.y / 100),
-                'power' : this.player.power,
+                'power' : this.player.boostHandler.power,
+                'isBoostBarShown' : this.player.boostHandler.isBoostBarShown,
                 'isTurningLeft' : this.player.isTurningLeft,
                 'isTurningRight' : this.player.isTurningRight,
                 'time' : this.player.getSecondsAlive()
@@ -171,17 +158,6 @@ export class GameplayScene extends Phaser.Scene {
         }
     }
 
-    onPlayerPowerThrustStart(){
-        this.activeSections.setAllSectionObstaclesSensors(true);
-        this.background.setSimulationBackground();
-        this.activeSections.setAllSectionObstaclesTintWhite(true);
-    }
-
-    onPlayerPowerThrustEnd(){
-        this.background.setRealityBackground();
-        this.activeSections.setAllSectionObstaclesTintWhite(false);
-        this.activeSections.setAllSectionObstaclesSensors(false);
-    }
 
     createNewPointOfNoReturn() {
         if (this.pointOfNoReturn) {

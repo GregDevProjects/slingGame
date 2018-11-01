@@ -3,7 +3,7 @@ import {destroyObject} from '../../../matter/MatterHelper'
 
 import { MovementHandler, straightAngle } from './MovementHandler'
 import { MissileHandler } from './MissileHandler'
-import { WarningPulseHandler } from './WarningPulseHandler';
+import { WarningPulseHandler } from '../../../WarningPulseHandler';
 
 import { MineHandler } from './MineHandler'
 

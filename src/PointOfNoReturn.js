@@ -67,8 +67,8 @@ export class PointOfNoReturn {
 
     sendPlayerToBlackHole() {
         moveObjectToPoint(this.scene.player, this.blackHoleImg, 5);
-        this.scene.player.disableEngine();
-        this.scene.player.addToCurrentAngle(10);
+        this.scene.player.boostHandler.disableEngine();
+        this.scene.player.angle+=10;
         if (!this.blackHoleKillTimer) {
             this.blackHoleKillTimer = this.scene.time.delayedCall(
                 2000, 

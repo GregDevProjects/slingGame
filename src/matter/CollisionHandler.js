@@ -26,15 +26,16 @@ export class CollisionHandler {
         for (let aPair of event.pairs) {
 
             if ((aPair.bodyA.key === "Player" || aPair.bodyB.key === "Player")) {
-                if (!this.scene.playerInvinsible) {
-                    this.onPlayerCollisionWithNonTruster(aPair.bodyA, aPair.bodyB);
-                }
+
+                console.log(event)
+                this.onPlayerCollisionWithNonTruster(aPair.bodyA, aPair.bodyB);
+
             }  
 
             if (aPair.bodyA.key === "Thruster" || aPair.bodyB.key === "Thruster") {
                 if (!isTrustAppliedForThisLoop){
                     isTrustAppliedForThisLoop = true;
-                    this.onTrusterCollision(aPair);
+                    this.onTrusterCollision(aPair, aPair.bodyA, aPair.bodyB);
                 }
             } 
 
@@ -61,67 +62,20 @@ export class CollisionHandler {
         let mineObj = objectPair.keyObject;
         let otherObj = objectPair.otherObj;
 
-        if (otherObj === "Player") {
-            debugger;
-        }
+  
     }
 
-    static onTrusterCollision(aPair) {
-        if (this.scene.player.getIsPowerThrusting()) {
-            return;
-        }
-        else {
-            console.log('sdfl')
-        }
+    static onTrusterCollision(aPair, bodyA, bodyB) {
 
-        let contactPoints = {
-            x : aPair.collision.supports[0].x + aPair.collision.penetration.x, 
-            y : aPair.collision.supports[0].y + aPair.collision.penetration.y 
-        };
+        let objectPair = this.getCollisionObjects("Thruster", bodyA, bodyB);
+        let thrusterObj = objectPair.keyObject;
+        let otherObj = objectPair.otherObj;
 
-        //TODO: break the thruster into another class and put this code there 
-        if (getDistanceBetweenObjects(this.scene.player, contactPoints) <= 200 ) {
-            if(getRandomInt(0,1)){
-                this.emitter(
-                    {
-                        x : aPair.collision.supports[0].x + aPair.collision.penetration.x, 
-                        y : aPair.collision.supports[0].y + aPair.collision.penetration.y 
-                    }
-                );
-            }
-        } else {
-            if(getRandomInt(0,1)){
-                this.emitter(
-                    {
-                        x : this.scene.player.thrusterImage.x, 
-                        y : this.scene.player.thrusterImage.y
-                    }
-                );
-            }            
-        }
+        this.scene.player.collisionHandler.onThrusterCollision(aPair, otherObj)
 
-        this.scene.player.queueBoostThrust();
-        this.scene.player.incrementPower();
     }
 
-    static emitter(source) {
-        var particles = this.scene.add.particles('red');
-        particles.setDepth(4)
-        particles.createEmitter({
-            x: source.x, 
-            y: source.y,
-            speed: 400,
-            lifespan: 250,
-            quantity: 1,
-            yoyo: true,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
-        });
 
-        this.scene.time.delayedCall(250, function() {
-            particles.destroy();
-        });
-    }
 
 
     static getCollisionObjects(objectKeyName,bodyA, bodyB) {
@@ -188,9 +142,6 @@ export class CollisionHandler {
         }
 
         if (otherObj.key === "Player") {
-            //debugger;
-            
-            otherObj.gameObject.power -=60
             missleObj.gameObject.delete(true);
             return;
         }
@@ -212,31 +163,10 @@ export class CollisionHandler {
             return;
         }
 
-
-
-        // if (otherObj.key === "Mine") {
-        //     debugger;
-        // }
-
         if (playerObj.gameObject.dead) {
             return;
         }
-
-        if (playerObj.gameObject.isPowerThrusting 
-            && otherObj.key !== 'Spinner'
-            && otherObj.key !== 'Missle'
-            ){
-
-            if (otherObj.key === 'VectorWall') {
-                return;
-            }
-            otherObj.gameObject.delete(true);
-            playerObj.gameObject.incrementCombo(); 
-            return;
-        }
-
-      
-
-        this.scene.killPlayer(); 
+        // debugger
+        this.scene.player.collisionHandler.onCollisionWithNonTruster(otherObj);
     }
 }
