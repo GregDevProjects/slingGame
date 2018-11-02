@@ -92,7 +92,7 @@ export class Pursuer extends Phaser.Physics.Matter.Sprite {
     }
     
     tintWhite() {
-        this.setTintFill(0xff0000);
+        this.setTintFill(0xffffff);
         this.missileHandler.tintWhite();
     }
 

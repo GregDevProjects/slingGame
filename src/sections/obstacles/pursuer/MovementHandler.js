@@ -2,7 +2,7 @@ import { getDistanceBetweenObjects } from '../../../Helper'
 
 const farthestLeftAngle = -110;
 const farthestRightAngle = -70;
-const minSpeed = 0.01;
+const minSpeed = 0.005;
 const medSpeed = 0.015;
 const maxSpeed = 0.025;
 

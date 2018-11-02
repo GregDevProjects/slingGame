@@ -6,6 +6,7 @@ import { getRandomInt } from '../Helper'
 import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
 import { Missle } from './obstacles/Missle'
+import { Pursuer } from './obstacles/pursuer/Pursuer'
 
 import { Levels } from './Levels'
 
@@ -38,9 +39,20 @@ export class ObstacleTrackProvider{
             obstacle = [Spinners, obstacle] ;
         }
 
-        const spawnMissile = sectionDifficulty % 6 == 0 ? Missle : false;
 
-        return {track: track, obstacle: obstacle, difficulty: difficulty, globalObstacles: spawnMissile};
+        return {track: track, obstacle: obstacle, difficulty: difficulty, globalObstacles: this.getGlobalObstacle(sectionDifficulty)};
+    }
+
+    static getGlobalObstacle(sectionDifficulty) {
+        if (sectionDifficulty % 5 == 0) {
+            return Missle;
+        }
+
+        if (sectionDifficulty % 8 == 0) {
+            return Pursuer;
+        }
+
+        return false; 
     }
 
     static getEndlessDifficultyWithCap(trackName, obstacleName, difficulty) {

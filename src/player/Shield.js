@@ -11,12 +11,18 @@ export class Shield {
      
     }
 
-    onShieldHit(dmg) {
+    onShieldHit(dmg, collidedWith) {
         if (this.startSpinOut) {
             return;
         }
 
         this.player.boostHandler.decrementPower(dmg);
+        
+        if (!this.doesCollidingWithThisObjectBouncePlayer(collidedWith.key)) {
+            return;
+        }
+
+        this.player.thruster.hideImage();
         this.doAddToAngleOnSpin = getRandomInt(0,1);
         this.startSpinOut = true;
         this.player.thruster.hideImage();
@@ -35,6 +41,10 @@ export class Shield {
         }); 
 
        
+    }
+
+    doesCollidingWithThisObjectBouncePlayer(objectKey) {
+        return objectKey !== 'Mine'
     }
     
     update() {

@@ -37,7 +37,7 @@ export class MuisicPlayer {
     }
 
     destroyAudio() {
-        if (this.currentSong)
+        if (this.currentSong && this.currentSong.isPlaying)
             this.currentSong.destroy();
     }
 

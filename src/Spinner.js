@@ -11,7 +11,8 @@ export class Spinner extends Phaser.Physics.Matter.Sprite {
         this.body.delete = this.delete.bind(this);
         this.velocity = 1;
         this.floatsLeft = getRandomInt(0,1);
-        this.setSensor(true);
+        //this.setSensor(true);
+        this.setStatic(true);
         this.setCollisionCategory(this.scene.matterHelper.getMainCollisionGroup());
         this.setDepth(2);
     }

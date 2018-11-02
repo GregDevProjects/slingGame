@@ -1,5 +1,7 @@
 import { Missle } from '../Missle'
+
 const missileStatus = { launched: 1, readyToLaunch: 2, prepingToLaunch: 3 }
+const maxMissileFireDistance = 200;
 
 export class MissileHandler {
     constructor(pursuer, player, scene) {
@@ -54,6 +56,13 @@ export class MissileHandler {
         this.missile.status = missileStatus.prepingToLaunch;
         
         const didLaunch = this.pursuer.startWarningPulse(function(){
+            if (this.getXDistanceFromPlayer() > maxMissileFireDistance) {
+                //added this as a way to prevent the missile from firing outside the play area
+                //this likely won't solve the problem in every situation.. I'm leaving it as an
+                //acceptable bug ¯\_(ツ)_/¯ 
+                this.missile.status = missileStatus.readyToLaunch;
+                return;
+            }
             this.missile.gameObject = new Missle({scene:this.scene, x: this.pursuer.x, y: this.pursuer.y, player: this.player});
             this.missile.status = missileStatus.launched;
             
@@ -62,6 +71,10 @@ export class MissileHandler {
         if(!didLaunch) {
             this.missile.status = missileStatus.readyToLaunch;
         } 
+    }
+
+    getXDistanceFromPlayer() {
+        return Math.abs(this.pursuer.x - this.player.x);
     }
 
     tintWhite() {

@@ -30,14 +30,9 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     create() {
-        
-        
-
         this.matterHelper = new Matter({ scene: this });
-
         this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
-
         this.background = new Background({scene:this});
 
         if (LocalStorageHandler.getIsMusicEnabled()) {

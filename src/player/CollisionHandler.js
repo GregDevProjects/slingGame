@@ -32,11 +32,12 @@ export class CollisionHandler {
             return;
         }
         
-        console.log('hit')
+       // console.log('hit')
         // return;
         //TODO: change what happens depending on hit
         this.player.onHit(
-            this.getDmgForWhatWasCollidedWith(otherObj.key)
+            this.getDmgForWhatWasCollidedWith(otherObj.key),
+            otherObj
         ); 
     }
 
@@ -49,7 +50,7 @@ export class CollisionHandler {
             case 'CargoShip':
                 return 30;
             case 'Missle':
-                return 60;
+                return 80;
             case 'Pursuer':
                 return 30;
             case 'SpaceRock':

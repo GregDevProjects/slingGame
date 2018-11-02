@@ -81,16 +81,16 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         this.isFinishedLevel = true;
     }
 
-    onHit(dmg) {
+    onHit(dmg, collidedWith) {
         this.boostHandler.showBoostBarForDuration();
 
-        this.shield.onShieldHit(dmg);
+        this.shield.onShieldHit(dmg, collidedWith);
 
         if (this.boostHandler.power <= 0) {
             this.scene.killPlayer();
         }
         
-        this.thruster.hideImage();
+        
  
     }
 

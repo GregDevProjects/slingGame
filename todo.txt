@@ -1,11 +1,6 @@
 -----------------In Progress -----------------------------------------
 
-As a player, I want a persuer that flies ahead of me like the cops on need for speed 
-    - drops mines that the player can collide with 
-    - it is possible to kill the persuer by boosting, but not easy 
-    - sometimes firies a missle 
-    - add to endless  
-    - make level 
+
 
 -----------------In Progress -----------------------------------------
 
@@ -34,8 +29,6 @@ pink menu - #ff33dc
 
 add riding spinners level 
 
-
-As a player, I want a final campaign boss type level with the persuer 
 
 
 As a mobile user, I don't want to hear the app when it's minimized 

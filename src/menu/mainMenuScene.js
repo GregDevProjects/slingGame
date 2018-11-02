@@ -1,5 +1,5 @@
 import { getGameWidth, getGameHeight } from '../Helper'
-import { LocalStorageHandler } from '../LocalStorageHandler'
+import { Levels } from '../sections/Levels'
 
 const disabledAlphaValue = 0.5;
 
@@ -15,11 +15,11 @@ export class MainMenu extends Phaser.Scene {
 
     create() {
 
-        // this.scene.stop();
-        // this.scene.start('UIScene', {level: 9});
-        // this.scene.start('GamePlay', {level: 9});
+        this.scene.stop();
+        this.scene.start('UIScene', {level: 9});
+        this.scene.start('GamePlay', {level: 9});
 
-        this.isEndlessUnlocked = true;//LocalStorageHandler.isEndlessUnlocked();
+        this.isEndlessUnlocked = Levels.isCampaignComplete(); //LocalStorageHandler.isEndlessUnlocked();
 
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
         this.add.image(getGameWidth() / 2, 50, 'title');

@@ -27,7 +27,7 @@ export class CollisionHandler {
 
             if ((aPair.bodyA.key === "Player" || aPair.bodyB.key === "Player")) {
 
-                console.log(event)
+               // console.log(event)
                 this.onPlayerCollisionWithNonTruster(aPair.bodyA, aPair.bodyB);
 
             }  
@@ -51,9 +51,24 @@ export class CollisionHandler {
                 this.onMissleCollision(aPair.bodyA, aPair.bodyB);
             }
 
+            if (aPair.bodyA.key === "Pursuer" || aPair.bodyB.key === "Pursuer") {
+                this.onPursuerCollision(aPair.bodyA, aPair.bodyB);
+            }
+
             // if (aPair.bodyA.key === "Mine" || aPair.bodyB.key === "Mine") {
             //     this.onMineCollision(aPair.bodyA, aPair.bodyB);
             // }
+        }
+    }
+
+    static onPursuerCollision(bodyA, bodyB) {
+        let objectPair = this.getCollisionObjects("Pursuer", bodyA, bodyB);
+        let mineObj = objectPair.keyObject;
+        let otherObj = objectPair.otherObj;
+
+        if (otherObj.key == "SpaceRock" || otherObj.key == "CargoShip") {
+            otherObj.gameObject.delete(true);
+            return;   
         }
     }
 
@@ -111,6 +126,8 @@ export class CollisionHandler {
             spackRockObj.gameObject.delete(true);
             return;
         }
+
+
         spackRockObj.changeDirection();
     }
 

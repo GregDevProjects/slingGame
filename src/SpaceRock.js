@@ -54,10 +54,6 @@ export class SpaceRock extends Phaser.Physics.Matter.Sprite{
         destroyObject(this, isExploding);       
     }
 
-    tintWhite(){
-        this.setTintFill(0xffffff);
-    }
-
     removeTint() {
         this.clearTint();
     }

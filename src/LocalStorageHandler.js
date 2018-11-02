@@ -1,4 +1,4 @@
-const totalLevels = 6;
+const totalLevels = 2;
 const isMusicEnabledKey = 'SpaceSlingMusic';
 const isArrowEnabledKey = 'SpaceSlingArrow';
 const levelTimeKey = "SpaceSlingLevelTime";
@@ -21,7 +21,7 @@ export class LocalStorageHandler {
     static isLevelStatSaved(level, stat) {
         const previousTime = this.getLevelCompleteTime(level);
         if (previousTime == 0) {
-            return false;
+            return true;
         }
 
         if (level == 0) {

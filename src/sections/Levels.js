@@ -34,6 +34,16 @@ export class Levels {
         return true;
     }
 
+    static isCampaignComplete() {
+       // debugger
+        for (let i = 0; i < this.getAllLevels().length; i++) {
+            if (!this.isLevelUnlocked(i+1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //returns the key of the medal image
     static getMedalForTime(level, time) {
         const medalTimes = this.getLevel(level).getDecription().medalTimes;
@@ -63,7 +73,7 @@ class Level1 {
         return { 
             name: 'Tube',
             level: 1,
-            description: 'Use your thruster to push off walls and maintain speed.',
+            description: 'Use your thruster to push off walls and maintain speed. Get a bronze time or higher to unlock the next level.',
             objective: 'Reach the finish line',
             medalTimes: {
                 'gold' : 23.00,
@@ -335,21 +345,35 @@ class Level8 {
 class Level9 {
     static getDecription() {
         return { 
-            name: 'Duel',
+            name: 'Hot Pursuit',
             level: 9,
-            description: 'Defeat the persuer!',
-            objective: 'This level will not end until the persuer is destroyed.',
+            description: 'The Pursuer will not stop until you are destroyed, good luck! Get a bronze or higher to unlock Endless Mode.',
+            objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 23.00,
-                'silver' : 25.00,
-                'bronze' : 27.00
+                'gold' : 58.00,
+                'silver' : 60.00,
+                'bronze' : 70.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
-        const lastTrack = 20;
+        const lastTrack = sectionsCompleted >= 20 ? true : false;
         const spawnPursuer = sectionsCompleted == 2 ? Pursuer : false;
-        return {track: Tube, globalObstacles: spawnPursuer ,obstacle: [], difficulty: 1, isLastTrack: false };
+
+        return {
+            track: this.getObstacles(sectionsCompleted).track, 
+            globalObstacles: spawnPursuer,
+            obstacle: this.getObstacles(sectionsCompleted).obstacle, 
+            difficulty: this.getObstacles(sectionsCompleted).diff, 
+            isLastTrack: lastTrack 
+        };
+    }
+
+    static getObstacles(sectionsCompleted) {
+        if (sectionsCompleted % 6 == 0 ) {
+            return { track: Diamond, obstacle: [GridTraffic], diff: 5 }
+        }
+        return { track: Tube, obstacle: [FloatingSpaceRocks], diff: getRandomInt(0,1) ? 1 : 2 }
     }
 }

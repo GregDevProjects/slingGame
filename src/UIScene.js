@@ -163,7 +163,7 @@ export class UIScene extends Phaser.Scene {
         this.progress.destroy();
 
         const levelTime =  Phaser.Math.RoundTo(this.ourGame.getPlayerStats().time, -2);
-
+       
         LocalStorageHandler.saveLevelCompletionTime(this.ourGame.level, levelTime);
 
         this.add.image(getGameWidth()/2, 100, 'level_complete');

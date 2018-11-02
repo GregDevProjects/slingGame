@@ -138,7 +138,7 @@ const credits = [
         ]
     },
     {
-        role : 'Ship Art',
+        role : 'Ship Art, Player Shield',
         names : [
             'Skorpio'
         ]
