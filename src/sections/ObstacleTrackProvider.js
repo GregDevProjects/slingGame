@@ -7,10 +7,11 @@ import { Spinners } from './obstacles/Spinners'
 import { SharpTurn } from './tracks/SharpTurn'
 import { Missle } from './obstacles/Missle'
 import { Pursuer } from './obstacles/pursuer/Pursuer'
+import { SundayDriverClump } from './obstacles/SundayDriverClump'
 
 import { Levels } from './Levels'
 
-const allObstacles = [ FloatingSpaceRocks, GridTraffic ];
+const allObstacles = [ FloatingSpaceRocks, GridTraffic, SundayDriverClump ];
 const allTracks = [ Diamond, Tube, SharpTurn ];
 
 //must return {track: track, obstacle: obstacle, difficulty: difficulty, lastTrack: lastTrack};
@@ -79,6 +80,12 @@ export class ObstacleTrackProvider{
             }
         }
 
+        if (obstacleName == 'SundayDriverClump') {
+            if (difficulty >= 3) {
+                return 3;
+            }
+            return difficulty;       
+        }
     }
 
     static getGridTrafficDifficulty( difficulty) {

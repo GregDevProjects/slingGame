@@ -1,11 +1,10 @@
-import { getRandomInt } from './Helper'
+import { ThrustEmitter } from './ThrustEmitter'
 import { destroyObject } from './matter/MatterHelper'
 
 export class CargoShip extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
         super(config.scene.matter.world, config.startPostion.x, config.startPostion.y, 'cargo_' + config.cargoKeyNumber);
         this.setBodyVertices(config.cargoKeyNumber);
-        this.setDepth(1);
         this.body.key = this.constructor.name;
         this.scene.add.existing(this);
         this.velocity = 1;
@@ -24,6 +23,18 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
         this.body.done = this.onPowerThrustCollision.bind(this);
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
         this.setDepth(2);
+
+        this.thrusterParticles = this.scene.add.particles('orange').setDepth(1);
+        
+        this.thruster = this.thrusterParticles.createEmitter({
+            x: 0,
+            y: 1000, 
+            speed: config.cargoKeyNumber == 1? 300 : 100,
+            scale: { start: config.cargoKeyNumber == 1? 4 : 2, end: 0 },
+            blendMode: 'ADD',
+            lifespan : config.cargoKeyNumber == 1? 300 : 200
+        })
+
     }
 
     //some duplicate code here 
@@ -262,6 +273,9 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
 
         this.moveX();
         this.moveY();
+        //this.thruster.update();
+        this.thruster.setPosition(this.x, this.y + this.height/2 - 20);
+        this.thruster.setAngle(90)
 
     }
 
@@ -302,6 +316,7 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
     }
 
     delete(isExploding) {
+        this.thrusterParticles.destroy();
         destroyObject(this, isExploding);
     }
 

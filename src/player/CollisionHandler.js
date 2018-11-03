@@ -57,6 +57,8 @@ export class CollisionHandler {
                 return 30;
             case 'Spinner':
                 return 40;
+            case 'SundayDriver':
+                return 30;
         }
         console.warn('dmg to player not defined for: ', otherObjectKey)
         return 0;

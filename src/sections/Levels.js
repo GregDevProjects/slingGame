@@ -8,11 +8,12 @@ import { SharpTurn } from './tracks/SharpTurn'
 import { LocalStorageHandler } from '../LocalStorageHandler'
 import { Missle } from '../sections/obstacles/Missle';
 import { Pursuer } from './obstacles/pursuer/Pursuer'
+import { SundayDriverClump } from './obstacles/SundayDriverClump'
 
 export class Levels {
     static getAllLevels() {
         //levels must be added to this array in ascending order 
-        return [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9];
+        return [Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10];
     }
 
     static getLevel(level) {
@@ -35,7 +36,6 @@ export class Levels {
     }
 
     static isCampaignComplete() {
-       // debugger
         for (let i = 0; i < this.getAllLevels().length; i++) {
             if (!this.isLevelUnlocked(i+1)) {
                 return false;
@@ -71,9 +71,32 @@ export class Levels {
 class Level1 {
     static getDecription() {
         return { 
-            name: 'Tube',
+            name: 'Sunday Drivers',
             level: 1,
-            description: 'Use your thruster to push off walls and maintain speed. Get a bronze time or higher to unlock the next level.',
+            description: 'Sunday drivers are pushy, rude, and tend to explode at random. \
+            Don\'t be afraid to take them out with a boost if they\'re pushing you around. \
+            Get a bronze time or higher to unlock the next level.',
+            objective: 'Reach the finish line',
+            medalTimes: {
+                'gold' : 23.00,
+                'silver' : 25.00,
+                'bronze' : 27.00
+            }
+        }
+    }
+
+    static getObstaclesAndTracks(sectionsCompleted) {
+        const lastTrack = 12;    
+        return {track: Tube,obstacle: [ SundayDriverClump ], difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
+    }
+}
+
+class Level2 {
+    static getDecription() {
+        return { 
+            name: 'Tube',
+            level: 2,
+            description: 'Use your thruster to push off walls and maintain speed.',
             objective: 'Reach the finish line',
             medalTimes: {
                 'gold' : 23.00,
@@ -90,11 +113,11 @@ class Level1 {
 }
 
 
-class Level2 {
+class Level3 {
     static getDecription() {
         return { 
             name: 'Winding Road',
-            level: 2,
+            level: 3,
             description: 'Push off the walls, watch for sharp turns.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -112,11 +135,11 @@ class Level2 {
 }
 
 
-class Level3 {
+class Level4 {
     static getDecription() {
         return { 
             name: 'Asteroid Tube',
-            level: 3,
+            level: 4,
             description: 'Dodge or destroy the asteroids by boosting. Press both turn directions to boost.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -133,11 +156,11 @@ class Level3 {
     }
 }
 
-class Level4 {
+class Level5 {
     static getDecription() {
         return { 
             name: 'Marathon',
-            level: 4,
+            level: 5,
             description: 'Keep going, don\'t give up. You are invulnerable to wall collisions while boosting.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -169,11 +192,11 @@ class Level4 {
 
 }
 
-class Level5 {
+class Level6 {
     static getDecription() {
         return { 
             name: 'Highway',
-            level: 5,
+            level: 6,
             description: 'You will need to use the cargo ships to build momentum. Cargo ships can be destroyed by boosting.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -190,11 +213,11 @@ class Level5 {
     }
 }
 
-class Level6 {
+class Level7 {
     static getDecription() {
         return { 
             name: 'Missile Run',
-            level: 6,
+            level: 7,
             description: 'Missiles are great on a straightway but terrible at turning. Boosting will not save you.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -230,11 +253,11 @@ class Level6 {
     }
 }
 
-class Level7 {
+class Level8 {
     static getDecription() {
         return { 
             name: 'Gridlock',
-            level: 7,
+            level: 8,
             description: 'Avoid the spinning satellite of death. Boost wisely and often. Stay focused.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -282,11 +305,11 @@ class Level7 {
     }
 }
 
-class Level8 {
+class Level9 {
     static getDecription() {
         return { 
             name: 'Unoccupied',
-            level: 8,
+            level: 9,
             description: 'Outrun the missiles without anything to hide behind.',
             objective: 'Reach the finish line',
             medalTimes: {
@@ -342,11 +365,11 @@ class Level8 {
     }
 }
 
-class Level9 {
+class Level10 {
     static getDecription() {
         return { 
             name: 'Hot Pursuit',
-            level: 9,
+            level: 10,
             description: 'The Pursuer will not stop until you are destroyed, good luck! Get a bronze or higher to unlock Endless Mode.',
             objective: 'Reach the finish line',
             medalTimes: {
