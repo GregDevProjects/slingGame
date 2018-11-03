@@ -11,7 +11,16 @@ import { MineHandler } from './MineHandler'
 export class Pursuer extends Phaser.Physics.Matter.Sprite {
     constructor(config) {
         super(config.scene.matter.world, getRandomInt(config.x-1000, config.x+1500), config.y - 2000, 'pursuer');
-     
+        
+        this.scene.activeSections.globalObstacles.obstaclesInGame.forEach(function(obstacle) {
+            if (obstacle.__proto__.constructor.name == "Pursuer"){
+                this.dontSpawn = true;
+                return;
+            }
+        }.bind(this));
+
+
+
         this.setBodyVertices();
         this.body.key = this.constructor.name;
         this.player = config.player;
@@ -25,6 +34,12 @@ export class Pursuer extends Phaser.Physics.Matter.Sprite {
         this.setSensor(true);
         this.setCollisionCategory(config.scene.matterHelper.getMainCollisionGroup());
         this.setDepth(5);
+
+        if (this.dontSpawn) {
+            //console.warn('tried to spawn more than 1 pursuer')
+            this.delete(false);  
+        }
+
     }   
 
     update() {

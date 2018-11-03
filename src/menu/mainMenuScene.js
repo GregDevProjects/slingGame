@@ -15,9 +15,9 @@ export class MainMenu extends Phaser.Scene {
 
     create() {
 
-        this.scene.stop();
-        this.scene.start('UIScene', {level: 6});
-        this.scene.start('GamePlay', {level: 6});
+        // this.scene.stop();
+        // this.scene.start('UIScene', {level: 6});
+        // this.scene.start('GamePlay', {level: 6});
 
         this.isEndlessUnlocked = Levels.isCampaignComplete(); //LocalStorageHandler.isEndlessUnlocked();
 

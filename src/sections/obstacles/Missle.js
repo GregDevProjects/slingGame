@@ -24,9 +24,10 @@ export class Missle extends Phaser.Physics.Matter.Sprite {
             lifespan : 500
         })
        .setVisible(false)
-       // .startFollow(this, -30, 0 );
-       // debugger;
-      
+        
+       if(this.player.boostHandler.isBoosting) {
+           this.tintWhite();
+       }
         
     }
 

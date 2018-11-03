@@ -108,8 +108,8 @@ export class CollisionHandler {
 
     static onSpinnerCollision(bodyA, bodyB) {
         let otherObj = this.getCollisionObjects("Spinner", bodyA, bodyB).otherObj;
-        if (otherObj.key === "SpaceRock" || otherObj.key === "CargoShip") {
-            otherObj.delete(true);
+        if (otherObj.key === "SpaceRock" || otherObj.key === "CargoShip" || otherObj.key == "SundayDriver") {
+            otherObj.gameObject.delete(true);
         }
     }   
 

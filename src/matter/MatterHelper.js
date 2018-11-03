@@ -22,12 +22,12 @@ export function destroyObject(matterObj, isExploding) {
 
     if(matterObj.anims == undefined) {
         matterObj.destroy();
-        console.warn('called destroyObject() on object that can\'t paly animations', matterObj);
+        //console.warn('called destroyObject() on object that can\'t paly animations', matterObj);
         return;
     }
 
     if (matterObj.anims.isPlaying) {
-        console.warn('tried to destroy an object that\'s already exploading', matterObj);
+        //console.warn('tried to destroy an object that\'s already exploading', matterObj);
         return;
     }
 

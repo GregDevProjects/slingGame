@@ -60,5 +60,9 @@ export class MovementHandler {
             pursuer.thrust(minSpeed);
             return;
         }
+
+        if(pursuer.y > player.y) {
+            pursuer.thrust(maxSpeed);
+        }
     }
 }

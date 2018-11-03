@@ -72,7 +72,7 @@ export class Credits extends Phaser.Scene {
                 startYPostion + (spacing * i),
                 name,
                 { font: '20px Arial', fill: '#ffffff' }
-            ).setAlpha(0)));
+            ).setAlpha(0).setDepth(3)));
         }.bind(this))
 
         return allText;
@@ -103,20 +103,34 @@ export class Credits extends Phaser.Scene {
 
 class scrollingCargoShip extends Phaser.GameObjects.Image {
     constructor(scene) {
-        super(scene, -200, getRandomInt(getGameHeight(), getGameHeight() - 300), 'cargo_' + getRandomInt(2,8));
+        super(scene, -200, getRandomInt(getGameHeight() - 100, getGameHeight() - 300), 'cargo_' + getRandomInt(2,8));
         this.setAngle(90);
-        scene.add.existing(this);
+        scene.add.existing(this);   
+        this.setDepth(2)
+        this.thrusterParticles = this.scene.add.particles('orange').setDepth(1);
+        
+        this.thruster = this.thrusterParticles.createEmitter({
+            x: 0,
+            y: 1000, 
+            speed: 100,
+            scale: { start:1.5, end: 0 },
+            blendMode: 'ADD',
+            lifespan :  400,
+            angle: {min:160, max: 190}
+        })
     }
 
     update() {
         this.x++;
+        this.thruster.setPosition(this.x - 100, this.y);
     }
 
     isOffScreen() {
-        return (this.x - this.height/2) >= getGameWidth();
+        return (this.x - this.height/2) >= getGameWidth() + 100;
     }   
 
     kill() {
+        this.thrusterParticles.destroy();
         this.destroy();
     }
 }
@@ -195,6 +209,12 @@ const credits = [
         role: 'Pursuer Mine Animation',
         names : [
             'ashishlko11'
+        ]
+    },
+    {
+        role : 'Game Framework',
+        names : [
+            'phaser.io'
         ]
     },
     {

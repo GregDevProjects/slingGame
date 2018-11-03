@@ -32,7 +32,8 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
             speed: config.cargoKeyNumber == 1? 300 : 100,
             scale: { start: config.cargoKeyNumber == 1? 4 : 2, end: 0 },
             blendMode: 'ADD',
-            lifespan : config.cargoKeyNumber == 1? 300 : 200
+            lifespan : config.cargoKeyNumber == 1? 300 : 200,
+            angle: {min: 70, max:110}
         })
 
     }
@@ -275,7 +276,7 @@ export class CargoShip extends Phaser.Physics.Matter.Sprite {
         this.moveY();
         //this.thruster.update();
         this.thruster.setPosition(this.x, this.y + this.height/2 - 20);
-        this.thruster.setAngle(90)
+        
 
     }
 

@@ -3,8 +3,8 @@ import { LocalStorageHandler } from '../LocalStorageHandler'
 
 
 const description = 'Randomly generated level that goes on forever \
- and gets more difficult the longer it\'s played \
- . Be warned - this isn\'t even remotely fair';
+ and gets more difficult the longer it\'s played\
+. Be warned - this isn\'t even even remotely fair or balanced';
 
 export class Endless extends Phaser.Scene {
 

@@ -31,7 +31,7 @@ export class LevelPreview extends Phaser.Scene {
             0, 
             titleText.y+ 75, 
             this.props.description, 
-            { font: '25px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
+            { font: '18px Arial', fill: '#ffffff', wordWrap: { width: getGameWidth(), useAdvancedWrap: true } },
         ));
 
         const objectiveText = placeTextInCenter(this.add.text(

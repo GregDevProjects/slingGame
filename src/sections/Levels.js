@@ -74,13 +74,13 @@ class Level1 {
             name: 'Sunday Drivers',
             level: 1,
             description: 'Sunday drivers are pushy, rude, and tend to explode at random. \
-            Don\'t be afraid to take them out with a boost if they\'re pushing you around. \
+            Press the up key (pc) or both turn directions at once (mobile) to take them out with a boost once your energy is full. \
             Get a bronze time or higher to unlock the next level.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 23.00,
-                'silver' : 25.00,
-                'bronze' : 27.00
+                'gold' : 40.00,
+                'silver' : 45.00,
+                'bronze' : 60.00
             }
         }
     }
@@ -96,12 +96,13 @@ class Level2 {
         return { 
             name: 'Tube',
             level: 2,
-            description: 'Use your thruster to push off walls and maintain speed.',
+            description: 'Use your thruster to push off from wall to wall and maintain speed.\
+             Boosting is a good way to maintain momentum if you stray too far from a wall, but keep in mind your boost and shield energy are the same.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 23.00,
-                'silver' : 25.00,
-                'bronze' : 27.00
+                'gold' : 19.00,
+                'silver' : 23.00,
+                'bronze' : 35.00
             }
         }
     }
@@ -118,12 +119,13 @@ class Level3 {
         return { 
             name: 'Winding Road',
             level: 3,
-            description: 'Push off the walls, watch for sharp turns.',
+            description: 'Push off the walls, watch for sharp turns. Boosting is a great way to get around tight turns, but be sure to \
+            position yourself close to a wall when the boost expires',
             objective: 'Reach the finish line',
             medalTimes: {
                 'gold' : 38.00,
                 'silver' : 40.00,
-                'bronze' : 43.00
+                'bronze' : 51.00
             }
         }
     }
@@ -140,54 +142,53 @@ class Level4 {
         return { 
             name: 'Asteroid Tube',
             level: 4,
-            description: 'Dodge or destroy the asteroids by boosting. Press both turn directions to boost.',
+            description: 'These floating space turds are blocking your path to the finish. I think you know what to do.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 47.00,
-                'silver' : 49.00,
-                'bronze' : 51.00
+                'gold' : 29.00,
+                'silver' : 35.00,
+                'bronze' : 45.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
-        const lastTrack = 6;
-        return {track: Tube, obstacle: [FloatingSpaceRocks], difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
+        const lastTrack = 9;
+        const obstacle = sectionsCompleted == 3 ? SundayDriverClump : FloatingSpaceRocks;
+        const difficulty = sectionsCompleted == 8 ? 3 : 1;
+        return {track: Tube, obstacle: [obstacle], difficulty: difficulty, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 }
 
 class Level5 {
     static getDecription() {
         return { 
-            name: 'Marathon',
+            name: 'Riding Spinners',
             level: 5,
-            description: 'Keep going, don\'t give up. You are invulnerable to wall collisions while boosting.',
+            description: 'Those satellites are stronger than they look.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 70.00,
-                'silver' : 80.00,
-                'bronze' : 90.00
+                'gold' : 65.00,
+                'silver' : 60.00,
+                'bronze' : 70.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
-        const lastTrack = 18;
-        return {track: this.getTracks(), obstacle: this.getObstacles(), difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
-    }
+        const isDiamond = getRandomInt(0,1);
 
-    static getObstacles() {
-        if (getRandomInt(0,2)) {
-            return [];
+        const obstacle = getRandomInt(0,1) ? [SundayDriverClump] : [FloatingSpaceRocks];
+        let track;
+        if(isDiamond) {
+            track = Diamond;
+            obstacle.push(Spinners);
+        } else {
+            track = Tube;
         }
-        return [FloatingSpaceRocks];
-    } 
 
-    static getTracks(){
-        if(getRandomInt(0,1)) {
-            return Tube;
-        }
-        return SharpTurn;
+        const lastTrack = 15;
+        return {track: track, obstacle: obstacle, difficulty: isDiamond ? 4 : 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 
 }
@@ -200,9 +201,9 @@ class Level6 {
             description: 'You will need to use the cargo ships to build momentum. Cargo ships can be destroyed by boosting.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 45.00,
-                'silver' : 47.00,
-                'bronze' : 55.00
+                'gold' : 50.00,
+                'silver' : 55.00,
+                'bronze' : 70.00
             }
         }
     }
@@ -221,16 +222,16 @@ class Level7 {
             description: 'Missiles are great on a straightway but terrible at turning. Boosting will not save you.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 30.00,
-                'silver' : 35.00,
-                'bronze' : 40.00
+                'gold' : 33.00,
+                'silver' : 38.00,
+                'bronze' : 48.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
-        const lastTrack = 6;
-        const spawnMissile = sectionsCompleted == 2 ? Missle : false; 
+        const lastTrack = 9;
+        const spawnMissile = sectionsCompleted % 3 == 0 ? Missle : false; 
         return {track: this.getTrack(sectionsCompleted), globalObstacles: spawnMissile ,obstacle: this.getObstacles(), difficulty: 1, isLastTrack: sectionsCompleted >= lastTrack ? true : false };
     }
 
@@ -261,9 +262,9 @@ class Level8 {
             description: 'Avoid the spinning satellite of death. Boost wisely and often. Stay focused.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 52.00,
-                'silver' : 57.00,
-                'bronze' : 64.00
+                'gold' : 58.00,
+                'silver' : 65.00,
+                'bronze' : 79.00
             }
         }
     }
@@ -286,11 +287,11 @@ class Level8 {
         }
 
         if (sectionsCompleted <= 5){
-            return {track:Diamond, obstacles: [GridTraffic, Spinners]};
+            return {track:Diamond, obstacles: sectionsCompleted % 2 == 0 ? [GridTraffic, Spinners] : [GridTraffic]};
         }
 
         if (sectionsCompleted == 6){
-            return {track:Tube, obstacles: []};
+            return {track:Tube, obstacles: [SundayDriverClump]};
         }
 
         if (sectionsCompleted <= 7){
@@ -298,7 +299,7 @@ class Level8 {
         }
 
         if (sectionsCompleted <= 10){
-            return {track:Diamond, obstacles: [GridTraffic, Spinners]};
+            return {track:Diamond, obstacles: sectionsCompleted % 2 == 0 ?[GridTraffic, Spinners] : [GridTraffic]};
         }
 
         return {track:Diamond, obstacles: [GridTraffic]};
@@ -313,16 +314,16 @@ class Level9 {
             description: 'Outrun the missiles without anything to hide behind.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 47.00,
-                'silver' : 53.00,
-                'bronze' : 60.00
+                'gold' : 55.00,
+                'silver' : 67.00,
+                'bronze' : 80.00
             }
         }
     }    
 
     static getObstaclesAndTracks(sectionsCompleted) {
         const lastTrack = 12;
-        const spawnMissile = (sectionsCompleted == 2 || sectionsCompleted == 6) ? Missle : false; 
+        const spawnMissile = (sectionsCompleted %2 == 0) ? Missle : false; 
         return {
             globalObstacles: spawnMissile, 
             track: this.getTrackAndObstacles(sectionsCompleted).track, 
@@ -370,19 +371,20 @@ class Level10 {
         return { 
             name: 'Hot Pursuit',
             level: 10,
-            description: 'The Pursuer will not stop until you are destroyed, good luck! Get a bronze or higher to unlock Endless Mode.',
+            description: 'The Pursuer will not stop until you are destroyed, good luck! Managing your power to balance defence and offence is the key to survival.  Get a bronze or higher to unlock Endless Mode.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 58.00,
-                'silver' : 60.00,
-                'bronze' : 70.00
+                'gold' : 65.00,
+                'silver' : 75.00,
+                'bronze' : 99.00
             }
         }
     }
 
     static getObstaclesAndTracks(sectionsCompleted) {
         const lastTrack = sectionsCompleted >= 20 ? true : false;
-        const spawnPursuer = sectionsCompleted == 2 ? Pursuer : false;
+        const spawnPursuer = sectionsCompleted == 2 ||sectionsCompleted == 3  ? Pursuer : false;
+        
 
         return {
             track: this.getObstacles(sectionsCompleted).track, 
@@ -397,6 +399,11 @@ class Level10 {
         if (sectionsCompleted % 6 == 0 ) {
             return { track: Diamond, obstacle: [GridTraffic], diff: 5 }
         }
+
+        if (sectionsCompleted % 5 == 0 ) {
+            return { track: Tube, obstacle: [SundayDriverClump], diff: 5 }
+        }
+
         return { track: Tube, obstacle: [FloatingSpaceRocks], diff: getRandomInt(0,1) ? 1 : 2 }
     }
 }
