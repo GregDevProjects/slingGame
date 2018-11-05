@@ -34,7 +34,7 @@ export class GameplayScene extends Phaser.Scene {
         this.cameras.main.setZoom(0.4);
         this.matter.world.setBounds(0, 0, 0, 0);
         this.background = new Background({scene:this});
-
+        this.uIScene = this.scene.get('UIScene');
         if (LocalStorageHandler.getIsMusicEnabled()) {
             this.music = new MuisicPlayer({scene:this}).playRandomGameSongs();
         }
@@ -62,8 +62,8 @@ export class GameplayScene extends Phaser.Scene {
         
     }
 
-    update() {
-     //  this.p.update();
+    update(time, delta) {
+     console.log('Time: ' + time + '\nDelta: ' + delta);
         if (this.isLevelFinished) {
             this.player.update();
             this.background.update();
@@ -122,7 +122,9 @@ export class GameplayScene extends Phaser.Scene {
     killPlayer() {
         this.activeSections.deleteGlobalObstacles();
         this.player.onDeath().on('animationcomplete', function () {
-            this.onPlayerDeathExplosionEnd();
+           // this.onPlayerDeathExplosionEnd();
+           this.scene.restart();
+           this.uIScene.scene.restart();
             
         }.bind(this));
     }

@@ -88,4 +88,5 @@ export function addGlowingTween(target) {
             yoyo: true
         }
     )
+    return target;
 }

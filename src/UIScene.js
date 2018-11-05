@@ -24,12 +24,11 @@ export class UIScene extends Phaser.Scene {
     {
         this.ourGame = this.scene.get('GamePlay');
         //  Our Text object to display the Score
-        this.distanceText = this.add.text(5, 10, '', { font: '30px Arial', fill: '#ffffff' });
+        
         this.isTurnArrowEnabled = LocalStorageHandler.getIsTurnArrowEnabled(); 
         this.addTurnArrows();
         addGlowingTween(
             this.add.image(getGameWidth() - 50, 30, 'menu').setInteractive().on('pointerdown', (event) => {
-                //replay
                 this.ourGame.stopMusic();
                 this.scene.start('MainMenu');
                 this.scene.stop();
@@ -37,9 +36,22 @@ export class UIScene extends Phaser.Scene {
             }, this)
         );
 
-        //  Grab a reference to the Game Scene
+        addGlowingTween(
+            this.add.image(50, 30, 'reset').setInteractive().on('pointerdown', (event) => {
+                this.ourGame.stopMusic();
+                this.ourGame.scene.restart();
+                this.scene.restart();
+            }, this)
+        );
+
+        const distanceText = this.distanceText = placeTextInCenter(
+            this.add.text( getGameWidth()/2, 
+            10, 
+            '00.00', 
+            { font: '30px Arial', fill: '#ffffff' }
+            )
+        );
         
-        // this.level = this.ourGame.getLevel();
         this.progress = this.add.graphics();
 
         this.progressWrapper = this.add.rectangle(
@@ -50,7 +62,25 @@ export class UIScene extends Phaser.Scene {
         );
         this.progressWrapper.setStrokeStyle(2, 0xff33dc);
         this.isLevelComplete = false;
+        
+        this.setLevelMedalTimesAndImage(distanceText);
+
+        
     }
+
+    setLevelMedalTimesAndImage(distanceText) {
+        if (this.level != 0) {
+            this.medalTimes = Levels.getLevel(this.level).getDecription().medalTimes
+            this.timeMedalImage = this.add.image(
+                distanceText.x - 20,
+                distanceText.y,
+                'medal_gold'
+            )
+            .setAlpha(0.6);
+        } 
+    }
+
+    
 
     addTurnArrows() {
         if (this.isTurnArrowEnabled) {
@@ -106,15 +136,41 @@ export class UIScene extends Phaser.Scene {
 
     setLevelDistanceAndTime(stats) {
         let text = '';
+        const time = Phaser.Math.RoundTo(stats.time, -2);
         if (this.level === 0) {
-            text = 'Distance: ' + stats.distance;
+            text = stats.distance;
         } else {
-            text = 'Time: ' + Phaser.Math.RoundTo(stats.time, -2);
+            text = Phaser.Math.RoundTo(time, -2);
+            this.setMedalImage(time);
         }
 
         this.distanceText.setText(
             text
         );
+        
+        
+    }
+
+    setMedalImage(time) {
+        const timeMedalImage = this.timeMedalImage;
+
+        if(!timeMedalImage.active) {
+            return;
+        }
+
+        if (time <= this.medalTimes.gold) {
+            if (timeMedalImage.texture.key !== 'medal_gold')
+                timeMedalImage.setTexture('medal_gold');
+        } else if (time <=  this.medalTimes.silver) {
+            if (timeMedalImage.texture.key !== 'medal_silver')
+                timeMedalImage.setTexture('medal_silver');
+        } else if (time <=  this.medalTimes.bronze) {
+            if (timeMedalImage.texture.key !== 'medal_bronze')
+                timeMedalImage.setTexture('medal_bronze');
+        } else {
+            this.timeMedalImage.destroy();
+        }
+        
     }
 
     setPowerThrustProgressBar(stats) {

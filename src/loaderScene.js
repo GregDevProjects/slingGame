@@ -80,6 +80,7 @@ export class LoaderScene extends Phaser.Scene {
     this.load.image('sunday_driver', 'assets/img/sunday.png');
     this.load.image('00', 'assets/img/00.png');
     this.load.image('blue', 'assets/img/blue.png');
+    this.load.image('reset', 'assets/img/reset_35.png')
   }
 
   create() {

@@ -105,6 +105,7 @@ export class BoostHandler {
 
         if(this.isBoosting){
             let progress = this.thrustTimer.getProgress();
+            debugger;
             this.power = 100 - progress*100; 
             this.isBoostBarShown = true;
         } 
