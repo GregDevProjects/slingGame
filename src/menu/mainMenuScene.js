@@ -1,7 +1,8 @@
-import { getGameWidth, getGameHeight } from '../Helper'
+import { getGameWidth, getGameHeight, placeTextInCenter } from '../Helper'
 import { Levels } from '../sections/Levels'
 
 const disabledAlphaValue = 0.5;
+const version = 1.01;
 
 export class MainMenu extends Phaser.Scene {
 
@@ -46,6 +47,8 @@ export class MainMenu extends Phaser.Scene {
             this.scene.stop();
             this.scene.start('Credits');
         }, this);
+
+        placeTextInCenter(this.add.text(0, getGameHeight() - 40, version , { font: '25px Arial', fill: '#ffffff' }))
     }
 
     onEndlessButtonClick() {

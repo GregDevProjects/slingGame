@@ -100,16 +100,14 @@ class Level2 {
              Boosting is a good way to maintain momentum if you stray too far from a wall, but keep in mind your boost and shield energy are the same.',
             objective: 'Reach the finish line',
             medalTimes: {
-                'gold' : 1,
-                'silver' : 2,
-                'bronze' : 3
+                'gold' : 19.00,
+                'silver' : 23.00,
+                'bronze' : 35.00
             }
         }
     }
 
-    // 'gold' : 19.00,
-    // 'silver' : 23.00,
-    // 'bronze' : 35.00
+
 
     static getObstaclesAndTracks(sectionsCompleted) {
         const lastTrack = 6;

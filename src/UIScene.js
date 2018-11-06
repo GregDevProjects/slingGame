@@ -217,6 +217,7 @@ export class UIScene extends Phaser.Scene {
         }
         this.distanceText.destroy();
         this.progress.destroy();
+        this.timeMedalImage.destroy();
 
         const levelTime =  Phaser.Math.RoundTo(this.ourGame.getPlayerStats().time, -2);
        
@@ -231,14 +232,7 @@ export class UIScene extends Phaser.Scene {
         this.addMedalImage(levelTime);
 
         addGlowingTween(
-            this.add.image(getGameWidth() - 90, getGameHeight() - 50, 'replay').setInteractive().on('pointerdown', (event) => {
-                this.scene.restart();
-                this.ourGame.stopMusic();
-                this.ourGame.scene.restart();
-            }, this)
-        );
-        addGlowingTween(
-            this.add.image(90, getGameHeight() - 50, 'nah').setInteractive().on('pointerdown', (event) => {
+            this.add.image(getGameWidth()/2, getGameHeight() - 50, 'level_select').setInteractive().on('pointerdown', (event) => {
                 this.ourGame.stopMusic();
                 this.scene.stop('GamePlay');
                 this.scene.stop('UIScene');

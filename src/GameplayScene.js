@@ -63,7 +63,6 @@ export class GameplayScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-     console.log('Time: ' + time + '\nDelta: ' + delta);
         if (this.isLevelFinished) {
             this.player.update();
             this.background.update();
@@ -93,7 +92,7 @@ export class GameplayScene extends Phaser.Scene {
             }
         }
 
-        this.player.update();
+        this.player.update(delta);
         this.background.update();
         this.moveCamera();
 

@@ -1,6 +1,3 @@
-const boostTime = 3000;
-const boostBarTime = 700;
-
 const thrustLevel = {
     disabled : 0,
     regularSpeed :  0.004,
@@ -16,6 +13,8 @@ const tailEmitterConfig = {
     lifespan: 300,
     quantity:1
 }
+
+const boostBarTime = 700;
 
 //manages the player's boost and speed 
 export class BoostHandler {
@@ -33,8 +32,8 @@ export class BoostHandler {
         this.emitter.startFollow(this.player);
         this.emitter.setVisible(false);
         this.isBoostBarShown = false;
-
         this.boostBarTimerConfig = {
+            
             delay: boostBarTime, 
             callback: function () { 
                 if(!this) {
@@ -55,6 +54,7 @@ export class BoostHandler {
     disableEngine() {
         this.isDisabled = true;
     }
+
 
     reset() {
         this.isBoosting = false;
@@ -101,13 +101,22 @@ export class BoostHandler {
         this.power-=amount;
     }
 
-    update() {
+    incrementPowerOnCombo(amount) {
+        if(this.power + amount >= 100) {
+            this.power = 100;
+        } else {
+            this.power +=amount
+        }
+    }
 
+    update(delta) {
         if(this.isBoosting){
-            let progress = this.thrustTimer.getProgress();
-            debugger;
-            this.power = 100 - progress*100; 
+            this.power -= .04 * delta; 
             this.isBoostBarShown = true;
+
+            if (this.power <= 0) {
+                this.endBoost();
+            }
         } 
     }
 
@@ -134,14 +143,7 @@ export class BoostHandler {
         this.emitter.setVisible(true);
         this.player.thruster.hideImage();
 
-        this.thrustTimer = this.scene.time.addEvent({ 
-            delay: boostTime, 
-            callback: function () { 
-                this.endBoost();
-            }, 
-            callbackScope: this, 
-            startAt: 0 
-        });       
+        this.boostStartTime = this.gameTime;      
 
         this.scene.activeSections.setAllSectionObstaclesSensors(true);
         this.scene.background.setSimulationBackground();

@@ -1,5 +1,7 @@
 import {getRandomInt} from '../Helper'
 
+const powerGainedOnHit = 5;
+
 //counts objects destroyed durring a boost and displays text if 2 kills or over
 export class ComboCounter{
     constructor(scene, target) {
@@ -15,6 +17,7 @@ export class ComboCounter{
 
     incrementCombo() {
         this.comboCounter++;
+        this.player.boostHandler.incrementPowerOnCombo(powerGainedOnHit * this.comboCounter);
         if (this.comboCounter < 2) {
             return;
         }

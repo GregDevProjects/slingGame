@@ -1,6 +1,12 @@
 -----------------In Progress -----------------------------------------
 
+You can now accumulate power while destroying objects in boost mode, consecutive kills with the same boost = more power   
 
+Tweaked respawn logic, this should fix any anomalies seen from extended play periods (Thanks for letting me know WhiteBaron2018)
+
+Added a restart button (Thanks for the suggestion Zeique)
+
+Added ingame medal progress indicator for campaign levels
 
 -----------------In Progress -----------------------------------------
 

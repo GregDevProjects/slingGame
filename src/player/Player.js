@@ -103,7 +103,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
     }
 
 
-    update() {
+    update(delta) {
         if (this.dead) {
             this.setVelocityX(0);
             this.setVelocityY(0);
@@ -129,7 +129,7 @@ export class Player extends Phaser.Physics.Matter.Sprite {
         //https://github.com/liabru/matter-js/issues/134
         this.applyGrindThrust();
 
-        this.boostHandler.update();
+        this.boostHandler.update(delta);
 
         this.thrust(
             this.boostHandler.getSpeed()
