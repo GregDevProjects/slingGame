@@ -122,6 +122,7 @@ export class GameplayScene extends Phaser.Scene {
         this.activeSections.deleteGlobalObstacles();
         this.player.onDeath().on('animationcomplete', function () {
            // this.onPlayerDeathExplosionEnd();
+           this.music.destroyAudio();
            this.scene.restart();
            this.uIScene.scene.restart();
             

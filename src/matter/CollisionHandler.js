@@ -66,7 +66,7 @@ export class CollisionHandler {
         let mineObj = objectPair.keyObject;
         let otherObj = objectPair.otherObj;
 
-        if (otherObj.key == "SpaceRock" || otherObj.key == "CargoShip") {
+        if (otherObj.key == "SpaceRock" || otherObj.key == "CargoShip" || otherObj.key == "SundayDriver") {
             otherObj.gameObject.delete(true);
             return;   
         }
