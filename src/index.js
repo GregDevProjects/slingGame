@@ -8,6 +8,7 @@ import { LevelPreview } from './menu/levelPreviewScene'
 import { Options } from './menu/optionsScene'
 import { Credits } from './menu/creditsScene'
 import { Endless } from './menu/endlessScene'
+import { MusicScene } from './MusicScene'
 
 let config = {
     type: Phaser.AUTO,
@@ -28,6 +29,7 @@ let config = {
     scene: [
         LoaderScene,
         MainMenu,
+        MusicScene,
         LevelSelect,
         LevelPreview,
         Options,

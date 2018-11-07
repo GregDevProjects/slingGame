@@ -16,7 +16,7 @@ export class LoaderScene extends Phaser.Scene {
 
         progress.clear();
         progress.fillStyle(0xffffff, 1);
-        progress.fillRect(0, 270, 800 * value, 60);
+        progress.fillRect(0, 270, getGameWidth() * value, 60);
 
     });
 

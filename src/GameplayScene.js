@@ -4,7 +4,6 @@ import { Player } from './player/Player'
 import { SectionContainer } from './SectionContainer'
 import { PointOfNoReturn } from './PointOfNoReturn'
 import { CollisionHandler } from './matter/CollisionHandler'
-import { MuisicPlayer } from './Music'
 import { LocalStorageHandler } from './LocalStorageHandler'
 
 import { Pursuer } from './sections/obstacles/pursuer/Pursuer'
@@ -36,30 +35,21 @@ export class GameplayScene extends Phaser.Scene {
         this.background = new Background({scene:this});
         this.uIScene = this.scene.get('UIScene');
         if (LocalStorageHandler.getIsMusicEnabled()) {
-            this.music = new MuisicPlayer({scene:this}).playRandomGameSongs();
+            this.scene.get('Music').playGameplayMusic();
         }
-        
-        // this.matterPhysics();
+
         this.player = new Player({ scene: this, x: 280, y: 0, matterHelper: this.matterHelper });
         this.createGameObjects();
-        // this.cameras.main.setBounds(0, 0, 3200, 600);
         
         this.playerInvinsible = false;
         this.isLevelFinished = false;
         this.finishLine = false;
 
         CollisionHandler.startCollisionDetection({ scene: this });
-        
-     //  this.p = new Pursuer({scene: this, x:0, y:0, player: this.player})
-
-       
     }
 
     stopMusic() {
-        if(this.music){
-            this.music.destroyAudio();
-        }
-        
+        this.scene.get('Music').stopMusic();
     }
 
     update(time, delta) {
@@ -111,21 +101,17 @@ export class GameplayScene extends Phaser.Scene {
             matterHelper: this.matterHelper,
             level: this.level
         });
-        
 
         this.activeSections.addAnotherSectionAbove();
         this.createNewPointOfNoReturn();
-        //this.addGlobalObstacleToTopOfSection();
     }
 
     killPlayer() {
         this.activeSections.deleteGlobalObstacles();
         this.player.onDeath().on('animationcomplete', function () {
-           // this.onPlayerDeathExplosionEnd();
-           this.music.destroyAudio();
-           this.scene.restart();
-           this.uIScene.scene.restart();
-            
+            this.scene.get('Music').stopMusic();
+            this.scene.restart();
+            this.uIScene.scene.restart();     
         }.bind(this));
     }
 

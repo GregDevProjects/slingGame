@@ -1,7 +1,4 @@
 import { getGameWidth, getGameHeight, placeTextInCenter, getRandomInt } from '../Helper'
-import { LocalStorageHandler } from '../LocalStorageHandler'
-import { MuisicPlayer } from '../Music'
-
 
 export class Credits extends Phaser.Scene {
 
@@ -16,19 +13,17 @@ export class Credits extends Phaser.Scene {
     create() {
         this.tileBackground = this.add.tileSprite(getGameWidth() / 2, getGameHeight() / 2, getGameWidth(), getGameHeight(), 'bg');
         this.add.image(getGameWidth() / 2, 50, 'credits').setScale(1.4, 1.4);
-        
-        this.music = new MuisicPlayer({scene : this}).playCreditsMusic();
-
         this.loopCredits(0);
 
         this.add.image( 70, getGameHeight() - 40, 'nah').setDepth(10).setInteractive().on('pointerdown', (event) => {   
             this.scene.stop();
             this.scene.start('MainMenu');
-            this.music.destroyAudio();
+            this.scene.get('Music').stopMusic();
         }, this);
         
         this.cargoShips = [new scrollingCargoShip(this)];
         this.spawnShipsRandomly();
+        this.scene.get('Music').playCreditsMusic();
     }
 
     update() {
