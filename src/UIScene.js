@@ -56,7 +56,7 @@ export class UIScene extends Phaser.Scene {
 
         this.progressWrapper = this.add.rectangle(
             getGameWidth()/2, 
-            getGameHeight() - 145,
+            getGameHeight() - getGameHeight()/4.2 + 5,  
             50, 
             10
         );
@@ -185,7 +185,7 @@ export class UIScene extends Phaser.Scene {
 
         this.progress.fillRect(
             getGameWidth()/2 - width/2, 
-            getGameHeight() - 150,
+            getGameHeight() - getGameHeight()/4.2,
             stats.power/100 * width, 
             10
         );
