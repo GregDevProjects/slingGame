@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.gmm.spacesling" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Space Sling</name>
+<widget id="com.gmm.spacedrift" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Space Drift</name>
     <description>
-        Practice mental math in space
+        Boost and Drift Through space
     </description>
     <author email="gregmclmobile@gmail.com" href="http://cordova.io">
         GMM
